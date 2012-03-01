@@ -1,0 +1,43 @@
+{% extends "fluent_blogs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% trans "Latest entries" %}
+  {% if category %}| {% trans "Category" %} {{ category }}{% endif %}
+  {% if tag %}| {% trans "Tag" %} {{ tag }}{% endif %}
+  {% if author %}| {% trans "Author" %} {{ author }}{% endif %}
+  {% if page_obj and page_obj.number != 1 %} | {% trans "Page" %} {{ page_obj.number }}{% endif %}
+{% endblock %}
+
+{% block content %}
+  {% block content_title %}
+    {% if category %}<h1>{{ category.title }}</h1>{% endif %}
+    {% if tag %}<h1>{% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}</h1>{% endif %}
+    {% if author %}<h1>{% blocktrans with author.username as author %}Entries by {{ author }}{% endblocktrans %}</h1>{% endif %}
+
+    {% if category and category.description %}
+      <p>{{ category.description|striptags|safe }}</p>
+    {% endif %}
+  {% endblock %}
+
+
+  {% block object_list %}
+    {% for object in object_list %}
+      <article id="blog-entry-{{ object.pk }}" class="blog-entry">
+        {% with object.html_content|truncatewords_html:100|safe as object_content %}
+          {% include "fluent_blogs/entry_list/item.html" %}
+        {% endwith %}
+      </article>
+      <hr />
+    {% empty %}
+      {% include "fluent_blogs/entry_list/empty.html" %}
+    {% endfor %}
+  {% endblock %}
+
+  {% block pagination %}
+    {% if is_paginated %}
+      {% include "fluent_blogs/entry_list/pagination.html" %}
+      {# zinnia_pagination page_obj #}
+    {% endif %}
+  {% endblock %}
+{% endblock %}

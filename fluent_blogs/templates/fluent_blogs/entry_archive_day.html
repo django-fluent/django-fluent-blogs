@@ -1,0 +1,12 @@
+{% extends "fluent_blogs/entry_list/index.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% trans "Archives" %} {{ day|date:"DATE_FORMAT" }}{% endblock %}
+
+{% block title %}{% trans "Archives" %} {{ day|date:"DATE_FORMAT" }}{% endblock %}
+
+{% block content %}
+  <h1>{% trans "Archives" %} {{ day|date:"DATE_FORMAT" }}</h1>
+
+  {{ block.super }}
+{% endblock %}
