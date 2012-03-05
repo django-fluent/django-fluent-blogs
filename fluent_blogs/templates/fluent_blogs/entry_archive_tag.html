@@ -1,0 +1,6 @@
+{% extends "fluent_blogs/entry_archive.html" %}
+{% load i18n %}
+
+{% block meta-description %}{% blocktrans with tag=tag %}Archives of tag {{ tag }}{% endblocktrans %}{% endblock %}
+
+{% block title %}{% blocktrans with tag=tag %}Archives of tag {{ tag }}{% endblocktrans %}{% endblock %}

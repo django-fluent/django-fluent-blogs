@@ -63,6 +63,7 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
+    template_name_suffix = '_archive_tag'
 
     def get_queryset(self):
         from taggit.models import Tag

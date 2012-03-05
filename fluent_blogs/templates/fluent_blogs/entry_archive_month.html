@@ -1,13 +1,13 @@
-{% extends "fluent_blogs/entry_list/index.html" %}
+{% extends "fluent_blogs/entry_archive.html" %}
 {% load i18n %}
 
-{% block meta-description %}{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}{% endblock %}
+{% block meta-description %}{% blocktrans with month=month|date:"YEAR_MONTH_FORMAT" %}Archives of {{ month }}{% endblocktrans %}{% endblock %}
 
-{% block title %}{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}{% endblock %}
+{% block title %}{% blocktrans with month=month|date:"YEAR_MONTH_FORMAT" %}Archives of {{ month }}{% endblocktrans %}{% endblock %}
+
+{% block content_title %}<h1>{% blocktrans with month=month|date:"YEAR_MONTH_FORMAT" %}Archives of {{ month }}{% endblocktrans %}</h1>{% endblock %}
 
 {% block content %}
-  <h1>{% trans "Archives" %} {{ month|date:"YEAR_MONTH_FORMAT" }}</h1>
-
   {{ block.super }}
 
   <h2>{% trans "Daily archives" %}</h2>
