@@ -9,7 +9,7 @@ from fluent_blogs.models import Entry
 class EntryAdmin(PlaceholderFieldAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'status', 'contents',),
+            'fields': ('title', 'slug', 'status', 'contents', 'categories'),
         }),
         (_('Publication settings'), {
             'fields': ('publication_date', 'expire_date',),

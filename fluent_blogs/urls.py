@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
-from fluent_blogs.views import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink
+from fluent_blogs.views import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive
 from fluent_blogs import appsettings
 
 def _get_entry_regex():
@@ -23,6 +23,10 @@ urlpatterns = patterns('',
     url(r'^(?P<year>\d{4})/$', EntryYearArchive.as_view(), name='entry_archive_year'),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', EntryMonthArchive.as_view(), name='entry_archive_month'),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', EntryDayArchive.as_view(), name='entry_archive_day'),
+
+    # Categories
+    url(r'^categories/(?P<slug>[-\w]+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category'),
+    url(r'^categories/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category_paginated'),
 
     # Entries
     url(r'^(?P<pk>\d+)/$', EntryShortLink.as_view(), name='entry_shortlink'),

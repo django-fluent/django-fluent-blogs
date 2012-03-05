@@ -60,9 +60,10 @@ class Entry(models.Model):
 
     objects = EntryManager()
     all_comments = GenericRelation(comments.get_model(), verbose_name=_("Comments"))
+    categories = models.ManyToManyField(appsettings.FLUENT_BLOGS_CATEGORY_MODEL, verbose_name=_("Categories"), blank=True)
 
     if TaggableManager is not None:
-        tags = TaggableManager()
+        tags = TaggableManager(blank=True)
     else:
         tags = None
 

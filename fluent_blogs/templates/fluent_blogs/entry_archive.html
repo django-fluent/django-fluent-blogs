@@ -13,7 +13,7 @@
 
 {% block content %}
   {% block content_title %}
-    {% if category %}<h1>{{ category.title }}</h1>{% endif %}
+    {% if category %}<h1>{{ category }}</h1>{% endif %}
     {% if tag %}<h1>{% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}</h1>{% endif %}
     {% if author %}<h1>{% blocktrans with author.username as author %}Entries by {{ author }}{% endblocktrans %}</h1>{% endif %}
 

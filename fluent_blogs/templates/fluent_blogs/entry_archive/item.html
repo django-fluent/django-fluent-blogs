@@ -22,7 +22,7 @@
     <abbr class="published" title="{{ object.creation_date }}">{{ object.creation_date|date:"DATE_FORMAT" }}</abbr>
     {% if object.categories.count %}{% trans "in" %}
       {% for category in object.categories.all %}
-        <a href="{{ category.get_absolute_url }}" title="{{ category }}" rel="tag category">{{ category }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}.
+        <a href="{% blogurl 'entry_archive_category' category.slug %}" rel="tag category">{{ category }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}.
   </p>
 </div>
 

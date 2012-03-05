@@ -1,3 +1,4 @@
+from categories.models import Category
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
@@ -10,10 +11,13 @@ base_queryset = Entry.objects.published()
 
 class BaseBlogMixin(object):
     queryset = base_queryset
+    context_object_name = None
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
         context['FLUENT_BLOGS_BASE_TEMPLATE'] = appsettings.FLUENT_BLOGS_BASE_TEMPLATE
+        if self.context_object_name:
+            context[self.context_object_name] = getattr(self, self.context_object_name)  # e.g. author, category, tag
         return context
 
 
@@ -59,19 +63,26 @@ class EntryShortLink(SingleObjectMixin, RedirectView):
         return entry.get_absolute_url()
 
 
+class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
+    """
+    Archive based on tag.
+    """
+    template_name_suffix = '_archive_category'
+    context_object_name = 'category'
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
+
+
 class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
     template_name_suffix = '_archive_tag'
+    context_object_name = 'tag'
 
     def get_queryset(self):
         from taggit.models import Tag
         self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
         return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)
-
-
-    def get_context_data(self, **kwargs):
-        context = super(EntryTagArchive, self).get_context_data(**kwargs)
-        context['tag'] = self.tag
-        return context
