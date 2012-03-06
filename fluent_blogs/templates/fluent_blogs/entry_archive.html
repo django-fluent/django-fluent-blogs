@@ -7,7 +7,7 @@
   {% trans "Latest entries" %}
   {% if category %}| {% blocktrans with category=category %}Category {{ category }}{% endblocktrans %}{% endif %}
   {% if tag %}| {% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}{% endif %}
-  {% if author %}| {% blocktrans with author=author %}Author {{ author }}{% endblocktrans %}{% endif %}
+  {% if author %}| {% blocktrans with author=author.get_full_name|default:author.username %}Author {{ author }}{% endblocktrans %}{% endif %}
   {% if page_obj and page_obj.number != 1 %} | {% blocktrans with number=page_obj.number %}Page {{ number }}{% endblocktrans %}{% endif %}
 {% endblock %}
 
@@ -15,7 +15,7 @@
   {% block content_title %}
     {% if category %}<h1>{{ category }}</h1>{% endif %}
     {% if tag %}<h1>{% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}</h1>{% endif %}
-    {% if author %}<h1>{% blocktrans with author.username as author %}Entries by {{ author }}{% endblocktrans %}</h1>{% endif %}
+    {% if author %}<h1>{% blocktrans with author.get_full_name|default:author.username as author %}Entries by {{ author }}{% endblocktrans %}</h1>{% endif %}
 
     {% if category and category.description %}
       <p>{{ category.description|striptags|safe }}</p>

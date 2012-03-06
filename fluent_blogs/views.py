@@ -1,4 +1,5 @@
 from categories.models import Category
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
@@ -73,6 +74,18 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug=self.kwargs['slug'])
         return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
+
+
+class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
+    """
+    Archive based on tag.
+    """
+    template_name_suffix = '_archive_author'
+    context_object_name = 'author'
+
+    def get_queryset(self):
+        self.author = get_object_or_404(User, username=self.kwargs['slug'])
+        return super(EntryAuthorArchive, self).get_queryset().filter(author=self.author)
 
 
 class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):

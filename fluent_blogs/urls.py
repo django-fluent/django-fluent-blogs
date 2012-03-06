@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
-from fluent_blogs.views import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive
+from fluent_blogs.views import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive, EntryAuthorArchive
 from fluent_blogs import appsettings
 
 def _get_entry_regex():
@@ -27,6 +27,10 @@ urlpatterns = patterns('',
     # Categories
     url(r'^categories/(?P<slug>[-\w]+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category'),
     url(r'^categories/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category_paginated'),
+
+    # Authors
+    url(r'^authors/(?P<slug>[-\w]+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author'),
+    url(r'^authors/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author_paginated'),
 
     # Entries
     url(r'^(?P<pk>\d+)/$', EntryShortLink.as_view(), name='entry_shortlink'),
