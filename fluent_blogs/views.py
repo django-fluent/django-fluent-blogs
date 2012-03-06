@@ -57,7 +57,7 @@ class EntryDetail(BaseBlogMixin, DetailView):
 
 class EntryShortLink(SingleObjectMixin, RedirectView):
     queryset = base_queryset
-    permanent = True
+    permanent = False   # Allow changing the URL format
 
     def get_redirect_url(self, **kwargs):
         entry = self.get_object()
