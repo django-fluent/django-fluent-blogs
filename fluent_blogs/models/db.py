@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.models.fields import PlaceholderField
-from fluent_blogs.managers import EntryManager
+from fluent_blogs.models.managers import EntryManager
 from fluent_blogs import appsettings
 
 # Optional tagging support
@@ -69,6 +69,7 @@ class Entry(models.Model):
 
 
     class Meta:
+        app_label = 'fluent_blogs'  # required for models subfolder
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
 
