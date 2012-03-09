@@ -1,8 +1,10 @@
 """
 The manager class for the CMS models
 """
+from datetime import datetime
 from django.db import models
 from django.db.models.query import QuerySet
+from django.db.models.query_utils import Q
 
 
 class EntryQuerySet(QuerySet):
@@ -11,7 +13,15 @@ class EntryQuerySet(QuerySet):
         Return only published entries
         """
         from fluent_blogs.models import Entry   # the import can't be globally, that gives a circular dependency
-        return self.filter(status=Entry.PUBLISHED)
+        return self \
+            .filter(status=Entry.PUBLISHED) \
+            .filter(
+                Q(publication_date__isnull=True) |
+                Q(publication_date__lt=datetime.now())
+            ).filter(
+                Q(publication_end_date__isnull=True) |
+                Q(publication_end_date__gte=datetime.now())
+            )
 
 
 

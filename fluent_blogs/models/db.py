@@ -51,7 +51,7 @@ class Entry(models.Model):
 
     status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT)
     publication_date = models.DateTimeField(_('publication date'), null=True, help_text=_('''When the page should go live, status must be "Published".'''))
-    expire_date = models.DateTimeField(_('publication end date'), null=True, blank=True)
+    publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True)
 
     # Metadata
     author = models.ForeignKey(User, verbose_name=_('author'), editable=False)

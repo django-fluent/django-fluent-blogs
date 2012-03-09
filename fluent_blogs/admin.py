@@ -12,7 +12,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
             'fields': ('title', 'slug', 'status', 'contents', 'categories'),
         }),
         (_('Publication settings'), {
-            'fields': ('publication_date', 'expire_date',),
+            'fields': ('publication_date', 'publication_end_date',),
             'classes': ('collapse',),
         }),
     )
