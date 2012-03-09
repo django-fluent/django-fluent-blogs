@@ -1,5 +1,5 @@
 {% extends "fluent_blogs/base.html" %}
-{% load i18n comments %}
+{% load i18n %}
 
 {% block title %}{{ object.title }}{% endblock %}
 
@@ -39,80 +39,10 @@
 {% endblock %}
 
 {% block content %}
-  <div id="entry-{{ object.pk }}" class="hentry{% if object.featured %} featured{% endif %} span-16 last">
-    {% with object.html_content|safe as object_content %}
-      {% include "fluent_blogs/entry_archive/item.html" %}
-    {% endwith %}
-  </div>
+  <article id="entry-{{ object.pk }}" class="blog-entry">
+    {% include "fluent_blogs/entry_detail/contents.html" %}
+  </article>
 
-  <hr />
-
-  <div class="entry-widgets">
-    {% with object.next_entry as next_entry %}
-      {% if next_entry %}
-        <div class="entry-next">
-          <h3>{% trans "Next entry" %}</h3>
-          <ul>
-            <li>
-              <a href="{{ next_entry.get_absolute_url }}" title="{{ next_entry.title }}" rel="next">
-                {{ next_entry.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      {% endif %}
-    {% endwith %}
-    {% with object.previous_entry as previous_entry %}
-      {% if previous_entry %}
-        <div class="entry-previous">
-          <h3>{% trans "Previous entry" %}</h3>
-          <ul>
-            <li>
-              <a href="{{ previous_entry.get_absolute_url }}" title="{{ previous_entry.title }}" rel="prev">
-                {{ previous_entry.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      {% endif %}
-    {% endwith %}
-    {% if object.related_published %}
-      <div class="entry-related">
-        <h3>{% trans "Related entries" %}</h3>
-        <ul>
-          {% for entry in object.related_published %}
-            <li>
-              <a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark">{{ entry.title }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-  </div>
-
-  <div id="comments">
-    <h3>{% trans "Comments" %}</h3>
-
-    {% with object.comments as comment_list %}
-      {% if comment_list.count %}
-        {% render_comment_list for object %}
-
-        {% if not object.comments_are_open %}
-          <p>{% trans "Comments are closed." %}</p>
-        {% endif %}
-      {% else %}
-        {% if object.comments_are_open %}
-          <p>{% trans "No comments yet." %}</p>
-        {% else %}
-          <p>{% trans "Comments are closed." %}</p>
-        {% endif %}
-      {% endif %}
-    {% endwith %}
-  </div>
-
-  {% if object.comments_are_open %}
-    <div class="commentForm">
-      {% render_comment_form for object %}
-    </div>
-  {% endif %}
+  {% include "fluent_blogs/entry_detail/widgets.html" %}
+  {% include "fluent_blogs/entry_detail/comments.html" %}
 {% endblock %}
