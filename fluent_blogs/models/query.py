@@ -86,6 +86,8 @@ def query_entries(queryset=None,
             queryset = queryset.order_by(*desc_fieldnames)
         else:
             queryset = queryset.order_by(*db_fieldnames)
+    else:
+        queryset = queryset.order_by('-publication_date')
 
     # Limit
     if limit:
