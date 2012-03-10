@@ -42,11 +42,13 @@ class EntryAdmin(PlaceholderFieldAdmin):
         # When the page is accessed via a pagetype, warn that the node can't be previewed yet.
         context['preview_error'] = ''
         if 'fluent_pages' in settings.INSTALLED_APPS:
-            from fluent_pages.urlresolvers import mixed_reverse, PageTypeNotMounted
+            from fluent_pages.urlresolvers import mixed_reverse, PageTypeNotMounted, MultipleReverseMatch
             try:
                 mixed_reverse('entry_archive_index')
             except PageTypeNotMounted:
                 context['preview_error'] = _("The blog page can't be previewed yet, a 'Blog' page needs to be created first.")
+            except MultipleReverseMatch:
+                pass
 
         return super(EntryAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
