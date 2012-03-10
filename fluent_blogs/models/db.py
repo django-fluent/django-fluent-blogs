@@ -72,6 +72,7 @@ class Entry(models.Model):
         app_label = 'fluent_blogs'  # required for models subfolder
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
+        ordering = ('-publication_date',)
 
     def __unicode__(self):
         return self.title
@@ -109,3 +110,19 @@ class Entry(models.Model):
     @property
     def pingback_enabled(self):
         return False
+
+    @property
+    def previous_entry(self):
+        """
+        Return the previous entry
+        """
+        entries = self.__class__.objects.published().filter(publication_date__lt=self.publication_date).order_by('-publication_date')[:1]
+        return entries[0] if entries else None
+
+    @property
+    def next_entry(self):
+        """
+        Return the next entry
+        """
+        entries = self.__class__.objects.published().filter(publication_date__gt=self.publication_date).order_by('publication_date')[:1]
+        return entries[0] if entries else None

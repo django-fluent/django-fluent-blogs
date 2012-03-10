@@ -7,36 +7,26 @@
 
 {% block meta-keywords %}{% if object.tags %}{{ object.tags }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
-{% block link %}
-  {{ block.super }}
-  {% with object.previous_entry as previous_entry %}{% if previous_entry %}
-    <link rel="prev" title="{{ previous_entry.title }}" href="{{ previous_entry.get_absolute_url }}" />
-  {% endif %}{% endwith %}
-  {% with object.next_entry as next_entry %}{% if next_entry %}
-    <link rel="next" title="{{ next_entry.title }}" href="{{ next_entry.get_absolute_url }}" />
-  {% endif %}{% endwith %}
-  {% if object.short_url %}
-    <link rel="shortlink" href="{{ object.short_url }}" />
-  {% endif %}
-  <link rel="canonical" href="{{ object.get_absolute_url }}" />
+{% block link %}{{ block.super }}{% with previous=object.previous_entry next=object.next_entry %}
+    <link rel="canonical" href="{{ object.get_absolute_url }}" />
+    {% if object.short_url %}<link rel="shortlink" href="{{ object.short_url }}" />{% endif %}
+    {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{{ previous.get_absolute_url }}" />{% endif %}
+    {% if next %}<link rel="next" title="{{ next.title }}" href="{{ next.get_absolute_url }}" />{% endif %}
 
-  {% comment %}
-  {% with object.creation_date|date:"Y" as year %}
-    {% with object.creation_date|date:"m" as month %}
-      {% with object.creation_date|date:"d" as day %}
-        <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of discussions on" %} '{{ object.title }}'"
-              href="{% url zinnia_entry_discussion_feed year month day object.slug %}" />
-        <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of comments on" %} '{{ object.title }}'"
-              href="{% url zinnia_entry_comment_feed year month day object.slug %}" />
-        <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of pingbacks on" %} '{{ object.title }}'"
-              href="{% url zinnia_entry_pingback_feed year month day object.slug %}" />
-        <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of trackbacks on" %} '{{ object.title }}'"
-              href="{% url zinnia_entry_trackback_feed year month day object.slug %}" />
+
+    {% comment %}
+    {% with object.creation_date|date:"Y" as year %}
+      {% with object.creation_date|date:"m" as month %}
+        {% with object.creation_date|date:"d" as day %}
+          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of discussions on" %} '{{ object.title }}'"
+                href="{% url zinnia_entry_discussion_feed year month day object.slug %}" />
+          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of comments on" %} '{{ object.title }}'"
+                href="{% url zinnia_entry_comment_feed year month day object.slug %}" />
+        {% endwith %}
       {% endwith %}
     {% endwith %}
-  {% endwith %}
-  {% endcomment %}
-{% endblock %}
+    {% endcomment %}
+{% endwith %}{% endblock %}
 
 {% block content %}
   <article id="entry-{{ object.pk }}" class="blog-entry">
