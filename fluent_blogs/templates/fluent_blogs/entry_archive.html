@@ -1,7 +1,14 @@
 {% extends "fluent_blogs/base.html" %}
-{% load i18n %}
+{% load i18n fluent_blogs_tags %}
 
 {% block meta-description %}{% trans "Latest entries" %}{% endblock %}
+
+{% block link %}
+    {{ block.super }}
+    {% if category %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with category=category %}RSS Feed for {{ category }}{% endblocktrans %}" href="{% blogurl 'entry_archive_category_rss' category.slug %}" />{% endif %}
+    {% if tag %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with tag=tag %}RSS Feed for {{ tag }}{% endblocktrans %}" href="{% blogurl 'entry_archive_tag_rss' tag.slug %}" />{% endif %}
+    {% if author %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with author=author.get_full_name|default:author.username %}RSS Feed for {{ author }}{% endblocktrans %}" href="{% blogurl 'entry_archive_author_rss' author.slug %}" />{% endif %}
+{% endblock %}
 
 {% block title %}
   {% trans "Latest entries" %}

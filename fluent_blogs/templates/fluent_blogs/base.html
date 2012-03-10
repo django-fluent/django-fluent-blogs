@@ -1,4 +1,4 @@
-{% extends FLUENT_BLOGS_BASE_TEMPLATE %}{% comment %}
+{% extends FLUENT_BLOGS_BASE_TEMPLATE %}{% load i18n fluent_blogs_tags %}{% comment %}
   The base template is 'base.html' by default.
 
   To configure the blog base template, either:
@@ -8,6 +8,12 @@
   It needs to have the blocks:
    - contents
    - title
+   - link
    - meta-description
    - meta-keywords
 {% endcomment %}
+
+{% block link %}
+    <link rel="index" href="{% blogurl 'entry_archive_index' %}" />
+    <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest entries" %}" href="{% blogurl 'entry_archive_index_rss' %}" />
+{% endblock %}
