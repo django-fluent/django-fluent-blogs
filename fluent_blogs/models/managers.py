@@ -17,7 +17,7 @@ class EntryQuerySet(QuerySet):
             .filter(status=Entry.PUBLISHED) \
             .filter(
                 Q(publication_date__isnull=True) |
-                Q(publication_date__lt=datetime.now())
+                Q(publication_date__lte=datetime.now())
             ).filter(
                 Q(publication_end_date__isnull=True) |
                 Q(publication_end_date__gte=datetime.now())
