@@ -1,6 +1,10 @@
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.aggregates import Count
 from fluent_blogs.models.db import Entry
 
-ORDER_BY_FIELDS = {
+ENTRY_ORDER_BY_FIELDS = {
+    'slug': 'slug',
+    'title': 'title',
     'author': ('author__first_name', 'author__last_name'),
     'author_slug': ('author__username',),
     'category': ('categories__name',),
@@ -11,7 +15,36 @@ ORDER_BY_FIELDS = {
     'year': ('publication_date',),
 }
 
-ORDER_BY_DESC = ('date', 'year', 'month', 'day')
+TAG_ORDER_BY_FIELDS = {
+    'slug': ('slug',),
+    'name': ('name',),
+    'count': ('count',),
+}
+
+ORDER_BY_DESC = (
+    'date', 'year', 'month', 'day', 'count',
+)
+
+
+def _get_order_by(order, orderby, order_by_fields):
+    """
+    Return the order by syntax for a model.
+    Checks whether use ascending or descending order, and maps the fieldnames.
+    """
+    try:
+        # Find the actual database fieldnames for the keyword.
+        db_fieldnames = order_by_fields[orderby]
+    except KeyError:
+        raise ValueError("Invalid value for 'orderby': '{0}', supported values are: {1}".format(orderby, ', '.join(sorted(order_by_fields.keys()))))
+
+    # Default to descending for some fields, otherwise be ascending
+    is_desc = (not order and orderby in ORDER_BY_DESC) \
+           or (order or 'asc').lower() in ('desc', 'descending')
+
+    if is_desc:
+        return map(lambda name: '-' + name, db_fieldnames)
+    else:
+        return db_fieldnames
 
 
 def query_entries(queryset=None,
@@ -75,17 +108,7 @@ def query_entries(queryset=None,
 
     # Ordering
     if orderby:
-        try:
-            db_fieldnames = ORDER_BY_FIELDS[orderby]
-        except KeyError:
-            raise ValueError("Invalid value for 'orderby', supported values are: {0}".format(', '.join(sorted(ORDER_BY_FIELDS.keys()))))
-
-        if (not order and orderby in ORDER_BY_DESC) or (order or 'asc').lower() in ('desc', 'descending'):
-            # Descending ordering by default for dates, or if requested.
-            desc_fieldnames = map(lambda name: '-' + name, db_fieldnames)
-            queryset = queryset.order_by(*desc_fieldnames)
-        else:
-            queryset = queryset.order_by(*db_fieldnames)
+        queryset = queryset.order_by(*_get_order_by(order, orderby, ENTRY_ORDER_BY_FIELDS))
     else:
         queryset = queryset.order_by('-publication_date')
 
@@ -93,4 +116,31 @@ def query_entries(queryset=None,
     if limit:
         queryset = queryset[:limit]
 
+    return queryset
+
+
+def query_tags(order=None, orderby=None, limit=None):
+    """
+    Query the tags, with usage count included.
+    This interface is mainly used by the ``get_tags`` template tag.
+    """
+    from taggit.models import Tag, TaggedItem    # feature is still optional
+    ct = ContentType.objects.get_for_model(Entry)  # take advantage of local caching.
+    entry_tag_ids = TaggedItem.objects.filter(content_type=ct).values_list('tag_id')
+
+    # get tags
+    queryset = Tag.objects.filter(id__in=entry_tag_ids)
+    queryset = queryset.annotate(count=Count('taggit_taggeditem_items'))
+
+    # Ordering
+    if orderby:
+        queryset = queryset.order_by(*_get_order_by(order, orderby, TAG_ORDER_BY_FIELDS))
+    else:
+        queryset = queryset.order_by('-count')
+
+    # Limit
+    if limit:
+        queryset = queryset[:limit]
+
+    print queryset.query
     return queryset
