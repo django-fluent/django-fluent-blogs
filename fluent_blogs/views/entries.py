@@ -7,12 +7,13 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_blogs import appsettings
 from fluent_blogs.models import Entry
 
-base_queryset = Entry.objects.published()
-
 
 class BaseBlogMixin(object):
-    queryset = base_queryset
     context_object_name = None
+
+    def get_queryset(self):
+        # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
+        return Entry.objects.published()
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
@@ -52,12 +53,15 @@ class EntryDetail(BaseBlogMixin, DetailView):
     """
     Blog detail page.
     """
-    queryset = base_queryset
+    pass
 
 
 class EntryShortLink(SingleObjectMixin, RedirectView):
-    queryset = base_queryset
     permanent = False   # Allow changing the URL format
+
+    def get_queryset(self):
+        # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
+        return Entry.objects.published()
 
     def get_redirect_url(self, **kwargs):
         entry = self.get_object()
