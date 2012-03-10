@@ -74,12 +74,15 @@ class Entry(models.Model):
         verbose_name_plural = _("Blog entries")
         ordering = ('-publication_date',)
 
+
     def __unicode__(self):
         return self.title
+
 
     def get_absolute_url(self):
         root = _mixed_reverse('entry_archive_index')
         return root + self.get_app_url()
+
 
     def get_app_url(self):
         return appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
@@ -90,13 +93,16 @@ class Entry(models.Model):
             pk = self.pk,
         )
 
+
     def get_short_url(self):
         return _mixed_reverse('entry_shortlink', kwargs={'pk': self.id})
+
 
     @property
     def comments(self):
         """Return the visible comments."""
         return comments.get_model().objects.for_model(self).filter(is_public=True)
+
 
     @property
     def comments_are_open(self):
@@ -107,9 +113,11 @@ class Entry(models.Model):
         #return self.comment_enabled
         return True
 
+
     @property
     def pingback_enabled(self):
         return False
+
 
     @property
     def previous_entry(self):
@@ -118,6 +126,7 @@ class Entry(models.Model):
         """
         entries = self.__class__.objects.published().filter(publication_date__lt=self.publication_date).order_by('-publication_date')[:1]
         return entries[0] if entries else None
+
 
     @property
     def next_entry(self):
