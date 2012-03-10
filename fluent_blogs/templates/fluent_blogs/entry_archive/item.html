@@ -25,14 +25,14 @@
 
   <footer class="entry-footer clearfix">
     {% block tags %}
+      {% with tags=object.tags.all %}{% if tags %}
       <p class="entry-tags">
         <strong>{% trans "Tags" %}</strong>:
         {% for tag in object.tags.all %}
           <a href="{% blogurl 'entry_archive_tag' tag.slug %}" title="Tag {{ tag }}" rel="tag">{{ tag }}</a>
-        {% empty %}
-          <span>{% trans "No tags" %}</span>
         {% endfor %}
       </p>
+      {% endif %}{% endwith %}
     {% endblock %}
 
     {% block shorturl %}
@@ -50,15 +50,13 @@
 
     {% block metainfo %}
       <p class="entry-meta">
-        <strong>{% trans "Discussions" %}</strong>:
-
         {% with comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
           {% if comment_count %}
             <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% blocktrans count comment_count as comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
           {% else %}
             {% if object.comments_are_open %}
-              {% trans "No comments yet." %}
-              <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% trans "Be first to comment!" %}</a>
+              {% trans "No comments yet," %}
+              <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% trans "be first to comment!" %}</a>
             {% else %}
               {% trans "Comments are closed." %}
             {% endif %}

@@ -1,17 +1,21 @@
 {% load i18n comments %}
 <div id="comments">
-  <h3>{% trans "Comments" %}</h3>
-
   {% with object.comments as comment_list %}
     {% if comment_list.count %}
+      <h3 class="has-comments-title">{% trans "Comments" %}</h3>
+
       {% render_comment_list for object %}
 
       {% if not object.comments_are_open %}
         <p>{% trans "Comments are closed." %}</p>
       {% endif %}
     {% else %}
+      <h3 class="no-comments-title">{% trans "Comments" %}</h3>
+
       {% if object.comments_are_open %}
-        <p>{% trans "No comments yet." %}</p>
+        <p>
+          {% trans "No comments yet, be first to comment!" %}
+        </p>
       {% else %}
         <p>{% trans "Comments are closed." %}</p>
       {% endif %}
