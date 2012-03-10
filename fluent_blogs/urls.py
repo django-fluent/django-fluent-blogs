@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
-from fluent_blogs.views import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive, EntryAuthorArchive
+from fluent_blogs.views.entries import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive, EntryAuthorArchive, EntryTagArchive
 from fluent_blogs import appsettings
 
 def _get_entry_regex():
@@ -39,8 +39,6 @@ urlpatterns = patterns('',
 
 
 if 'taggit' in settings.INSTALLED_APPS:
-    from fluent_blogs.views import EntryTagArchive
-
     urlpatterns += patterns('',
         url(r'^tags/(?P<slug>[-\w]+)/$', EntryTagArchive.as_view(), name='entry_archive_tag'),
         url(r'^tags/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryTagArchive.as_view(), name='entry_archive_tag_paginated'),
