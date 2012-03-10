@@ -99,6 +99,16 @@ class Entry(models.Model):
 
 
     @property
+    def is_published(self):
+        return self.status == self.PUBLISHED
+
+
+    @property
+    def is_draft(self):
+        return self.status == self.DRAFT
+
+
+    @property
     def comments(self):
         """Return the visible comments."""
         return comments.get_model().objects.for_model(self).filter(is_public=True)
