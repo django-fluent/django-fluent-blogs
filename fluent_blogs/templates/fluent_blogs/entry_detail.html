@@ -7,7 +7,7 @@
 
 {% block meta-keywords %}{% if object.tags %}{{ object.tags }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
-{% block link %}{{ block.super }}{% with previous=object.previous_entry next=object.next_entry %}
+{% block link %}{{ block.super }}{% with next=object.next_entry previous=object.previous_entry %}
     <link rel="canonical" href="{{ object.get_absolute_url }}" />
     {% if object.short_url %}<link rel="shortlink" href="{{ object.short_url }}" />{% endif %}
     {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{{ previous.get_absolute_url }}" />{% endif %}
@@ -33,6 +33,8 @@
     {% include "fluent_blogs/entry_detail/contents.html" %}
   </article>
 
+  {% include "fluent_blogs/entry_detail/navigation.html" %}
   {% include "fluent_blogs/entry_detail/widgets.html" %}
   {% include "fluent_blogs/entry_detail/comments.html" %}
+  {% include "fluent_blogs/entry_detail/page_footer.html" %}
 {% endblock %}

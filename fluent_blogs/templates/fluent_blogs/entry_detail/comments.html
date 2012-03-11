@@ -1,30 +1,26 @@
 {% load i18n comments %}
-<div id="comments">
-  {% with object.comments as comment_list %}
-    {% if comment_list.count %}
-      <h3 class="has-comments-title">{% trans "Comments" %}</h3>
+{% with comment_list=object.comments %}{% with comment_count=comment_list.count %}
+
+  <div id="comments">
+    {% if comment_count %}
+      <h3 class="has-comments-title">{% blocktrans with comment_count=comment_count entry_title=object.title %}{{ comment_count }} comments to {{ entry_title }}{% endblocktrans %}</h3>
 
       {% render_comment_list for object %}
 
       {% if not object.comments_are_open %}
-        <p>{% trans "Comments are closed." %}</p>
+        <p class="comments-closed">{% trans "Comments are closed." %}</p>
       {% endif %}
     {% else %}
-      <h3 class="no-comments-title">{% trans "Comments" %}</h3>
-
       {% if object.comments_are_open %}
-        <p>
-          {% trans "No comments yet, be first to comment!" %}
-        </p>
-      {% else %}
-        <p>{% trans "Comments are closed." %}</p>
+        <h3 class="no-comments-title">{% trans "Leave a reply" %}</h3>
       {% endif %}
     {% endif %}
-  {% endwith %}
-</div>
-
-{% if object.comments_are_open %}
-  <div class="commentForm">
-    {% render_comment_form for object %}
   </div>
-{% endif %}
+
+  {% if object.comments_are_open %}
+    <div class="commentForm">
+      {% render_comment_form for object %}
+    </div>
+  {% endif %}
+
+{% endwith %}{% endwith %}
