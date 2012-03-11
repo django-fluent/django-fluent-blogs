@@ -20,7 +20,10 @@ __all__ = (
     'LatestEntriesFeed', 'LatestCategoryEntriesFeed', 'LatestAuthorEntriesFeed', 'LatestTagEntriesFeed'
 )
 
-_base_qs = Entry.objects.published().order_by('-publication_date')
+def get_entry_queryset():
+    # Avoid being cached at module level, always return a new queryset.
+    return Entry.objects.published().order_by('-publication_date')
+
 _max_items = appsettings.FLUENT_BLOGS_MAX_FEED_ITEMS
 
 
@@ -54,7 +57,7 @@ class EntryFeedBase(FeedView):
     Base class for all feeds returning blog entries.
     """
     def items(self, object=None):
-        return _base_qs[:_max_items]
+        return get_entry_queryset()[:_max_items]
 
 
     def reverse(self, viewname, args=None, kwargs=None):
@@ -131,7 +134,7 @@ class LatestCategoryEntriesFeed(EntryFeedBase):
         return get_object_or_404(Category, slug=slug)
 
     def items(self, category):
-        return _base_qs.filter(categories=category)[:_max_items]
+        return get_entry_queryset().filter(categories=category)[:_max_items]
 
     def title(self, category):
         return gettext(u"Entries in the category {category_name}").format(category_name=category.name)
@@ -155,7 +158,7 @@ class LatestAuthorEntriesFeed(EntryFeedBase):
         return get_object_or_404(User, username=slug)
 
     def items(self, author):
-        return _base_qs.filter(author=author)[:_max_items]
+        return get_entry_queryset().filter(author=author)[:_max_items]
 
     def title(self, author):
         return gettext(u"Entries by {author_name}").format(author_name=author.get_full_name())
@@ -180,7 +183,7 @@ class LatestTagEntriesFeed(EntryFeedBase):
         return get_object_or_404(Tag, slug=slug)
 
     def items(self, tag):
-        return _base_qs.filter(tags=tag)[:_max_items]
+        return get_entry_queryset().filter(tags=tag)[:_max_items]
 
     def title(self, tag):
         return gettext(u"Entries for the tag {tag_name}").format(tag_name=tag.name)
