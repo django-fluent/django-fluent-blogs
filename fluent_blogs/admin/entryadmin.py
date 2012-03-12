@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin import widgets
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.admin.placeholderfield import PlaceholderFieldAdmin
 from fluent_blogs.models import Entry
@@ -15,7 +16,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'status', 'contents', 'categories'),
+            'fields': ('title', 'slug', 'status', 'intro', 'contents', 'categories'),
         }),
         (_('Publication settings'), {
             'fields': ('publication_date', 'publication_end_date',),
@@ -57,6 +58,13 @@ class EntryAdmin(PlaceholderFieldAdmin):
                 pass
 
         return super(EntryAdmin, self).render_change_form(request, context, add, change, form_url, obj)
+
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'intro':
+            kwargs['widget'] = widgets.AdminTextareaWidget(attrs={'rows': 4})
+        return super(EntryAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
 
 
     # ---- List code ----

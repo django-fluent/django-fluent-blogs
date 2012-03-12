@@ -46,6 +46,7 @@ class Entry(models.Model):
 
     title = models.CharField(_("Title"), max_length=200)
     slug = models.SlugField(_("Slug"))
+    intro = models.TextField(_("Introtext"))
     contents = PlaceholderField("blog_contents")
     parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
