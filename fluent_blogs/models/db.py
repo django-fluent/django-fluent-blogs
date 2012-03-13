@@ -3,10 +3,10 @@ from django.contrib import comments
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.models.fields import PlaceholderField
+from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager
 from fluent_blogs import appsettings
 
@@ -16,18 +16,6 @@ if 'taggit_autocomplete_modified' in settings.INSTALLED_APPS:
     from taggit_autocomplete_modified.managers import TaggableManagerAutocomplete as TaggableManager
 elif 'taggit' in settings.INSTALLED_APPS:
     from taggit.managers import TaggableManager
-
-
-# Optional django-fluent-pages integration
-def _mixed_reverse(viewname, args=None, kwargs=None):
-    # Allow both stand-alone working, and integration with django-fluent-pages.
-    # django-fluent-pages can't provide integration in the reverse-mapping unfortunately,
-    # so it provides a separate reverse function that first checks the URLconf, then the CMS nodes.
-    if 'fluent_pages' in settings.INSTALLED_APPS:
-        from fluent_pages.urlresolvers import mixed_reverse
-        return mixed_reverse(viewname, args=args, kwargs=kwargs, multiple=True).next()
-    else:
-        return reverse(viewname, args=args, kwargs=kwargs)
 
 
 def _get_current_site():
@@ -81,7 +69,7 @@ class Entry(models.Model):
 
 
     def get_absolute_url(self):
-        root = _mixed_reverse('entry_archive_index')
+        root = blog_reverse('entry_archive_index', ignore_multiple=True)
         return root + self.get_app_url()
 
 
@@ -96,7 +84,15 @@ class Entry(models.Model):
 
 
     def get_short_url(self):
-        return _mixed_reverse('entry_shortlink', kwargs={'pk': self.id})
+        return blog_reverse('entry_shortlink', kwargs={'pk': self.id}, ignore_multiple=True)
+
+
+    @property
+    def url(self):
+        """
+        The URL of the page, provided for template code.
+        """
+        return self.get_absolute_url()
 
 
     @property
