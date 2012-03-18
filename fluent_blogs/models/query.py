@@ -61,7 +61,7 @@ def query_entries(queryset=None,
     Query the entries using a set of predefined filters.
     This interface is mainly used by the ``get_entries`` template tag.
     """
-    if not queryset:
+    if queryset is None:
         queryset = Entry.objects.all()
 
     if not future:
