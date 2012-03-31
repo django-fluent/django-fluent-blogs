@@ -1,7 +1,7 @@
 {% load i18n comments %}
 {% with comment_list=object.comments %}{% with comment_count=comment_list.count %}
 
-  <div id="comments">
+  <div id="comments-wrapper">
     {% if comment_count %}
       <h3 class="has-comments-title">{% blocktrans with comment_count=comment_count entry_title=object.title %}{{ comment_count }} comments to {{ entry_title }}{% endblocktrans %}</h3>
 
@@ -18,7 +18,7 @@
   </div>
 
   {% if object.comments_are_open %}
-    <div class="commentForm">
+    <div id="comments-form-wrapper">
       {% render_comment_form for object %}
     </div>
   {% endif %}

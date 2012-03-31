@@ -28,6 +28,8 @@
     {% endcomment %}
 {% endwith %}{% endblock %}
 
+{% block script %}{% include "fluent_blogs/entry_detail/comments_script.html" %}{% endblock %}
+
 {% block content %}
   <article id="entry-{{ object.pk }}" class="blog-entry">
     {% include "fluent_blogs/entry_detail/contents.html" %}
