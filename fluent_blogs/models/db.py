@@ -38,9 +38,9 @@ class Entry(models.Model):
     contents = PlaceholderField("blog_contents")
     parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
-    status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT)
-    publication_date = models.DateTimeField(_('publication date'), null=True, help_text=_('''When the page should go live, status must be "Published".'''))
-    publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True)
+    status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT, db_index=True)
+    publication_date = models.DateTimeField(_('publication date'), null=True, db_index=True, help_text=_('''When the page should go live, status must be "Published".'''))
+    publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
     author = models.ForeignKey(User, verbose_name=_('author'), editable=False)
