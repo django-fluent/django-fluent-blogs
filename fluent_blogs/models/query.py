@@ -130,7 +130,7 @@ def query_tags(order=None, orderby=None, limit=None):
 
     # get tags
     queryset = Tag.objects.filter(id__in=entry_tag_ids)
-    queryset = queryset.annotate(count=Count('taggit_taggeditem_items'))
+    queryset = queryset.annotate(count=Count('taggit_taggeditem_items'))  # Related name differed in Django 1.2
 
     # Ordering
     if orderby:
