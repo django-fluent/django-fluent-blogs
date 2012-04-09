@@ -16,7 +16,7 @@ def blog_reverse(viewname, args=None, kwargs=None, current_app='fluent_blogs', c
     if _HAS_FLUENT_PAGES:
         return mixed_reverse(viewname, args=args, kwargs=kwargs, current_page=current_page, multiple=multiple, ignore_multiple=ignore_multiple)
     else:
-        return reverse(viewname, urlconf=urlconf, args=args, kwargs=kwargs, current_app=current_app)
+        return reverse(viewname, args=args, kwargs=kwargs, current_app=current_app)
 
 
 __all__ = (
