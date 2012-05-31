@@ -13,6 +13,7 @@
     {% else %}
       {% if object.comments_are_open %}
         <h3 class="no-comments-title">{% trans "Leave a reply" %}</h3>
+        {% render_comment_list for object %}{# make sure the div is visible in the page #}
       {% endif %}
     {% endif %}
   </div>
