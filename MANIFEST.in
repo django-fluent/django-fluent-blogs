@@ -1,0 +1,7 @@
+# Windows note: folders should not end with a slash
+include AUTHORS
+include README.rst
+include LICENSE
+recursive-include fluent_blogs/static *.gif
+recursive-include fluent_blogs/locale *.po *.mo
+recursive-include fluent_blogs/templates *.html
