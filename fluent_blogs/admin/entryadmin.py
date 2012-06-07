@@ -53,7 +53,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
             try:
                 mixed_reverse('entry_archive_index')
             except PageTypeNotMounted:
-                context['preview_error'] = _("The blog page can't be previewed yet, a 'Blog' page needs to be created first.")
+                context['preview_error'] = _("The blog entry can't be previewed yet, a 'Blog' page needs to be created first.")
             except MultipleReverseMatch:
                 pass
 
@@ -93,7 +93,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
         return u' '.join(self._actions_column_icons(entry))
 
     actions_column.allow_tags = True
-    actions_column.short_description = _('actions')
+    actions_column.short_description = _('Actions')
 
 
     def _actions_column_icons(self, entry):
@@ -110,10 +110,10 @@ class EntryAdmin(PlaceholderFieldAdmin):
         rows_updated = queryset.update(status=Entry.PUBLISHED)
 
         if rows_updated == 1:
-            message = "1 page was marked as published."
+            message = "1 entry was marked as published."
         else:
-            message = "{0} pages were marked as published.".format(rows_updated)
+            message = "{0} entries were marked as published.".format(rows_updated)
         self.message_user(request, message)
 
 
-    make_published.short_description = _("Mark selected objects as published")
+    make_published.short_description = _("Mark selected entries as published")

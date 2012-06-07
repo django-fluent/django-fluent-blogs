@@ -1,0 +1,299 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-08 00:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: admin/entryadmin.py:21
+msgid "Publication settings"
+msgstr "Publicatievoorkeuren"
+
+#: admin/entryadmin.py:56
+msgid "The blog entry can't be previewed yet, a 'Blog' page needs to be created first."
+msgstr "Het blogartikel kan nog niet bekeken worden, er moet eerst een 'Blog' pagina aangemaakt worden."
+
+#: admin/entryadmin.py:89
+msgid "Status"
+msgstr "Status"
+
+#: admin/entryadmin.py:96
+msgid "Actions"
+msgstr "Acties"
+
+#: admin/entryadmin.py:104
+#: templates/admin/fluent_blogs/entry/change_form.html:5
+msgid "View on site"
+msgstr "Bekijk op website"
+
+#: admin/entryadmin.py:119
+msgid "Mark selected entries as published"
+msgstr "Publiceer geselecteerde blogartikelen"
+
+#: models/db.py:31
+msgid "Published"
+msgstr "Gepubliceerd"
+
+#: models/db.py:32
+msgid "Draft"
+msgstr "Concept"
+
+#: models/db.py:35
+msgid "Title"
+msgstr "Titel"
+
+#: models/db.py:36
+msgid "Slug"
+msgstr "Naam"
+
+#: models/db.py:37
+msgid "Introtext"
+msgstr "Introductietekst"
+
+#: models/db.py:41
+msgid "status"
+msgstr "status"
+
+#: models/db.py:42
+msgid "publication date"
+msgstr "gepubliceerd op"
+
+#: models/db.py:42
+msgid "When the entry should go live, status must be \"Published\"."
+msgstr "Zet de status op 'gepubliceerd' zodra het blogartikel live moet staan."
+
+#: models/db.py:43
+msgid "publication end date"
+msgstr "gepubliceerd tot"
+
+#: models/db.py:46
+msgid "author"
+msgstr "auteur"
+
+#: models/db.py:47
+msgid "creation date"
+msgstr "aanmaak datum"
+
+#: models/db.py:48
+msgid "last modification"
+msgstr "laatste wijziging"
+
+#: models/db.py:51
+msgid "Comments"
+msgstr "Reacties"
+
+#: models/db.py:52
+msgid "Categories"
+msgstr "Categoriën"
+
+#: models/db.py:62
+msgid "Blog entry"
+msgstr "Blogartikel"
+
+#: models/db.py:63
+msgid "Blog entries"
+msgstr "Blogartikelen"
+
+#: pagetypes/blogpage/models.py:7
+msgid "Blog"
+msgstr "Blog"
+
+#: pagetypes/blogpage/models.py:8
+msgid "Blogs"
+msgstr "Blogs"
+
+#: templates/admin/fluent_blogs/entry/change_form.html:4
+msgid "History"
+msgstr ""
+
+#: templates/fluent_blogs/base.html:19
+msgid "RSS Feed of latest entries"
+msgstr "RSS Feed met de laatste blogartikelen"
+
+#: templates/fluent_blogs/entry_archive.html:4
+#: templates/fluent_blogs/entry_archive.html:14
+msgid "Latest entries"
+msgstr "Laatste blogartikelen"
+
+#: templates/fluent_blogs/entry_archive.html:8
+#, python-format
+msgid "RSS Feed for %(category)s"
+msgstr "RSS-feed voor %(category)s"
+
+#: templates/fluent_blogs/entry_archive.html:9
+#, python-format
+msgid "RSS Feed for %(tag)s"
+msgstr "RSS-feed voor %(tag)s"
+
+#: templates/fluent_blogs/entry_archive.html:10
+#, python-format
+msgid "RSS Feed for %(author_name)s"
+msgstr "RSS-feed voor %(author_name)s"
+
+#: templates/fluent_blogs/entry_archive.html:15
+#, python-format
+msgid "Category %(category)s"
+msgstr "Categorie %(category)s"
+
+#: templates/fluent_blogs/entry_archive.html:16
+#: templates/fluent_blogs/entry_archive.html:24
+#, python-format
+msgid "Tag %(tag)s"
+msgstr "Tag %(tag)s"
+
+#: templates/fluent_blogs/entry_archive.html:17
+#, python-format
+msgid "Author %(author_name)s"
+msgstr "Auteur %(author_name)s"
+
+#: templates/fluent_blogs/entry_archive.html:18
+#, python-format
+msgid "Page %(number)s"
+msgstr "Pagina %(number)s"
+
+#: templates/fluent_blogs/entry_archive.html:25
+#, python-format
+msgid "Entries by %(author_name)s"
+msgstr "Artikelen door %(author_name)s"
+
+#: templates/fluent_blogs/entry_archive_day.html:4
+#: templates/fluent_blogs/entry_archive_day.html:6
+#: templates/fluent_blogs/entry_archive_day.html:8
+#, python-format
+msgid "Archives of %(day)s"
+msgstr "Archief van %(day)s"
+
+#: templates/fluent_blogs/entry_archive_month.html:4
+#: templates/fluent_blogs/entry_archive_month.html:6
+#: templates/fluent_blogs/entry_archive_month.html:8
+#, python-format
+msgid "Archives of %(month)s"
+msgstr "Archief van %(month)s"
+
+#: templates/fluent_blogs/entry_archive_month.html:13
+msgid "Daily archives"
+msgstr "Dagelijke archiefpagina's"
+
+#: templates/fluent_blogs/entry_archive_tag.html:4
+#: templates/fluent_blogs/entry_archive_tag.html:6
+#, python-format
+msgid "Archives of tag %(tag)s"
+msgstr "Archief van de tag %(tag)s"
+
+#: templates/fluent_blogs/entry_archive_year.html:4
+#: templates/fluent_blogs/entry_archive_year.html:6
+#: templates/fluent_blogs/entry_archive_year.html:8
+#, python-format
+msgid "Archives of %(year)s"
+msgstr "Archief van %(year)s"
+
+#: templates/fluent_blogs/entry_archive_year.html:13
+msgid "Monthly archives"
+msgstr "Maandelijke archiefpagina's"
+
+#: templates/fluent_blogs/entry_archive/empty.html:1
+msgid "No entries yet."
+msgstr "Nog geen artikelen."
+
+#: templates/fluent_blogs/entry_archive/item.html:11
+msgid "in"
+msgstr "in"
+
+#: templates/fluent_blogs/entry_archive/item.html:29
+msgid "Tags"
+msgstr "Tags"
+
+#: templates/fluent_blogs/entry_archive/item.html:54
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] "%(comment_count)s reacties"
+msgstr[1] "%(comment_count)s reactie"
+
+#: templates/fluent_blogs/entry_archive/item.html:57
+msgid "Post a comment"
+msgstr "Plaats een reactie"
+
+#: templates/fluent_blogs/entry_archive/item.html:61
+#, python-format
+msgid "%(pingback_count)s pingback"
+msgid_plural "%(pingback_count)s pingbacks"
+msgstr[0] "%(pingback_count)s pingback"
+msgstr[1] "%(pingback_count)s pingbacks"
+
+#: templates/fluent_blogs/entry_archive/item.html:62
+#, python-format
+msgid "%(trackback_count)s trackback"
+msgid_plural "%(trackback_count)s trackbacks"
+msgstr[0] "%(trackback_count)s trackback"
+msgstr[1] "%(trackback_count)s trackbacks"
+
+#: templates/fluent_blogs/entry_detail/comments.html:6
+#, python-format
+msgid "%(comment_count)s comment to %(entry_title)s"
+msgid_plural "%(comment_count)s comments to %(entry_title)s"
+msgstr[0] "%(comment_count)s reactie op %(entry_title)s"
+msgstr[1] "%(comment_count)s reacties op %(entry_title)s"
+
+#: templates/fluent_blogs/entry_detail/comments.html:11
+msgid "Comments are closed."
+msgstr "Reacties zijn gesloten."
+
+#: templates/fluent_blogs/entry_detail/comments.html:15
+msgid "Leave a reply"
+msgstr "Laat een reactie achter"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:7
+msgid "Previous"
+msgstr "Vorige"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:8
+msgid "Next"
+msgstr "Volgende"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:14
+msgid "Related entries"
+msgstr "Gerelateerde artikelen"
+
+#: views/feeds.py:116
+msgid "{site_name} - Latest entries"
+msgstr "{site_name} - Laatste berichten"
+
+#: views/feeds.py:122
+msgid "The latest entries for {site_name}"
+msgstr "Recente artikelen van {site_name}"
+
+#: views/feeds.py:140
+msgid "Entries in the category {category_name}"
+msgstr "Artikelen in de categorie {category_name}"
+
+#: views/feeds.py:146
+msgid "The latest entries in the category {category_name}"
+msgstr "Recente artikelen in de categorie {category_name}"
+
+#: views/feeds.py:164
+msgid "Entries by {author_name}"
+msgstr "Artikelen door {author_name}"
+
+#: views/feeds.py:170
+msgid "The latest entries written by {author_name}"
+msgstr "Recente artikelen geschreven door {author_name}"
+
+#: views/feeds.py:189
+msgid "Entries for the tag {tag_name}"
+msgstr "Artikelen met de tag {tag_name}"
+
+#: views/feeds.py:195
+msgid "The latest entries tagged with {tag_name}"
+msgstr "Recente artikelen die getagged zijn met {tag_name}"

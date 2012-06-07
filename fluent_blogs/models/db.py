@@ -39,7 +39,7 @@ class Entry(models.Model):
     parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
     status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT, db_index=True)
-    publication_date = models.DateTimeField(_('publication date'), null=True, db_index=True, help_text=_('''When the page should go live, status must be "Published".'''))
+    publication_date = models.DateTimeField(_('publication date'), null=True, db_index=True, help_text=_('''When the entry should go live, status must be "Published".'''))
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
@@ -90,7 +90,7 @@ class Entry(models.Model):
     @property
     def url(self):
         """
-        The URL of the page, provided for template code.
+        The URL of the entry, provided for template code.
         """
         return self.get_absolute_url()
 
