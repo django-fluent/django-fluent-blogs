@@ -12,7 +12,11 @@
    - script
    - meta-description
    - meta-keywords
+   - og-type (optional)
+   - og-description (optional)
 {% endcomment %}
+
+{% block og-type %}blog{% endblock %}
 
 {% block link %}
     <link rel="index" href="{% blogurl 'entry_archive_index' %}" />
