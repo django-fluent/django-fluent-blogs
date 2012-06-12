@@ -3,7 +3,7 @@
 
   <div id="comments-wrapper">
     {% if comment_count %}
-    <h3 class="has-comments-title">{% blocktrans comment_count with comment_count=comment_count entry_title=object.title %}{{ comment_count }} comment to {{ entry_title }}{% plural %}{{ comment_count }} comments to {{ entry_title }}{% endblocktrans %}</h3>
+    <h3 class="has-comments-title">{% blocktrans with entry_title=object.title count comment_count=comment_count %}{{ comment_count }} comment to {{ entry_title }}{% plural %}{{ comment_count }} comments to {{ entry_title }}{% endblocktrans %}</h3>
 
       {% render_comment_list for object %}
 
