@@ -1,7 +1,7 @@
 {% load i18n %}
 {% with next_entry=object.next_entry previous_entry=object.previous_entry %}
 
-  <div class="entry-widgets">
+  <div class="entry-navigation">
     {% if next_entry or previous_entry %}
       <nav class="next-previous-entry">
         {% if previous_entry %}<span class="previous-entry"><a href="{{ previous_entry.get_absolute_url }}" title="{{ previous_entry.title }}" rel="prev"><span class="nav-arrow">&larr; </span>{% trans "Previous" %}</a></span>{% endif %}
