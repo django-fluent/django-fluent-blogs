@@ -62,6 +62,7 @@ class Entry(models.Model):
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
         ordering = ('-publication_date',)
+        get_latest_by = "publication_date"  # Support Entry.objects.latest() call.
 
 
     def __unicode__(self):
