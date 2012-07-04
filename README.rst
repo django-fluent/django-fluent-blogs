@@ -9,7 +9,7 @@ This is a basic blogging engine, with the following features:
 
 Applications:
 
-* Comments based on django.contrib.comments_ (can be styled with django-fluent-comments_ for example)
+* Comments based on django.contrib.comments_ (can be styled via django-fluent-comments_ for example)
 * Categories integrated with django-categories_
 * *Optional* tagging with django-taggit_ and optionally django-taggit-autocomplete-modified_
 * *Optional* integration with django-fluent-pages_
@@ -18,7 +18,7 @@ Applications:
 TODO:
 
 * Provide a mechanism for custom fields, for example by using django-polymorphic_ for entries or a custom admin form.
-* Have integration with publication protocols (like django-blog-zinnia_ provides), done in a similar way like django.contrib.syndication_ works.
+* Have integration with blog publication protocols (like django-blog-zinnia_ provides), done in a similar way like django.contrib.syndication_ works.
 
 
 Installation
