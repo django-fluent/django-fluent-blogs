@@ -101,7 +101,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
         actions = []
         if hasattr(entry, 'get_absolute_url') and entry.is_published:
             actions.append(
-                u'<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_pages/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>'.format(
+                u'<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_blogs/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>'.format(
                     url=entry.get_absolute_url(), title=_('View on site'), static=settings.STATIC_URL)
             )
         return actions
