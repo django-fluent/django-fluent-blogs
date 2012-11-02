@@ -7,6 +7,13 @@ from django.utils.translation import ugettext_lazy as _
 from fluent_contents.admin.placeholderfield import PlaceholderFieldAdmin
 from fluent_blogs.models import Entry
 
+# The timezone support was introduced in Django 1.4, fallback to standard library for 1.3.
+try:
+    from django.utils.timezone import now
+except ImportError:
+    from datetime import datetime
+    now = datetime.now
+
 
 class EntryAdmin(PlaceholderFieldAdmin):
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
@@ -42,7 +49,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
         if not obj.publication_date:
             # auto_now_add makes the field uneditable.
             # default fills the field before the post is written (too early)
-            obj.publication_date = datetime.now()
+            obj.publication_date = now()
         obj.save()
 
 

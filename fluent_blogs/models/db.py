@@ -116,7 +116,7 @@ class Entry(models.Model):
     def comments_are_open(self):
         """Check if comments are open"""
         #if AUTO_CLOSE_COMMENTS_AFTER and self.comment_enabled:
-        #    return (datetime.now() - self.start_publication).days <\
+        #    return (now() - self.start_publication).days <\
         #           AUTO_CLOSE_COMMENTS_AFTER
         #return self.comment_enabled
         return True
