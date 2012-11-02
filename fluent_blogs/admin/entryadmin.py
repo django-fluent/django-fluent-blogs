@@ -3,6 +3,7 @@ import django
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import widgets
+from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.admin.placeholderfield import PlaceholderFieldAdmin
 from fluent_blogs.models import Entry
@@ -15,12 +16,19 @@ except ImportError:
     now = datetime.now
 
 
+class EntryForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(EntryForm, self).__init__(*args, **kwargs)
+        self.fields['publication_date'].required = False  # The admin's .save() method fills in a default.
+
+
 class EntryAdmin(PlaceholderFieldAdmin):
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
     list_filter = ('status',)
     date_hierarchy = 'publication_date'
     search_fields = ('slug', 'title')
     actions = ['make_published']
+    form = EntryForm
 
     fieldsets = (
         (None, {
