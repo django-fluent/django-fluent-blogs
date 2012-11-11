@@ -71,10 +71,11 @@ class Entry(models.Model):
 
     def get_absolute_url(self):
         root = blog_reverse('entry_archive_index', ignore_multiple=True)
-        return root + self.get_app_url()
+        return root + self._get_relative_url()
 
 
-    def get_app_url(self):
+    def _get_relative_url(self):
+        # Return the link style, using the permalink style setting.
         return appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
             year = self.publication_date.strftime('%Y'),
             month = self.publication_date.strftime('%m'),
@@ -85,7 +86,7 @@ class Entry(models.Model):
 
 
     def get_short_url(self):
-        return blog_reverse('entry_shortlink', kwargs={'pk': self.id}, ignore_multiple=True)
+        return blog_reverse('entry_shortlink', kwargs={'pk': self.pk}, ignore_multiple=True)
 
 
     @property
@@ -108,13 +109,17 @@ class Entry(models.Model):
 
     @property
     def comments(self):
-        """Return the visible comments."""
+        """
+        Return the visible comments.
+        """
         return comments.get_model().objects.for_model(self).filter(is_public=True)
 
 
     @property
     def comments_are_open(self):
-        """Check if comments are open"""
+        """
+        Check if comments are open
+        """
         #if AUTO_CLOSE_COMMENTS_AFTER and self.comment_enabled:
         #    return (now() - self.start_publication).days <\
         #           AUTO_CLOSE_COMMENTS_AFTER

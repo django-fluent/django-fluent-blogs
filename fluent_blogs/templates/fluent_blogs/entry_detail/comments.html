@@ -1,5 +1,5 @@
 {% load i18n comments %}
-{% with comment_list=object.comments %}{% with comment_count=comment_list.count %}
+{% with comment_count=object.comments.count %}
 
   <div id="comments-wrapper">
     {% if comment_count %}
@@ -11,9 +11,13 @@
         <p class="comments-closed">{% trans "Comments are closed." %}</p>
       {% endif %}
     {% else %}
+      {# no comments yet, invite #}
       {% if object.comments_are_open %}
         <h3 class="no-comments-title">{% trans "Leave a reply" %}</h3>
-        {% render_comment_list for object %}{# make sure the div is visible in the page #}
+
+        {# include the empty list, so the <div> is there for Ajax code #}
+        {% render_comment_list for object %}
+
       {% endif %}
     {% endif %}
   </div>
@@ -24,4 +28,4 @@
     </div>
   {% endif %}
 
-{% endwith %}{% endwith %}
+{% endwith %}
