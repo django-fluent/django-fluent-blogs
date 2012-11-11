@@ -148,3 +148,17 @@ class Entry(models.Model):
         """
         entries = self.__class__.objects.published().filter(publication_date__gt=self.publication_date).order_by('publication_date')[:1]
         return entries[0] if entries else None
+
+
+
+# Make sure the 'tags' field is ignored by South
+try:
+    from south.modelsinspector import add_ignored_fields
+except ImportError:
+    pass
+else:
+    # South should ignore the tags field as it's a RelatedField.
+    add_ignored_fields((
+        "^taggit\.managers\.TaggableManager",
+        "^taggit_autocomplete_modified\.managers\.TaggableManagerAutocomplete",
+    ))
