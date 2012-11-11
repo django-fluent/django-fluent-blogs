@@ -137,6 +137,22 @@ class Entry(models.Model):
 
 
     @property
+    def comments_are_moderated(self):
+        """
+        Check if comments are moderated
+        """
+        try:
+            # Get the moderator which is installed for this model.
+            mod = moderator._registry[self.__class__]
+        except KeyError:
+            return False
+
+        # Check the 'auto_moderate_field', 'moderate_after',
+        # by reusing the basic Django policies.
+        return CommentModerator.moderate(mod, None, self, None)
+
+
+    @property
     def previous_entry(self):
         """
         Return the previous entry
