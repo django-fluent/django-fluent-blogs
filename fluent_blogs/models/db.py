@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import comments
+from django.contrib.comments.moderation import moderator, CommentModerator
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
@@ -50,6 +51,7 @@ class Entry(models.Model):
     objects = EntryManager()
     all_comments = GenericRelation(comments.get_model(), verbose_name=_("Comments"), object_id_field='object_pk')
     categories = models.ManyToManyField(appsettings.FLUENT_BLOGS_CATEGORY_MODEL, verbose_name=_("Categories"), blank=True)
+    enable_comments = models.BooleanField(_("Enable comments"), default=True)
 
     if TaggableManager is not None:
         tags = TaggableManager(blank=True)
@@ -120,16 +122,18 @@ class Entry(models.Model):
         """
         Check if comments are open
         """
-        #if AUTO_CLOSE_COMMENTS_AFTER and self.comment_enabled:
-        #    return (now() - self.start_publication).days <\
-        #           AUTO_CLOSE_COMMENTS_AFTER
-        #return self.comment_enabled
-        return True
+        if not self.enable_comments:
+            return False
 
+        try:
+            # Get the moderator which is installed for this model.
+            mod = moderator._registry[self.__class__]
+        except KeyError:
+            return True
 
-    @property
-    def pingback_enabled(self):
-        return False
+        # Check the 'enable_field', 'auto_close_field' and 'close_after',
+        # by reusing the basic Django policies.
+        return CommentModerator.allow(mod, None, self, None)
 
 
     @property
@@ -149,6 +153,15 @@ class Entry(models.Model):
         entries = self.__class__.objects.published().filter(publication_date__gt=self.publication_date).order_by('publication_date')[:1]
         return entries[0] if entries else None
 
+
+
+# Auto-register with django-fluent-comments moderation
+if 'fluent_comments' in settings.INSTALLED_APPS:
+    from fluent_comments.moderation import moderate_model
+    moderate_model(Entry,
+        publication_date_field='publication_date',
+        enable_comments_field='enable_comments',
+    )
 
 
 # Make sure the 'tags' field is ignored by South

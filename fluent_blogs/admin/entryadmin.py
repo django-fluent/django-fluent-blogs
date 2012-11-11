@@ -43,6 +43,8 @@ class EntryAdmin(PlaceholderFieldAdmin):
     if Entry.tags is not None:
         fieldsets[0][1]['fields'] += ('tags',)
 
+    fieldsets[0][1]['fields'] += ('enable_comments',)
+
     prepopulated_fields = {'slug': ('title',),}
     radio_fields = {
         'status': admin.HORIZONTAL,
