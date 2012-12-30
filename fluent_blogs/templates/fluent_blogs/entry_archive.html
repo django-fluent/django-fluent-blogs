@@ -33,7 +33,7 @@
   {% block object_list %}
     {% for object in object_list %}
       <article id="blog-entry-{{ object.pk }}" class="blog-entry">
-        {% include "fluent_blogs/entry_archive/item.html" %}
+        {% include "fluent_blogs/entry_archive/item.html" with BLOG_LAYOUT='archive' %}
       </article>
     {% empty %}
       {% include "fluent_blogs/entry_archive/empty.html" %}
