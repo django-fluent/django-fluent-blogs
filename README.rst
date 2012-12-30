@@ -9,9 +9,10 @@ This is a basic blogging engine, with the following features:
 
 Applications:
 
-* Comments based on django.contrib.comments_ (can be styled via django-fluent-comments_ for example)
-* Categories integrated with django-categories_
-* *Optional* tagging with django-taggit_ and optionally django-taggit-autocomplete-modified_
+* Comments based on django.contrib.comments_
+* Categories based on django-categories_
+* *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
+* *Optional* integration with django-fluent-comments_ for Ajax-based comments
 * *Optional* integration with django-fluent-pages_
 * *Optional* integration with django.contrib.sitemaps_
 
@@ -94,9 +95,8 @@ In that case, don't include ``fluent_blogs.urls`` in the URLconf, but add it as 
 
 A "Blog" page can now be created in the page tree of django-fluent-pages_.
 
-
-Configuring the template
-------------------------
+Configuring the templates
+-------------------------
 
 To display the blog contents, a ``fluent_blogs/base.html`` file needs to be created.
 This will be used to map the output of the module to your site templates.
@@ -126,6 +126,15 @@ this example should be sufficient.
 
 The filename of the base template can also be changed by defining the  ``FLUENT_BLOGS_BASE_TEMPLATE`` setting.
 
+Comments
+~~~~~~~~
+
+To integrate django.contrib.comments_ with your site theme, also create a ``comments/base.html`` template that maps the blocks:
+
+* ``title``
+* ``content``
+* ``extrahead`` (only for django-fluent-comments_)
+
 
 Adding pages to the sitemap
 ---------------------------
@@ -147,6 +156,22 @@ Add the following in ``urls.py``::
     )
 
 
+Using other commenting systems
+------------------------------
+
+This module automatically integrates with django-fluent-comments_ when it's included in the ``INSTALLED_APPS``.
+This will enable the moderation features, and include the required CSS and JavaScript files
+that are needed to have a Ajax-based commenting system. These tags are generated using:
+
+* ``fluent_blogs/entry_detail/comments_css.html``
+* ``fluent_blogs/entry_detail/comments_script.html``
+
+To use a different commenting system instead of django.contrib.comments_ (e.g. Facebook-comments_ or DISQUS_), override the following templates:
+
+* ``fluent_blogs/entry_detail/comments.html``
+* ``fluent_blogs/entry_detail/item.html``
+
+
 Finishing up
 ------------
 
@@ -156,6 +181,7 @@ The database can be created afterwards::
     ./manage.py runserver
 
 
+.. _DISQUS: http://disqus.com/
 .. _django-blog-zinnia: http://django-blog-zinnia.com/documentation/
 .. _django.contrib.syndication: https://docs.djangoproject.com/en/dev/ref/contrib/syndication/
 .. _django.contrib.comments: https://docs.djangoproject.com/en/dev/ref/contrib/comments/
@@ -167,4 +193,5 @@ The database can be created afterwards::
 .. _django-polymorphic: https://github.com/bconstantin/django_polymorphic
 .. _django-taggit: https://github.com/alex/django-taggit
 .. _django-taggit-autocomplete-modified: http://packages.python.org/django-taggit-autocomplete-modified/
+.. _Facebook-comments: https://developers.facebook.com/docs/reference/plugins/comments/
 
