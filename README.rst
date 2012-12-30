@@ -1,5 +1,5 @@
-Introduction
-============
+django-fluent-blogs
+===================
 
 This is a basic blogging engine, with the following features:
 
@@ -7,7 +7,7 @@ This is a basic blogging engine, with the following features:
 * Contents filled by django-fluent-contents_
 * RSS and Atom feeds
 
-Applications:
+Used applications:
 
 * Comments based on django.contrib.comments_
 * Categories based on django-categories_
@@ -18,8 +18,8 @@ Applications:
 
 TODO:
 
-* Provide a mechanism for custom fields, for example by using django-polymorphic_ for entries or a custom admin form.
-* Have integration with blog publication protocols (like django-blog-zinnia_ provides), done in a similar way like django.contrib.syndication_ works.
+* Provide a mechanism for custom fields, for example by using django-polymorphic_ for entries or using a custom admin form.
+* Have integration with blog publication protocols (like django-blog-zinnia_ provides), built in a similar way like django.contrib.syndication_ works.
 
 
 Installation
@@ -31,22 +31,18 @@ First install the module, preferably in a virtual environment::
     cd django-fluent-blogs
     pip install .
 
+    # To add tagging support + autocomplete:
+    pip install django-taggit django-taggit-autocomplete-modified
+
+
 Configuration
 -------------
 
-Next, create a project which uses the CMS::
-
-    cd ..
-    django-admin.py startproject fluentdemo
-
-It should have the following settings::
+Add the applications to ``settings.py``::
 
     INSTALLED_APPS += (
-        # Blog engine
+        # Blog engine + comments
         'fluent_blogs',
-
-        # Comments system
-        'fluent_comments',       # Optional but recommended.
         'django.contrib.comments',
 
         # The content plugins
@@ -57,43 +53,29 @@ It should have the following settings::
         'categories',
         'categories.editor',
         'django_wysiwyg',
-        'mptt',
 
         # Optional tagging
         'taggit',
         'taggit_autocomplete_modified',
-
-        # enable the admin
-        'django.contrib.admin',
     )
 
     DJANGO_WYSIWYG_FLAVOR = "yui_advanced"
 
-Note some applications are optional.
-The ``fluent_contents``, ``django.contrib.comments`` and ``categories`` are required.
-Tagging is optional, and so are the various ``fluent_contents`` plugins.
+Note that not all applications are required;
+tagging is optional, and so are the various ``fluent_contents`` plugins.
 
-
-Configuring the URLs
---------------------
-
-To use the application stand alone, include the pages in ``urls.py``::
+Include the apps in ``urls.py``::
 
     urlpatterns += patterns('',
-        url(r'^api/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
-        url(r'^blog/comments/', include('django.contrib.comments.urls')),   # or fluent_comments.urls
+        url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
+        url(r'^blog/comments/', include('django.contrib.comments.urls')),
         url(r'^blog/', include('fluent_blogs.urls')),
     )
 
-The application can also be used as pagetype in django-fluent-pages_.
-In that case, don't include ``fluent_blogs.urls`` in the URLconf, but add it as page type instead::
+The database can be created afterwards:
 
-    INSTALLED_APPS += (
-        'fluent_pages',
-        'fluent_blogs.pagetypes.blogpage',
-    )
+    ./manage.py syncdb
 
-A "Blog" page can now be created in the page tree of django-fluent-pages_.
 
 Configuring the templates
 -------------------------
@@ -156,20 +138,64 @@ Add the following in ``urls.py``::
     )
 
 
-Using other commenting systems
-------------------------------
+Integration with django-fluent-pages:
+-------------------------------------
 
-This module automatically integrates with django-fluent-comments_ when it's included in the ``INSTALLED_APPS``.
-This will enable the moderation features, and include the required CSS and JavaScript files
-that are needed to have a Ajax-based commenting system. These tags are generated using:
+To integrate with the page types of django-fluent-pages_, don't include ``fluent_blogs.urls`` in the URLconf::
 
-* ``fluent_blogs/entry_detail/comments_css.html``
-* ``fluent_blogs/entry_detail/comments_script.html``
+    urlpatterns += patterns('',
+        url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
+        url(r'^blog/comments/', include('django.contrib.comments.urls')),   # or fluent_comments.urls
+    )
 
-To use a different commenting system instead of django.contrib.comments_ (e.g. Facebook-comments_ or DISQUS_), override the following templates:
+Instead, add a page type instead::
+
+    INSTALLED_APPS += (
+        'fluent_pages',
+        'fluent_blogs.pagetypes.blogpage',
+    )
+
+A "Blog" page can now be created in the page tree of django-fluent-pages_
+at the desired URL path.
+
+
+Integration with django-fluent-comments:
+----------------------------------------
+
+To use Ajax-based commenting features of django-fluent-comments_, include it in ``settings.py``::
+
+    INSTALLED_APPS += (
+        'fluent_blogs',
+        'fluent_comments',      # Before django.contrib.comments
+        'django.contrib.comments',
+
+        ...
+    )
+
+Include the proper module in ``urls.py``::
+
+    urlpatterns += patterns('',
+        url(r'^blog/comments/', include('fluent_comments.urls')),
+
+        ...
+    )
+
+This module will detect the installation, and enable the moderation features and include
+the required CSS and JavaScript files to have a Ajax-based commenting system.
+
+
+Integration with other commenting systems
+-----------------------------------------
+
+To use a different commenting system instead of django.contrib.comments_ (e.g. DISQUS_ or Facebook-comments_), override the following templates:
 
 * ``fluent_blogs/entry_detail/comments.html``
 * ``fluent_blogs/entry_detail/item.html``
+
+These CSS/JavaScript includes are generated using:
+
+* ``fluent_blogs/entry_detail/comments_css.html``
+* ``fluent_blogs/entry_detail/comments_script.html``
 
 
 Finishing up
