@@ -3,6 +3,8 @@ import django
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import widgets
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.admin.placeholderfield import PlaceholderFieldAdmin
@@ -73,7 +75,16 @@ class EntryAdmin(PlaceholderFieldAdmin):
             except PageTypeNotMounted:
                 context['preview_error'] = _("The blog entry can't be previewed yet, a 'Blog' page needs to be created first.")
             except MultipleReverseMatch:
+                # When 'entry_archive_index is ambiguous (because there are multiple blog nodes in the fluent-pages tree),
+                # the edit page will automatically pick an option.
                 pass
+            except NoReverseMatch:
+                # Since forgetting the pagetype app is easy, give off a warning to help developers
+                # find their way with these apps.
+                raise ImproperlyConfigured(
+                    "To use django-fluent-blogs, either include('fluent_blogs.urls') in the URLConf, "
+                    "or add the 'fluent_blogs.pagetypes.blogpage' app to the INSTALLED_APPS."
+                )
 
         return super(EntryAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
@@ -117,10 +128,19 @@ class EntryAdmin(PlaceholderFieldAdmin):
     def _actions_column_icons(self, entry):
         actions = []
         if hasattr(entry, 'get_absolute_url') and entry.is_published:
-            actions.append(
-                u'<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_blogs/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>'.format(
-                    url=entry.get_absolute_url(), title=_('View on site'), static=settings.STATIC_URL)
-            )
+            try:
+                url = entry.get_absolute_url()
+            except NoReverseMatch:
+                # A Blog Entry is already added, but the URL can no longer be resolved.
+                # This can either mean that urls.py is missing a 'fluent_blogs.urls' (unlikely),
+                # or that this is a PageTypeNotMounted exception because the "Blog page" node was removed.
+                # In the second case, the edit page should still be reachable, and the "view on site" link will give an alert.
+                pass
+            else:
+                actions.append(
+                    u'<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_blogs/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>'.format(
+                        url=url, title=_('View on site'), static=settings.STATIC_URL)
+                )
         return actions
 
 
