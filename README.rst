@@ -6,6 +6,7 @@ This is a basic blogging engine, with the following features:
 * Archive views by date, author, category and tags.
 * Contents filled by django-fluent-contents_
 * RSS and Atom feeds
+* Granularity in templates to override layouts.
 
 Used applications:
 
@@ -198,13 +199,39 @@ These CSS/JavaScript includes are generated using:
 * ``fluent_blogs/entry_detail/comments_script.html``
 
 
-Finishing up
+Overriding the blog layout
+--------------------------
+
+To change the layout of the blog , the following templates can be overwritten:
+
+In the archive/list page:
+
+* ``fluent_blogs/entry_archive/item.html`` - a single list item.
+* ``fluent_blogs/entry_archive/empty.html`` - the default message when there are no entries.
+* ``fluent_blogs/entry_archive/pagination.html`` - the pagination at the bottom of the page.
+
+In the detail page:
+
+* ``fluent_blogs/entry_detail/contents.html`` - the entry contents, based on ``fluent_blogs/entry_archive/item.html`` by default.
+* ``fluent_blogs/entry_detail/widgets.html`` - space to add Social Media buttons.
+* ``fluent_blogs/entry_detail/comments.html`` - the comments.
+* ``fluent_blogs/entry_detail/navigation.html`` - the entry navigation links
+* ``fluent_blogs/entry_detail/page_footer.html`` - space below the comments to add Social Media buttons.
+* ``fluent_blogs/entry_detail/comments_css.html``
+* ``fluent_blogs/entry_detail/comments_script.html``
+
+
+Contributing
 ------------
 
-The database can be created afterwards::
+This module is designed to be generic, and easy to plug into your site.
+In case there is anything you didn't like about it, or think it's not
+flexible enough, please let us know. We'd love to improve it!
 
-    ./manage.py syncdb
-    ./manage.py runserver
+If you have any other valuable contribution, suggestion or idea,
+please let us know as well because we will look into it.
+Pull requests are welcome too. :-)
+
 
 
 .. _DISQUS: http://disqus.com/
