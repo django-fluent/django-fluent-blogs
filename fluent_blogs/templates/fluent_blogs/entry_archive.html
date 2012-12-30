@@ -33,9 +33,7 @@
   {% block object_list %}
     {% for object in object_list %}
       <article id="blog-entry-{{ object.pk }}" class="blog-entry">
-        {% with object.html_content|truncatewords_html:100|safe as object_content %}
-          {% include "fluent_blogs/entry_archive/item.html" %}
-        {% endwith %}
+        {% include "fluent_blogs/entry_archive/item.html" %}
       </article>
     {% empty %}
       {% include "fluent_blogs/entry_archive/empty.html" %}

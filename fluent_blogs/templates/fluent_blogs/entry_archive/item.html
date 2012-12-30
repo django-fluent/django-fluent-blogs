@@ -19,7 +19,8 @@
 
   <div class="entry-body">
     <div class="entry-content">
-      {% render_placeholder object.contents %}
+      {# to shorten the contents, use: {% with object.html_content|truncatewords_html:100|safe as object_content %} #}
+      {% if object_contents %}{{ object_contents }}{% else %}{% render_placeholder object.contents %}{% endif %}
     </div>
   </div>
 
