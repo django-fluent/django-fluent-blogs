@@ -72,6 +72,7 @@ Note some applications are optional.
 The ``fluent_contents``, ``django.contrib.comments`` and ``categories`` are required.
 Tagging is optional, and so are the various ``fluent_contents`` plugins.
 
+
 Configuring the URLs
 --------------------
 
@@ -92,6 +93,39 @@ In that case, don't include ``fluent_blogs.urls`` in the URLconf, but add it as 
     )
 
 A "Blog" page can now be created in the page tree of django-fluent-pages_.
+
+
+Configuring the template
+------------------------
+
+To display the blog contents, a ``fluent_blogs/base.html`` file needs to be created.
+This will be used to map the output of the module to your site templates.
+
+The base template needs to have the blocks:
+
+* ``content`` - displays the main content
+* ``title`` - the ``<head>`` title fragment.
+* ``link`` - displays ``<link>`` tags for RSS feeds.
+* ``script`` - includes additional ``<script>`` tags.
+* ``meta-description`` - the ``value`` of the meta-description tag.
+* ``meta-keywords`` - the ``value`` for the meta-keywords tag.
+* ``og-type`` - the OpenGraph type for Facebook (optional)
+* ``og-description`` the OpenGraph description for Facebook (optional)
+
+The ``fluent_blogs/base.html`` template could simply remap the block names to the site's ``base.html`` template.
+For example::
+
+    {% extends "base.html" %}
+
+    {% block headtitle %}{% block title %}{% endblock %}{% endblock %}
+
+    {% block main %}{% block content %}{% endblock %}{% endblock %}
+
+When all other block names are already available in the site's ``base.html`` template,
+this example should be sufficient.
+
+The filename of the base template can also be changed by defining the  ``FLUENT_BLOGS_BASE_TEMPLATE`` setting.
+
 
 Adding pages to the sitemap
 ---------------------------

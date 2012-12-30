@@ -1,0 +1,9 @@
+{% extends FLUENT_BLOGS_BASE_TEMPLATE %}{% load i18n fluent_blogs_tags %}
+{# The base template is 'fluent_blogs/base.html' by default. #}
+
+{% block og-type %}blog{% endblock %}
+
+{% block link %}
+    <link rel="index" href="{% blogurl 'entry_archive_index' %}" />
+    <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest entries" %}" href="{% blogurl 'entry_archive_index_rss' %}" />
+{% endblock %}
