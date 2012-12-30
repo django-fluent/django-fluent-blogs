@@ -104,28 +104,34 @@ class EntryAdmin(PlaceholderFieldAdmin):
     )
 
 
-    def status_column(self, entry):
+    @classmethod
+    def get_status_column(cls, entry):
+        # Create a status column, is also reused by templatetags/fluent_blogs_admin_tags.py
         status = entry.status
-        title = [rec[1] for rec in Entry.STATUSES if rec[0] == status].pop()
-        icon  = [rec[1] for rec in self.STATUS_ICONS if rec[0] == status].pop()
+        title = next(rec[1] for rec in Entry.STATUSES if rec[0] == status)
+        icon  = next(rec[1] for rec in cls.STATUS_ICONS if rec[0] == status)
         if django.VERSION >= (1, 4):
             admin = settings.STATIC_URL + 'admin/img/'
         else:
             admin = settings.ADMIN_MEDIA_PREFIX + 'img/admin/'
         return u'<img src="{admin}{icon}" width="10" height="10" alt="{title}" title="{title}" />'.format(admin=admin, icon=icon, title=title)
 
+
+    def status_column(self, entry):
+        # Method is needed because can't assign attributes to a class method
+        return self.get_status_column(entry)
+
     status_column.allow_tags = True
     status_column.short_description = _('Status')
 
 
-    def actions_column(self, entry):
-        return u' '.join(self._actions_column_icons(entry))
-
-    actions_column.allow_tags = True
-    actions_column.short_description = _('Actions')
+    @classmethod
+    def get_actions_column(cls, entry):
+        return u' '.join(cls._actions_column_icons(entry))
 
 
-    def _actions_column_icons(self, entry):
+    @classmethod
+    def _actions_column_icons(cls, entry):
         actions = []
         if hasattr(entry, 'get_absolute_url') and entry.is_published:
             try:
@@ -142,6 +148,13 @@ class EntryAdmin(PlaceholderFieldAdmin):
                         url=url, title=_('View on site'), static=settings.STATIC_URL)
                 )
         return actions
+
+
+    def actions_column(self, entry):
+        return self.get_actions_column(entry)
+
+    actions_column.allow_tags = True
+    actions_column.short_description = _('Actions')
 
 
     def make_published(self, request, queryset):

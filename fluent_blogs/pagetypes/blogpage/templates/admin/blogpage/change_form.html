@@ -1,0 +1,47 @@
+{% extends base_change_form_template %}
+{% load i18n fluent_blogs_tags fluent_blogs_admin_tags static %}{% load url from future %}
+
+{% block after_first_fieldset %}
+  {% get_static_prefix as STATIC_URL %}{# Can't expect Django project to use context processors #}
+
+  {% if change %}
+    <div class="inline-group" id="published-entries" xmlns="http://www.w3.org/1999/html">
+        <div class="tabular inline-related">
+            <fieldset class="module">
+                <h2>
+                    {% trans "Latest blog entries at this page" %}
+                </h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Entry" %}</th>
+                            <th width="80">{% trans "status" as t %}{{ t|title }}</th>
+                            <th width="160">{% trans "last modification" as t %}{{ t|title }}</th>
+                            <th width="120">{% trans "actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in original.entries.all|slice:":15" %}
+                        <tr class="{% cycle 'row1' 'row2' %}">
+                            <td>
+                                <span class="inline_label">
+                                    <a href="{% url 'admin:fluent_blogs_entry_change' entry.pk %}" target="_blank">{{ entry }}</a>
+                                </span>
+                            </td>
+                            <td>{% status_column entry %}</td>
+                            <td class="nowrap">{{ entry.modification_date }}</td>
+                            <td class="nowrap">{% actions_column entry %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </fieldset>
+        </div>
+    </div>
+
+  {% endif %}
+
+{% endblock %}
