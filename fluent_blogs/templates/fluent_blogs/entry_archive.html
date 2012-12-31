@@ -22,7 +22,7 @@
   {% block content_title %}
     {% if category %}<h1>{{ category }}</h1>{% endif %}
     {% if tag %}<h1>{% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}</h1>{% endif %}
-    {% if author %}<h1>{% blocktrans with author_name.get_full_name|default:author.username as author %}Entries by {{ author_name }}{% endblocktrans %}</h1>{% endif %}
+    {% if author %}<h1>{% blocktrans with author.get_full_name|default:author.username as author_name %}Entries by {{ author_name }}{% endblocktrans %}</h1>{% endif %}
 
     {% if category and category.description %}
       <p>{{ category.description|striptags|safe }}</p>
