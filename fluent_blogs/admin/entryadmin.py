@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
-from fluent_contents.admin.placeholderfield import PlaceholderFieldAdmin
+from fluent_contents.admin import PlaceholderFieldAdmin
 from fluent_blogs.models import Entry
 
 # The timezone support was introduced in Django 1.4, fallback to standard library for 1.3.

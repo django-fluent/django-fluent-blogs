@@ -6,7 +6,7 @@ from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from fluent_contents.models.fields import PlaceholderField
+from fluent_contents.models import PlaceholderField
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager
 from fluent_blogs import appsettings
