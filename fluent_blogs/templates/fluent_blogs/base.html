@@ -10,7 +10,7 @@
     <meta property="og:description" content="{% block og-description %}{% endblock %}" />
 
     {% block link %}{% endblock %}
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     {% block script %}{% endblock %}
 </head>
 <body>
@@ -24,7 +24,7 @@
 </ul>
 <p>The template needs to provide the following blocks:</p>
 <table>
-    <tr><td><kbd>contents</kbd></td><td>The placeholder for the main content.</td></tr>
+    <tr><td><kbd>content</kbd></td><td>The block for the main content.</td></tr>
     <tr><td><kbd>title</kbd></td><td>The contents for the <code>&lt;title&gt;</code> tag.</td></tr>
     <tr><td><kbd>link</kbd></td><td>The placeholder for <code>&lt;link&gt;</code> tags for RSS feeds and CSS.</td></tr>
     <tr><td><kbd>script</kbd></td><td>The placeholder for <code>&lt;script&gt;</code> tags.</td></tr>
