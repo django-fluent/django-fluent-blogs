@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib import comments
 from django.contrib.comments.moderation import moderator, CommentModerator
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
@@ -9,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from fluent_contents.models import PlaceholderField
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager
+from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
 
 # Optional tagging support
@@ -44,7 +44,7 @@ class Entry(models.Model):
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
-    author = models.ForeignKey(User, verbose_name=_('author'), editable=False)
+    author = models.ForeignKey(get_user_model_name(), verbose_name=_('author'), editable=False)
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 

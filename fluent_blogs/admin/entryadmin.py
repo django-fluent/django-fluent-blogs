@@ -1,4 +1,3 @@
-from datetime import datetime
 import django
 from django.conf import settings
 from django.contrib import admin
@@ -9,13 +8,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from fluent_contents.admin import PlaceholderFieldAdmin
 from fluent_blogs.models import Entry
-
-# The timezone support was introduced in Django 1.4, fallback to standard library for 1.3.
-try:
-    from django.utils.timezone import now
-except ImportError:
-    from datetime import datetime
-    now = datetime.now
+from fluent_blogs.utils.compat import now
 
 
 class EntryForm(ModelForm):

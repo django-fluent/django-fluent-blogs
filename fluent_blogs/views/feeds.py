@@ -1,6 +1,5 @@
 from categories.models import Category
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site, get_current_site
+from django.contrib.sites.models import get_current_site
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.utils import feedgenerator
@@ -9,6 +8,7 @@ from django.views.generic import View
 from fluent_blogs import appsettings
 from fluent_blogs.models import Entry
 from fluent_blogs.urlresolvers import blog_reverse
+from fluent_blogs.utils.compat import get_user_model
 
 _FEED_FORMATS = {
     'atom1': feedgenerator.Atom1Feed,
@@ -155,6 +155,7 @@ class LatestAuthorEntriesFeed(EntryFeedBase):
     """
 
     def get_object(self, request, slug):
+        User = get_user_model()
         return get_object_or_404(User, username=slug)
 
     def items(self, author):

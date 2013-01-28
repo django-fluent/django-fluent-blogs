@@ -1,8 +1,8 @@
 from categories.models import Category
-from django.contrib.auth.models import User
 from django.contrib.sitemaps import Sitemap
 from fluent_blogs.models import Entry
 from fluent_blogs.urlresolvers import blog_reverse
+from fluent_blogs.utils.compat import get_user_model
 
 
 class EntrySitemap(Sitemap):
@@ -38,6 +38,7 @@ class CategoryArchiveSitemap(Sitemap):
 
 class AuthorArchiveSitemap(Sitemap):
     def items(self):
+        User = get_user_model()
         only_ids = Entry.objects.values('author').order_by().distinct()
         return User.objects.filter(id__in=only_ids)
 
