@@ -1,0 +1,12 @@
+{# default template for the {% get_entries %} tag if no template is given, or "as var" is used. #}
+{% if entries %}
+  <ul>
+    {% for entry in entries %}
+      {% with entry_url=entry.get_absolute_url %}
+        <li><a href="{{ entry_url }}" title="{{ entry.intro|default:entry.title }}">{{ entry.title }}</a></li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <!-- no blog entries for query -->
+{% endif %}

@@ -1,0 +1,5 @@
+{# default template for the {% get_tags %} tag if no template is given, or "as var" is used. #}
+{% load fluent_blogs_tags %}
+{% for tag in tags %}
+  <a href="{% blogurl 'entry_archive_tag' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+{% endfor %}
