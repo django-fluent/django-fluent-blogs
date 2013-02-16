@@ -18,8 +18,11 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
-        'Django>=1.3.0',
         'django-categories>=1.0.0',
+        'django-tag-parser>=1.0.0',
+    ],
+    requires=[
+        'Django (>=1.3)',   # Using staticfiles
     ],
     extras_require = {
         'taggit': ['taggit', 'taggit-autocomplete-modified'],
