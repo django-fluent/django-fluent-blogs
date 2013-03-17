@@ -1,4 +1,5 @@
 from categories.models import Category
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
 from fluent_blogs.models import Entry
 from fluent_blogs.urlresolvers import blog_reverse
@@ -23,7 +24,7 @@ class EntrySitemap(Sitemap):
 
 class CategoryArchiveSitemap(Sitemap):
     def items(self):
-        only_ids = Entry.objects.values('categories').order_by().distinct()
+        only_ids = Entry.objects.published().values('categories').order_by().distinct()
         return Category.objects.filter(id__in=only_ids)
 
     def lastmod(self, category):
@@ -39,7 +40,7 @@ class CategoryArchiveSitemap(Sitemap):
 class AuthorArchiveSitemap(Sitemap):
     def items(self):
         User = get_user_model()
-        only_ids = Entry.objects.values('author').order_by().distinct()
+        only_ids = Entry.objects.published().values('author').order_by().distinct()
         return User.objects.filter(id__in=only_ids)
 
     def lastmod(self, author):
@@ -55,8 +56,14 @@ class AuthorArchiveSitemap(Sitemap):
 class TagArchiveSitemap(Sitemap):
     def items(self):
         from taggit.models import TaggedItem, Tag
-        only_ids = TaggedItem.tags_for(Entry).values('id').order_by().distinct()
-        return Tag.objects.filter(taggit_taggeditem_items__in=only_ids)
+        only_instances = Entry.objects.published().only('pk')
+
+        # Until https://github.com/alex/django-taggit/pull/86 is merged,
+        # better use the field names directly instead of bulk_lookup_kwargs
+        return Tag.objects.filter(
+            taggit_taggeditem_items__object_id__in=only_instances,
+            taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(Entry)
+        )
 
     def lastmod(self, tag):
         """Return the last modification of the entry."""
