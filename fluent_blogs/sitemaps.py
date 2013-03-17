@@ -55,7 +55,7 @@ class AuthorArchiveSitemap(Sitemap):
 
 class TagArchiveSitemap(Sitemap):
     def items(self):
-        from taggit.models import TaggedItem, Tag
+        from taggit.models import Tag
         only_instances = Entry.objects.published().only('pk')
 
         # Until https://github.com/alex/django-taggit/pull/86 is merged,
