@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
 from django.db.models import get_model
@@ -57,6 +58,10 @@ class AuthorArchiveSitemap(Sitemap):
 
 class TagArchiveSitemap(Sitemap):
     def items(self):
+        # Tagging is optional. When it's not used, it's ignored.
+        if 'taggit' not in settings.INSTALLED_APPS:
+            return []
+
         from taggit.models import Tag
         only_instances = Entry.objects.published().only('pk')
 
