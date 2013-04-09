@@ -1,6 +1,7 @@
-from categories.models import Category
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
+from django.db.models import get_model
+from fluent_blogs import appsettings
 from fluent_blogs.models import Entry
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.utils.compat import get_user_model
@@ -25,6 +26,7 @@ class EntrySitemap(Sitemap):
 class CategoryArchiveSitemap(Sitemap):
     def items(self):
         only_ids = Entry.objects.published().values('categories').order_by().distinct()
+        Category = get_model(appsettings.FLUENT_BLOGS_CATEGORY_MODEL)
         return Category.objects.filter(id__in=only_ids)
 
     def lastmod(self, category):
