@@ -7,117 +7,138 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-08 00:41+0200\n"
+"POT-Creation-Date: 2013-04-09 15:06+0200\n"
 "PO-Revision-Date: 2012-08-28 23:47+0100\n"
 "Last-Translator: Diederik van der Boor <vdboor@edoburu.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: admin/entryadmin.py:21
+#: admin/entryadmin.py:32
 msgid "Publication settings"
 msgstr "Publicatievoorkeuren"
 
-#: admin/entryadmin.py:56
-msgid "The blog entry can't be previewed yet, a 'Blog' page needs to be created first."
-msgstr "Het blogartikel kan nog niet bekeken worden, er moet eerst een 'Blog' pagina aangemaakt worden."
+#: admin/entryadmin.py:69
+msgid ""
+"The blog entry can't be previewed yet, a 'Blog' page needs to be created "
+"first."
+msgstr ""
+"Het blogartikel kan nog niet bekeken worden, er moet eerst een 'Blog' pagina "
+"aangemaakt worden."
 
-#: admin/entryadmin.py:89
+#: admin/entryadmin.py:118
 msgid "Status"
 msgstr "Status"
 
-#: admin/entryadmin.py:96
-msgid "Actions"
-msgstr "Acties"
-
-#: admin/entryadmin.py:104
+#: admin/entryadmin.py:141
 #: templates/admin/fluent_blogs/entry/change_form.html:5
 msgid "View on site"
 msgstr "Bekijk op website"
 
-#: admin/entryadmin.py:119
+#: admin/entryadmin.py:150
+msgid "Actions"
+msgstr "Acties"
+
+#: admin/entryadmin.py:163
 msgid "Mark selected entries as published"
 msgstr "Publiceer geselecteerde blogartikelen"
 
-#: models/db.py:31
+#: models/db.py:41
 msgid "Published"
 msgstr "Gepubliceerd"
 
-#: models/db.py:32
+#: models/db.py:42
 msgid "Draft"
 msgstr "Concept"
 
-#: models/db.py:35
+#: models/db.py:45
 msgid "Title"
 msgstr "Titel"
 
-#: models/db.py:36
+#: models/db.py:46
 msgid "Slug"
 msgstr "Naam"
 
-#: models/db.py:37
+#: models/db.py:47
 msgid "Introtext"
 msgstr "Introductietekst"
 
-#: models/db.py:41
+#: models/db.py:51
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:34
 msgid "status"
 msgstr "status"
 
-#: models/db.py:42
+#: models/db.py:52
 msgid "publication date"
 msgstr "gepubliceerd op"
 
-#: models/db.py:42
+#: models/db.py:52
 msgid "When the entry should go live, status must be \"Published\"."
 msgstr "Zet de status op 'gepubliceerd' zodra het blogartikel live moet staan."
 
-#: models/db.py:43
+#: models/db.py:53
 msgid "publication end date"
 msgstr "gepubliceerd tot"
 
-#: models/db.py:46
+#: models/db.py:56
 msgid "author"
 msgstr "auteur"
 
-#: models/db.py:47
+#: models/db.py:57
 msgid "creation date"
 msgstr "aanmaak datum"
 
-#: models/db.py:48
+#: models/db.py:58
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:35
 msgid "last modification"
 msgstr "laatste wijziging"
 
-#: models/db.py:51
-msgid "Comments"
-msgstr "Reacties"
-
-#: models/db.py:52
+#: models/db.py:61
 msgid "Categories"
 msgstr "Categoriën"
 
 #: models/db.py:62
+msgid "Enable comments"
+msgstr "Reacties toestaan"
+
+#: models/db.py:72
+msgid "Comments"
+msgstr "Reacties"
+
+#: models/db.py:79
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:33
 msgid "Blog entry"
 msgstr "Blogartikel"
 
-#: models/db.py:63
+#: models/db.py:80
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:55
 msgid "Blog entries"
 msgstr "Blogartikelen"
 
-#: pagetypes/blogpage/models.py:7
+#: pagetypes/blogpage/models.py:8
 msgid "Blog"
 msgstr "Blog"
 
-#: pagetypes/blogpage/models.py:8
+#: pagetypes/blogpage/models.py:9
 msgid "Blogs"
 msgstr "Blogs"
 
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:27
+msgid "Latest blog entries at this page"
+msgstr "Laatste blogartikelen op deze pagina"
+
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:36
+msgid "actions"
+msgstr "acties"
+
 #: templates/admin/fluent_blogs/entry/change_form.html:4
 msgid "History"
-msgstr ""
+msgstr "Geschiedenis"
 
-#: templates/fluent_blogs/base.html:19
+#: templates/fluent_blogs/base_internal.html:8
 msgid "RSS Feed of latest entries"
 msgstr "RSS Feed met de laatste blogartikelen"
 
@@ -210,29 +231,29 @@ msgstr "Nog geen artikelen."
 msgid "in"
 msgstr "in"
 
-#: templates/fluent_blogs/entry_archive/item.html:29
+#: templates/fluent_blogs/entry_archive/item.html:30
 msgid "Tags"
 msgstr "Tags"
 
-#: templates/fluent_blogs/entry_archive/item.html:54
+#: templates/fluent_blogs/entry_archive/item.html:56
 #, python-format
 msgid "%(comment_count)s comment"
 msgid_plural "%(comment_count)s comments"
 msgstr[0] "%(comment_count)s reactie"
 msgstr[1] "%(comment_count)s reacties"
 
-#: templates/fluent_blogs/entry_archive/item.html:57
+#: templates/fluent_blogs/entry_archive/item.html:59
 msgid "Post a comment"
 msgstr "Plaats een reactie"
 
-#: templates/fluent_blogs/entry_archive/item.html:61
+#: templates/fluent_blogs/entry_archive/item.html:63
 #, python-format
 msgid "%(pingback_count)s pingback"
 msgid_plural "%(pingback_count)s pingbacks"
 msgstr[0] "%(pingback_count)s pingback"
 msgstr[1] "%(pingback_count)s pingbacks"
 
-#: templates/fluent_blogs/entry_archive/item.html:62
+#: templates/fluent_blogs/entry_archive/item.html:64
 #, python-format
 msgid "%(trackback_count)s trackback"
 msgid_plural "%(trackback_count)s trackbacks"
@@ -250,7 +271,7 @@ msgstr[1] "%(comment_count)s reacties op %(entry_title)s"
 msgid "Comments are closed."
 msgstr "Reacties zijn gesloten."
 
-#: templates/fluent_blogs/entry_detail/comments.html:15
+#: templates/fluent_blogs/entry_detail/comments.html:16
 msgid "Leave a reply"
 msgstr "Laat een reactie achter"
 
@@ -282,19 +303,18 @@ msgstr "Artikelen in de categorie {category_name}"
 msgid "The latest entries in the category {category_name}"
 msgstr "Recente artikelen in de categorie {category_name}"
 
-#: views/feeds.py:164
+#: views/feeds.py:165
 msgid "Entries by {author_name}"
 msgstr "Artikelen door {author_name}"
 
-#: views/feeds.py:170
+#: views/feeds.py:171
 msgid "The latest entries written by {author_name}"
 msgstr "Recente artikelen geschreven door {author_name}"
 
-#: views/feeds.py:189
+#: views/feeds.py:190
 msgid "Entries for the tag {tag_name}"
 msgstr "Artikelen met de tag {tag_name}"
 
-#: views/feeds.py:195
+#: views/feeds.py:196
 msgid "The latest entries tagged with {tag_name}"
 msgstr "Recente artikelen die getagged zijn met {tag_name}"
-
