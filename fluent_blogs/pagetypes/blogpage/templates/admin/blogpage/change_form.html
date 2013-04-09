@@ -1,11 +1,26 @@
 {% extends base_change_form_template %}
+{% comment %}
+
+  This template is automatically selected by django-fluent-pages for the "blogpage" model.
+  It displays the associated blog entries which the current "BlogPage" model displays.
+
+{% endcomment %}
 {% load i18n fluent_blogs_tags fluent_blogs_admin_tags static %}{% load url from future %}
+
+{% block extrahead %}{{ block.super }}
+    <style type="text/css">
+      #published-entries .paginator {
+          margin: 0;
+          padding: 5px;  /* plus 5px from td */
+      }
+    </style>
+{% endblock %}
 
 {% block after_first_fieldset %}
   {% get_static_prefix as STATIC_URL %}{# Can't expect Django project to use context processors #}
 
   {% if change %}
-    <div class="inline-group" id="published-entries" xmlns="http://www.w3.org/1999/html">
+    <div class="inline-group" id="published-entries">
         <div class="tabular inline-related">
             <fieldset class="module">
                 <h2>
@@ -33,11 +48,16 @@
                             <td class="nowrap">{{ entry.modification_date }}</td>
                             <td class="nowrap">{% actions_column entry %}</td>
                         </tr>
+                        {% empty %}
+                            <tr>
+                              <td>
+                                  <p class="paginator">
+                                      0 {% trans "Blog entries" %}
+                                  </p>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-
-
             </fieldset>
         </div>
     </div>
