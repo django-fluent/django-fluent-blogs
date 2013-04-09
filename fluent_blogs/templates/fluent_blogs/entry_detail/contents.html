@@ -1,1 +1,20 @@
-{% include "fluent_blogs/entry_archive/item.html" with BLOG_LAYOUT='detail' %}
+{% extends "fluent_blogs/entry_contents_base.html" %}
+
+{% block entry-footer-contents %}
+    {{ block.super }}
+
+    {% comment %}
+    Added as example, removed for cleaning up.
+
+    <p class="entry-shorturl">
+      <strong>{% trans "Short url" %}</strong>:
+      {% with short_url=object.get_short_url %}
+        {% if short_url %}
+          <a href="{{ short_url }}" title="{{ object.title }}" rel="shortlink">{{ short_url }}</a>
+        {% else %}
+          {% trans "Unavailable" %}
+        {% endif %}
+      {% endwith %}
+    </p>
+    {% endcomment %}
+{% endblock %}

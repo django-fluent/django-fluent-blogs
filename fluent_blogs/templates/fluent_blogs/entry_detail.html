@@ -1,5 +1,11 @@
 {% extends "fluent_blogs/base_internal.html" %}
 {% load i18n %}
+{% comment %}
+
+    This is the central template for detail pages.
+    The layout can be customized easily by overwriting the included templates.
+
+{% endcomment %}
 
 {% block title %}{{ object.title }}{% endblock %}
 

@@ -1,0 +1,59 @@
+{% load i18n placeholder_tags fluent_blogs_tags %}
+{% comment %}
+
+  This is a special template for the entry_archive and entry_detail pages.
+  It manages the appearance of entries for both the archive and detail view in the same template.
+  This is extended by:
+
+  * fluent_blogs/entry_archive/item.html
+  * fluent_blogs/entry_detail/contents.html
+
+  Common appearance of the archive and detail pages can be included in this template.
+  When both pages differ a lot, simply place the desired HTML in those pages instead of extending this base template.
+
+{% endcomment %}
+{% with comments_url=object.get_absolute_url|add:"#comments" comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
+
+  {% block entry-header %}
+    <header class="entry-header clearfix">
+      {% block entry-header-contents %}
+      <h2><a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a></h2>
+      <p class="entry-info">
+        {% block entry-header-info %}
+          <abbr class="published" title="{{ object.creation_date }}">{{ object.creation_date|date:"DATE_FORMAT" }}</abbr>
+
+          {% if object.categories.all %}
+            <span class="categories">
+              {% trans "in" %}
+              {% for category in object.categories.all %}
+                <a href="{% blogurl 'entry_archive_category' category.slug %}" rel="category">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </span>
+          {% endif %}
+        {% endblock %}
+      </p>
+      {% endblock %}
+    </header>
+  {% endblock %}
+
+  {% block entry-body %}
+  <div class="entry-body">
+    {% block entry-body-contents %}{% render_placeholder object.contents %}{% endblock %}
+  </div>
+  {% endblock %}
+
+  {% block entry-footer %}
+    <footer class="entry-footer clearfix">
+      {% block entry-footer-contents %}
+        {% with tags=object.tags.all %}{% if tags %}
+        <p class="entry-tags">
+          <strong>{% trans "Tags" %}</strong>:
+          {% for tag in object.tags.all %}
+            <a href="{% blogurl 'entry_archive_tag' tag.slug %}" title="Tag {{ tag }}" rel="tag">{{ tag }}</a>
+          {% endfor %}
+        </p>
+        {% endif %}{% endwith %}
+      {% endblock %}
+    </footer>
+  {% endblock %}
+{% endwith %}

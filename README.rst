@@ -194,7 +194,6 @@ Integration with other commenting systems
 To use a different commenting system instead of django.contrib.comments_ (e.g. DISQUS_ or Facebook-comments_), override the following templates:
 
 * ``fluent_blogs/entry_detail/comments.html``
-* ``fluent_blogs/entry_detail/item.html``
 
 These CSS/JavaScript includes are generated using:
 
@@ -209,19 +208,33 @@ To change the layout of the blog , the following templates can be overwritten:
 
 In the archive/list page:
 
-* ``fluent_blogs/entry_archive/item.html`` - a single list item.
+* ``fluent_blogs/entry_archive.html`` - the starting point, which includes all sub templates:
+* ``fluent_blogs/entry_archive/item.html`` - a single list item (extends ``fluent_blogs/entry_contents_base.html``).
 * ``fluent_blogs/entry_archive/empty.html`` - the default message when there are no entries.
 * ``fluent_blogs/entry_archive/pagination.html`` - the pagination at the bottom of the page.
 
 In the detail page:
 
-* ``fluent_blogs/entry_detail/contents.html`` - the entry contents, based on ``fluent_blogs/entry_archive/item.html`` by default.
+* ``fluent_blogs/entry_detail.html`` - the starting point, which includes all sub templates:
+* ``fluent_blogs/entry_detail/contents.html`` - the entry contents (extends ``fluent_blogs/entry_contents_base.html``).
 * ``fluent_blogs/entry_detail/widgets.html`` - space to add Social Media buttons.
 * ``fluent_blogs/entry_detail/comments.html`` - the comments.
 * ``fluent_blogs/entry_detail/navigation.html`` - the entry navigation links
 * ``fluent_blogs/entry_detail/page_footer.html`` - space below the comments to add Social Media buttons.
 * ``fluent_blogs/entry_detail/comments_css.html``
 * ``fluent_blogs/entry_detail/comments_script.html``
+
+Common appearance:
+
+* ``fluent_blogs/entry_contents_base.html`` - the common appearance of entries in the archive and detail page.
+
+
+Shared entry layout
+~~~~~~~~~~~~~~~~~~~
+
+When the layout of individual entries is shared with
+
+* By default, the contents ``fluent_blogs/entry_archive/item.html`` and , based on ``fluent_blogs/entry_archive/item.html`` by default
 
 
 Contributing

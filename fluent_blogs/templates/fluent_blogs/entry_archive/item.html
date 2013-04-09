@@ -1,67 +1,29 @@
-{% load i18n placeholder_tags fluent_blogs_tags %}
-{% with comments_url=object.get_absolute_url|add:"#comments" comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
+{% extends "fluent_blogs/entry_contents_base.html" %}
+{% load i18n %}
 
-  <header class="entry-header clearfix">
-    <h2><a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a></h2>
-    <p class="entry-info">
-      <abbr class="published" title="{{ object.creation_date }}">{{ object.creation_date|date:"DATE_FORMAT" }}</abbr>
-
-      {% if object.categories.all %}
-        <span class="categories">
-          {% trans "in" %}
-          {% for category in object.categories.all %}
-            <a href="{% blogurl 'entry_archive_category' category.slug %}" rel="category">{{ category }}</a>{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </span>
-      {% endif %}
-    </p>
-  </header>
-
-  <div class="entry-body">
-    <div class="entry-content">
-      {# to shorten the contents, use: {% with object.html_content|truncatewords_html:100|safe as object_content %} #}
-      {% if object_contents %}{{ object_contents }}{% else %}{% render_placeholder object.contents %}{% endif %}
-    </div>
-  </div>
-
-  <footer class="entry-footer clearfix">
-    {% with tags=object.tags.all %}{% if tags %}
-    <p class="entry-tags">
-      <strong>{% trans "Tags" %}</strong>:
-      {% for tag in object.tags.all %}
-        <a href="{% blogurl 'entry_archive_tag' tag.slug %}" title="Tag {{ tag }}" rel="tag">{{ tag }}</a>
-      {% endfor %}
-    </p>
-    {% endif %}{% endwith %}
+{% block entry-body-contents %}
+    {{ block.super }}
 
     {% comment %}
-    Added as example, removed for cleaning up.
-
-    <p class="entry-shorturl">
-      <strong>{% trans "Short url" %}</strong>:
-      {% with short_url=object.get_short_url %}
-        {% if short_url %}
-          <a href="{{ short_url }}" title="{{ object.title }}" rel="shortlink">{{ short_url }}</a>
-        {% else %}
-          {% trans "Unavailable" %}
-        {% endif %}
-      {% endwith %}
-    </p>
+      To shorten the contents in the archive, use:
+      {% with object.html_content|truncatewords_html:100|safe as object_content %} #}
     {% endcomment %}
+{% endblock %}
 
-    {% if BLOG_LAYOUT == 'archive' %}
-        <p class="entry-meta">
-          {% if comment_count %}
-            <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% blocktrans count comment_count as comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
-          {% else %}
-            {% if object.comments_are_open %}{# no comments are closed message here, only encourage to post #}
-              <a href="{{ comments_url }}" title="{{ object.title }}">{% trans "Post a comment" %}</a>
-            {% endif %}
-          {% endif %}
+{% block entry-footer-contents %}
+    {{ block.super }}
 
-          {% if pingback_count %}<a href="{{ object.get_absolute_url }}#pingbacks" title="{{ object.title }}">{% blocktrans count pingback_count as pingback_count %}{{ pingback_count }} pingback{% plural %}{{ pingback_count }} pingbacks{% endblocktrans %}</a>{% endif %}
-          {% if trackback_count %}<a href="{{ object.get_absolute_url }}#trackbacks" title="{{ object.title }}">{% blocktrans count trackback_count as trackback_count %}{{ trackback_count }} trackback{% plural %}{{ trackback_count }} trackbacks{% endblocktrans %}</a>{% endif %}
-        </p>
-    {% endif %}
-  </footer>
-{% endwith %}
+    {# Archive typically gives short summary, whereas the details page displays the full set of comments #}
+    <p class="entry-meta">
+      {% if comment_count %}
+        <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% blocktrans count comment_count as comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
+      {% else %}
+        {% if object.comments_are_open %}{# no comments are closed message here, only encourage to post #}
+          <a href="{{ comments_url }}" title="{{ object.title }}">{% trans "Post a comment" %}</a>
+        {% endif %}
+      {% endif %}
+
+      {% if pingback_count %}<a href="{{ object.get_absolute_url }}#pingbacks" title="{{ object.title }}">{% blocktrans count pingback_count as pingback_count %}{{ pingback_count }} pingback{% plural %}{{ pingback_count }} pingbacks{% endblocktrans %}</a>{% endif %}
+      {% if trackback_count %}<a href="{{ object.get_absolute_url }}#trackbacks" title="{{ object.title }}">{% blocktrans count trackback_count as trackback_count %}{{ trackback_count }} trackback{% plural %}{{ trackback_count }} trackbacks{% endblocktrans %}</a>{% endif %}
+    </p>
+{% endblock %}
