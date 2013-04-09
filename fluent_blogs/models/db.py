@@ -19,9 +19,18 @@ elif 'taggit' in settings.INSTALLED_APPS:
     from taggit.managers import TaggableManager
 
 
+# Optional commenting support
+CommentModel = None
+if 'django.contrib.comments' in settings.INSTALLED_APPS:
+    CommentModel = comments.get_model()
+
+def _get_comment_relation_stub():
+    from django.contrib.comments.models import Comment
+    return Comment.objects.get_empty_query_set()
+
+
 def _get_current_site():
     return Site.objects.get_current()
-
 
 
 class Entry(models.Model):
@@ -49,14 +58,20 @@ class Entry(models.Model):
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 
     objects = EntryManager()
-    all_comments = GenericRelation(comments.get_model(), verbose_name=_("Comments"), object_id_field='object_pk')
     categories = models.ManyToManyField(appsettings.FLUENT_BLOGS_CATEGORY_MODEL, verbose_name=_("Categories"), blank=True)
     enable_comments = models.BooleanField(_("Enable comments"), default=True)
 
+    # Make association with tags optional.
     if TaggableManager is not None:
         tags = TaggableManager(blank=True)
     else:
         tags = None
+
+    # Make association with comments optional
+    if CommentModel is not None:
+        all_comments = GenericRelation(CommentModel, verbose_name=_("Comments"), object_id_field='object_pk')
+    else:
+        all_comments = _get_comment_relation_stub()
 
 
     class Meta:
@@ -114,7 +129,12 @@ class Entry(models.Model):
         """
         Return the visible comments.
         """
-        return comments.get_model().objects.for_model(self).filter(is_public=True)
+        if CommentModel is None:
+            # No local comments, return empty queryset.
+            # The project might be using DISQUS or Facebook comments instead.
+            return _get_comment_relation_stub()
+        else:
+            return CommentModel.objects.for_model(self).filter(is_public=True)
 
 
     @property
@@ -122,7 +142,7 @@ class Entry(models.Model):
         """
         Check if comments are open
         """
-        if not self.enable_comments:
+        if not self.enable_comments or CommentModel is None:
             return False
 
         try:

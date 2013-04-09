@@ -1,4 +1,4 @@
-{% load comments i18n placeholder_tags fluent_blogs_tags %}
+{% load i18n placeholder_tags fluent_blogs_tags %}
 {% with comments_url=object.get_absolute_url|add:"#comments" comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
 
   <header class="entry-header clearfix">

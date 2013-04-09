@@ -10,8 +10,8 @@ This is a basic blogging engine, with the following features:
 
 Used applications:
 
-* Comments based on django.contrib.comments_
 * Categories based on django-categories_
+* *Optional* comments based on django.contrib.comments_
 * *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
 * *Optional* integration with django-fluent-comments_ for Ajax-based comments
 * *Optional* integration with django-fluent-pages_
@@ -42,9 +42,8 @@ Configuration
 Add the applications to ``settings.py``::
 
     INSTALLED_APPS += (
-        # Blog engine + comments
+        # Blog engine
         'fluent_blogs',
-        'django.contrib.comments',
 
         # The content plugins
         'fluent_contents',
@@ -54,6 +53,9 @@ Add the applications to ``settings.py``::
         'categories',
         'categories.editor',
         'django_wysiwyg',
+
+        # Optional commenting support
+        'django.contrib.comments',
 
         # Optional tagging
         'taggit',
@@ -112,6 +114,7 @@ The filename of the base template can also be changed by defining the  ``FLUENT_
 Comments
 ~~~~~~~~
 
+The commenting support can be based on django.contrib.comments_, or any other system of your choice.
 To integrate django.contrib.comments_ with your site theme, also create a ``comments/base.html`` template that maps the blocks:
 
 * ``title``
