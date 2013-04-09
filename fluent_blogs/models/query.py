@@ -142,5 +142,4 @@ def query_tags(order=None, orderby=None, limit=None):
     if limit:
         queryset = queryset[:limit]
 
-    print queryset.query
     return queryset
