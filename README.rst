@@ -104,7 +104,12 @@ For example::
 
     {% block headtitle %}{% block title %}{% endblock %}{% endblock %}
 
-    {% block main %}{% block content %}{% endblock %}{% endblock %}
+    {% block main %}
+        {# This area is filled with the blog archive/details:
+        {% block content %}{% endblock %}
+
+        {# Add any common layout, e.g. a sidebar here #}
+    {% endblock %}
 
 When all other block names are already available in the site's ``base.html`` template,
 this example should be sufficient.
@@ -227,6 +232,7 @@ In the detail page:
 Common appearance:
 
 * ``fluent_blogs/entry_contents_base.html`` - the common appearance of entries in the archive and detail page.
+* ``fluent_blogs/base.html`` - the base template, e.g. to introduce a common sidebar.
 
 
 Shared entry layout
