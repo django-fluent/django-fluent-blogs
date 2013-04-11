@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-09 15:06+0200\n"
+"POT-Creation-Date: 2013-04-11 14:26+0200\n"
 "PO-Revision-Date: 2012-08-28 23:47+0100\n"
 "Last-Translator: Diederik van der Boor <vdboor@edoburu.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,12 +119,12 @@ msgid "Blog entries"
 msgstr "Blogartikelen"
 
 #: pagetypes/blogpage/models.py:8
-msgid "Blog"
-msgstr "Blog"
+msgid "Blog module"
+msgstr "Blogmodule"
 
 #: pagetypes/blogpage/models.py:9
-msgid "Blogs"
-msgstr "Blogs"
+msgid "Blog modules"
+msgstr "Blogmodules"
 
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:27
 msgid "Latest blog entries at this page"
@@ -142,48 +142,48 @@ msgstr "Geschiedenis"
 msgid "RSS Feed of latest entries"
 msgstr "RSS Feed met de laatste blogartikelen"
 
-#: templates/fluent_blogs/entry_archive.html:4
-#: templates/fluent_blogs/entry_archive.html:14
+#: templates/fluent_blogs/entry_archive.html:11
+#: templates/fluent_blogs/entry_archive.html:21
 msgid "Latest entries"
 msgstr "Laatste blogartikelen"
 
-#: templates/fluent_blogs/entry_archive.html:8
+#: templates/fluent_blogs/entry_archive.html:15
 #, python-format
 msgid "RSS Feed for %(category)s"
 msgstr "RSS-feed voor %(category)s"
 
-#: templates/fluent_blogs/entry_archive.html:9
+#: templates/fluent_blogs/entry_archive.html:16
 #, python-format
 msgid "RSS Feed for %(tag)s"
 msgstr "RSS-feed voor %(tag)s"
 
-#: templates/fluent_blogs/entry_archive.html:10
+#: templates/fluent_blogs/entry_archive.html:17
 #, python-format
 msgid "RSS Feed for %(author_name)s"
 msgstr "RSS-feed voor %(author_name)s"
 
-#: templates/fluent_blogs/entry_archive.html:15
+#: templates/fluent_blogs/entry_archive.html:22
 #, python-format
 msgid "Category %(category)s"
 msgstr "Categorie %(category)s"
 
-#: templates/fluent_blogs/entry_archive.html:16
-#: templates/fluent_blogs/entry_archive.html:24
+#: templates/fluent_blogs/entry_archive.html:23
+#: templates/fluent_blogs/entry_archive.html:31
 #, python-format
 msgid "Tag %(tag)s"
 msgstr "Tag %(tag)s"
 
-#: templates/fluent_blogs/entry_archive.html:17
+#: templates/fluent_blogs/entry_archive.html:24
 #, python-format
 msgid "Author %(author_name)s"
 msgstr "Auteur %(author_name)s"
 
-#: templates/fluent_blogs/entry_archive.html:18
+#: templates/fluent_blogs/entry_archive.html:25
 #, python-format
 msgid "Page %(number)s"
 msgstr "Pagina %(number)s"
 
-#: templates/fluent_blogs/entry_archive.html:25
+#: templates/fluent_blogs/entry_archive.html:32
 #, python-format
 msgid "Entries by %(author_name)s"
 msgstr "Artikelen door %(author_name)s"
@@ -223,37 +223,37 @@ msgstr "Archief van %(year)s"
 msgid "Monthly archives"
 msgstr "Maandelijke archiefpagina's"
 
+#: templates/fluent_blogs/entry_contents_base.html:27
+msgid "in"
+msgstr "in"
+
+#: templates/fluent_blogs/entry_contents_base.html:50
+msgid "Tags"
+msgstr "Tags"
+
 #: templates/fluent_blogs/entry_archive/empty.html:1
 msgid "No entries yet."
 msgstr "Nog geen artikelen."
 
-#: templates/fluent_blogs/entry_archive/item.html:11
-msgid "in"
-msgstr "in"
-
-#: templates/fluent_blogs/entry_archive/item.html:30
-msgid "Tags"
-msgstr "Tags"
-
-#: templates/fluent_blogs/entry_archive/item.html:56
+#: templates/fluent_blogs/entry_archive/item.html:20
 #, python-format
 msgid "%(comment_count)s comment"
 msgid_plural "%(comment_count)s comments"
 msgstr[0] "%(comment_count)s reactie"
 msgstr[1] "%(comment_count)s reacties"
 
-#: templates/fluent_blogs/entry_archive/item.html:59
+#: templates/fluent_blogs/entry_archive/item.html:23
 msgid "Post a comment"
 msgstr "Plaats een reactie"
 
-#: templates/fluent_blogs/entry_archive/item.html:63
+#: templates/fluent_blogs/entry_archive/item.html:27
 #, python-format
 msgid "%(pingback_count)s pingback"
 msgid_plural "%(pingback_count)s pingbacks"
 msgstr[0] "%(pingback_count)s pingback"
 msgstr[1] "%(pingback_count)s pingbacks"
 
-#: templates/fluent_blogs/entry_archive/item.html:64
+#: templates/fluent_blogs/entry_archive/item.html:28
 #, python-format
 msgid "%(trackback_count)s trackback"
 msgid_plural "%(trackback_count)s trackbacks"
@@ -318,3 +318,9 @@ msgstr "Artikelen met de tag {tag_name}"
 #: views/feeds.py:196
 msgid "The latest entries tagged with {tag_name}"
 msgstr "Recente artikelen die getagged zijn met {tag_name}"
+
+#~ msgid "Blog"
+#~ msgstr "Blog"
+
+#~ msgid "Blogs"
+#~ msgstr "Blogs"

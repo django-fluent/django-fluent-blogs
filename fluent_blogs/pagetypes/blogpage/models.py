@@ -5,8 +5,8 @@ from fluent_pages.models import Page
 
 class BlogPage(Page):
     class Meta:
-        verbose_name = _("Blog")
-        verbose_name_plural = _("Blogs")
+        verbose_name = _("Blog module")
+        verbose_name_plural = _("Blog modules")
 
 
     @property
