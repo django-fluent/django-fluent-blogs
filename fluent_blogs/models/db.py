@@ -41,7 +41,7 @@ def get_entry_model():
         if 'any_urlfield' in settings.INSTALLED_APPS:
             from any_urlfield.models import AnyUrlField
             from any_urlfield.forms.widgets import SimpleRawIdWidget
-            AnyUrlField.register_model(Entry, widget=SimpleRawIdWidget(Entry))
+            AnyUrlField.register_model(_EntryModel, widget=SimpleRawIdWidget(_EntryModel))
 
     return _EntryModel
 
