@@ -1,6 +1,14 @@
+"""
+A query interface to retrieve blog models and tags.
+"""
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
 from fluent_blogs.models.db import get_entry_model
+
+__all__ = (
+    'query_entries',
+    'query_tags',
+)
 
 ENTRY_ORDER_BY_FIELDS = {
     'slug': 'slug',
