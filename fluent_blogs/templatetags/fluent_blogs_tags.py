@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import Library
-from fluent_blogs.models import Entry
+from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import query_entries, query_tags
 from tag_parser import template_tag
 from tag_parser.basetags import BaseAssignmentOrInclusionNode
@@ -68,7 +68,7 @@ class GetEntriesNode(BaseAssignmentOrInclusionNode):
         'year', 'month', 'day',
         'orderby', 'order', 'limit',
     )
-    model = Entry
+    model = get_entry_model()
 
     def get_value(self, *tag_args, **tag_kwargs):
         # Query happens in the backend,

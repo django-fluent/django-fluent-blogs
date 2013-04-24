@@ -6,9 +6,13 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
-from fluent_contents.admin import PlaceholderFieldAdmin
-from fluent_blogs.models import Entry
+from fluent_blogs.base_models import AbstractEntryBase
+from fluent_blogs.models import get_entry_model
 from fluent_blogs.utils.compat import now
+from fluent_contents.admin import PlaceholderFieldAdmin
+
+
+EntryModel = get_entry_model()
 
 
 class EntryForm(ModelForm):
@@ -17,33 +21,29 @@ class EntryForm(ModelForm):
         self.fields['publication_date'].required = False  # The admin's .save() method fills in a default.
 
 
-class EntryAdmin(PlaceholderFieldAdmin):
+class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
+    """
+    The base functionality of the admin, which only uses the fields of the :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
+    Everything else is branched off in the :class:`EntryAdmin` class.
+    """
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
     list_filter = ('status',)
     date_hierarchy = 'publication_date'
     search_fields = ('slug', 'title')
     actions = ['make_published']
     form = EntryForm
-
-    fieldsets = (
-        (None, {
-            'fields': ('title', 'slug', 'status', 'intro', 'contents', 'categories'),
-        }),
-        (_('Publication settings'), {
-            'fields': ('publication_date', 'publication_end_date',),
-            'classes': ('collapse',),
-        }),
-    )
-
-    if Entry.tags is not None:
-        fieldsets[0][1]['fields'] += ('tags',)
-
-    fieldsets[0][1]['fields'] += ('enable_comments',)
-
     prepopulated_fields = {'slug': ('title',),}
     radio_fields = {
         'status': admin.HORIZONTAL,
     }
+
+    FIELDSET_GENERAL = (None, {
+        'fields': ('title', 'slug', 'status',),
+    })
+    FIELDSET_PUBLICATION = (_('Publication settings'), {
+        'fields': ('publication_date', 'publication_end_date',),
+        'classes': ('collapse',),
+    })
 
 
     def save_model(self, request, obj, form, change):
@@ -79,21 +79,15 @@ class EntryAdmin(PlaceholderFieldAdmin):
                     "or add the 'fluent_blogs.pagetypes.blogpage' app to the INSTALLED_APPS."
                 )
 
-        return super(EntryAdmin, self).render_change_form(request, context, add, change, form_url, obj)
-
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        if db_field.name == 'intro':
-            kwargs['widget'] = widgets.AdminTextareaWidget(attrs={'rows': 4})
-        return super(EntryAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        return super(AbstractEntryBaseAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
 
 
     # ---- List code ----
 
     STATUS_ICONS = (
-        (Entry.PUBLISHED, 'icon-yes.gif'),
-        (Entry.DRAFT,     'icon-unknown.gif'),
+        (AbstractEntryBase.PUBLISHED, 'icon-yes.gif'),
+        (AbstractEntryBase.DRAFT,     'icon-unknown.gif'),
     )
 
 
@@ -101,7 +95,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
     def get_status_column(cls, entry):
         # Create a status column, is also reused by templatetags/fluent_blogs_admin_tags.py
         status = entry.status
-        title = next(rec[1] for rec in Entry.STATUSES if rec[0] == status)
+        title = next(rec[1] for rec in AbstractEntryBase.STATUSES if rec[0] == status)
         icon  = next(rec[1] for rec in cls.STATUS_ICONS if rec[0] == status)
         if django.VERSION >= (1, 4):
             admin = settings.STATIC_URL + 'admin/img/'
@@ -151,7 +145,7 @@ class EntryAdmin(PlaceholderFieldAdmin):
 
 
     def make_published(self, request, queryset):
-        rows_updated = queryset.update(status=Entry.PUBLISHED)
+        rows_updated = queryset.update(status=AbstractEntryBase.PUBLISHED)
 
         if rows_updated == 1:
             message = "1 entry was marked as published."
@@ -159,5 +153,33 @@ class EntryAdmin(PlaceholderFieldAdmin):
             message = "{0} entries were marked as published.".format(rows_updated)
         self.message_user(request, message)
 
-
     make_published.short_description = _("Mark selected entries as published")
+
+
+class EntryAdmin(AbstractEntryBaseAdmin):
+    """
+    The Django admin class for the default blog :class:`~fluent_blogs.models.Entry` model.
+    When using a custom model, you can use :class:`AbstractEntryBaseAdmin`, which isn't attached to any of the optional fields.
+    """
+    # Redefine the fieldset, because it will be extended with auto-detected fields.
+    FIELDSET_GENERAL = (None, {
+        'fields': ('title', 'slug', 'status',),  # is filled with ('intro', 'contents', 'categories', 'tags', 'enable_comments') below
+    })
+
+    fieldsets = (
+        FIELDSET_GENERAL,
+        AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
+    )
+
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'intro':
+            kwargs['widget'] = widgets.AdminTextareaWidget(attrs={'rows': 4})
+        return super(EntryAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+
+# Add all fields
+_fields = EntryModel._meta.get_all_field_names()
+for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
+    if _f in _fields:
+        EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)

@@ -6,7 +6,7 @@ from django.utils import feedgenerator
 from django.utils.translation import gettext
 from django.views.generic import View
 from fluent_blogs import appsettings
-from fluent_blogs.models import Entry
+from fluent_blogs.models import get_entry_model
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.utils.compat import get_user_model
 
@@ -22,7 +22,7 @@ __all__ = (
 
 def get_entry_queryset():
     # Avoid being cached at module level, always return a new queryset.
-    return Entry.objects.published().order_by('-publication_date')
+    return get_entry_model().objects.published().order_by('-publication_date')
 
 _max_items = appsettings.FLUENT_BLOGS_MAX_FEED_ITEMS
 
@@ -75,7 +75,14 @@ class EntryFeedBase(FeedView):
     def item_title(self, entry):
         return entry.title
 
-    description_template = "fluent_blogs/feeds/entry/description.html"
+    @property
+    def description_template(self):
+        EntryModel = get_entry_model()
+        return [
+            "{0}/{1}_feed_description.html".format(EntryModel._meta.app_label, EntryModel._meta.object_name.lower()),
+            "fluent_blogs/entry_feed_description.html",  # New name
+            "fluent_blogs/feeds/entry/description.html"  # Old name
+        ]
 
     def item_pubdate(self, entry):
         return entry.publication_date

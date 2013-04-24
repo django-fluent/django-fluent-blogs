@@ -1,12 +1,11 @@
-from categories.models import Category
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_blogs import appsettings
-from fluent_blogs.models import Entry
+from fluent_blogs.models import get_entry_model, get_category_model
+from fluent_blogs.utils.compat import get_user_model
 
 
 class BaseBlogMixin(object):
@@ -14,7 +13,7 @@ class BaseBlogMixin(object):
 
     def get_queryset(self):
         # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
-        return Entry.objects.published()
+        return get_entry_model().objects.published()
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
@@ -30,6 +29,25 @@ class BaseArchiveMixin(BaseBlogMixin):
     month_format = '%m'
     allow_future = False
     paginate_by = 10
+
+    def get_template_names(self):
+        names = super(BaseArchiveMixin, self).get_template_names()
+
+        # Include the appname/model_suffix.html version for any customized model too.
+        if not names[-1].startswith('fluent_blogs/entry'):
+            names.append("fluent_blogs/entry{0}.html".format(self.template_name_suffix))
+
+        return names
+
+
+class BaseDetailMixin(BaseBlogMixin):
+    def get_template_names(self):
+        names = super(BaseDetailMixin, self).get_template_names()
+
+        if not names[-1].startswith('fluent_blogs/entry'):
+            names.append("fluent_blogs/entry{0}.html".format(self.template_name_suffix))
+
+        return names
 
 
 class EntryArchiveIndex(BaseArchiveMixin, ArchiveIndexView):
@@ -51,7 +69,7 @@ class EntryDayArchive(BaseArchiveMixin, DayArchiveView):
     pass
 
 
-class EntryDetail(BaseBlogMixin, DetailView):
+class EntryDetail(BaseDetailMixin, DetailView):
     """
     Blog detail page.
     """
@@ -63,7 +81,7 @@ class EntryShortLink(SingleObjectMixin, RedirectView):
 
     def get_queryset(self):
         # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
-        return Entry.objects.published()
+        return get_entry_model().objects.published()
 
     def get_redirect_url(self, **kwargs):
         entry = self.get_object()
@@ -78,7 +96,7 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     context_object_name = 'category'
 
     def get_queryset(self):
-        self.category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        self.category = get_object_or_404(get_category_model(), slug=self.kwargs['slug'])
         return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
 
 
@@ -90,7 +108,7 @@ class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
     context_object_name = 'author'
 
     def get_queryset(self):
-        self.author = get_object_or_404(User, username=self.kwargs['slug'])
+        self.author = get_object_or_404(get_user_model(), username=self.kwargs['slug'])
         return super(EntryAuthorArchive, self).get_queryset().filter(author=self.author)
 
 
@@ -102,6 +120,6 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     context_object_name = 'tag'
 
     def get_queryset(self):
-        from taggit.models import Tag
+        from taggit.models import Tag  # django-taggit is optional, hence imported here.
         self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
         return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)

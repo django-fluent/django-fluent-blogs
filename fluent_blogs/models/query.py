@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
-from fluent_blogs.models.db import Entry
+from fluent_blogs.models.db import get_entry_model
 
 ENTRY_ORDER_BY_FIELDS = {
     'slug': 'slug',
@@ -62,7 +62,7 @@ def query_entries(queryset=None,
     This interface is mainly used by the ``get_entries`` template tag.
     """
     if queryset is None:
-        queryset = Entry.objects.all()
+        queryset = get_entry_model().objects.all()
 
     if not future:
         queryset = queryset.published()
@@ -125,7 +125,8 @@ def query_tags(order=None, orderby=None, limit=None):
     This interface is mainly used by the ``get_tags`` template tag.
     """
     from taggit.models import Tag, TaggedItem    # feature is still optional
-    ct = ContentType.objects.get_for_model(Entry)  # take advantage of local caching.
+    EntryModel = get_entry_model()
+    ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
     entry_tag_ids = TaggedItem.objects.filter(content_type=ct).values_list('tag_id')
 
     # get tags

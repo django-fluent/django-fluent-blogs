@@ -7,6 +7,7 @@ This is a basic blogging engine, with the following features:
 * Contents filled by django-fluent-contents_
 * RSS and Atom feeds
 * Granularity in templates to override layouts.
+* Abstract base model for custom blog models.
 
 Used applications:
 
@@ -241,6 +242,40 @@ Shared entry layout
 When the layout of individual entries is shared with
 
 * By default, the contents ``fluent_blogs/entry_archive/item.html`` and , based on ``fluent_blogs/entry_archive/item.html`` by default
+
+
+Custom entry models
+-------------------
+
+This applications supports the use of custom models for the blog entries.
+Include the following setting in your project::
+
+    FLUENT_BLOGS_ENTRY_MODEL = 'myapp.ModelName'
+
+This application will use the custom model for feeds, views and the sitemap.
+The model can either inherit from the following classes:
+
+* ``fluent_blogs.models.Entry`` (the default entry)
+* ``fluent_blogs.base_models.AbstractEntry`` (the default entry, as abstract model)
+* A mix of ``fluent_blogs.base_models.AbstractEntryBase`` combined with:
+
+ * ``fluent_blogs.base_models.ExcerptEntryMixin``
+ * ``fluent_blogs.base_models.ContentsEntryMixin``
+ * ``fluent_blogs.base_models.CommentsEntryMixin``
+ * ``fluent_blogs.base_models.CategoriesEntryMixin``
+ * ``fluent_blogs.base_models.TagsEntryMixin``
+
+When a custom model is used, the admin needs to be registered manually.
+The admin can inherit from either:
+
+* ``fluent_blogs.admin.AbstractEntryBaseAdmin``
+* ``fluent_blogs.admin.EntryAdmin``
+
+The views are still rendered using the same templates, but you can also override:
+
+* ``myapp/modelname_archive_*.html``
+* ``myapp/modelname_detail.html``
+* ``myapp/modelname_feed_description.html``
 
 
 Contributing

@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
-from django.db.models import get_model
-from fluent_blogs import appsettings
-from fluent_blogs.models import Entry
+from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.utils.compat import get_user_model
+
+User = get_user_model()
+EntryModel = get_entry_model()
+CategoryModel = get_category_model()
 
 
 class EntrySitemap(Sitemap):
@@ -13,7 +15,7 @@ class EntrySitemap(Sitemap):
     The sitemap definition for the pages created with django-fluent-pages.
     """
     def items(self):
-        return Entry.objects.published().order_by('slug')
+        return EntryModel.objects.published().order_by('slug')
 
     def lastmod(self, urlnode):
         """Return the last modification of the entry."""
@@ -26,13 +28,12 @@ class EntrySitemap(Sitemap):
 
 class CategoryArchiveSitemap(Sitemap):
     def items(self):
-        only_ids = Entry.objects.published().values('categories').order_by().distinct()
-        Category = get_model(appsettings.FLUENT_BLOGS_CATEGORY_MODEL)
-        return Category.objects.filter(id__in=only_ids)
+        only_ids = EntryModel.objects.published().values('categories').order_by().distinct()
+        return CategoryModel.objects.filter(id__in=only_ids)
 
     def lastmod(self, category):
         """Return the last modification of the entry."""
-        lastitems = Entry.objects.published().order_by('-modification_date').filter(categories=category).only('modification_date')
+        lastitems = EntryModel.objects.published().order_by('-modification_date').filter(categories=category).only('modification_date')
         return lastitems[0].modification_date
 
     def location(self, category):
@@ -42,13 +43,12 @@ class CategoryArchiveSitemap(Sitemap):
 
 class AuthorArchiveSitemap(Sitemap):
     def items(self):
-        User = get_user_model()
-        only_ids = Entry.objects.published().values('author').order_by().distinct()
+        only_ids = EntryModel.objects.published().values('author').order_by().distinct()
         return User.objects.filter(id__in=only_ids)
 
     def lastmod(self, author):
         """Return the last modification of the entry."""
-        lastitems = Entry.objects.published().order_by('-modification_date').filter(author=author).only('modification_date')
+        lastitems = EntryModel.objects.published().order_by('-modification_date').filter(author=author).only('modification_date')
         return lastitems[0].modification_date
 
     def location(self, author):
@@ -63,18 +63,18 @@ class TagArchiveSitemap(Sitemap):
             return []
 
         from taggit.models import Tag
-        only_instances = Entry.objects.published().only('pk')
+        only_instances = EntryModel.objects.published().only('pk')
 
         # Until https://github.com/alex/django-taggit/pull/86 is merged,
         # better use the field names directly instead of bulk_lookup_kwargs
         return Tag.objects.filter(
             taggit_taggeditem_items__object_id__in=only_instances,
-            taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(Entry)
+            taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(EntryModel)
         )
 
     def lastmod(self, tag):
         """Return the last modification of the entry."""
-        lastitems = Entry.objects.published().order_by('-modification_date').filter(tags=tag).only('modification_date')
+        lastitems = EntryModel.objects.published().order_by('-modification_date').filter(tags=tag).only('modification_date')
         return lastitems[0].modification_date
 
     def location(self, tag):
