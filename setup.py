@@ -15,10 +15,11 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-fluent-blogs',
-    version='0.1.0',
+    version='0.9.0',
     license='Apache License, Version 2.0',
 
     install_requires=[
+        'django-fluent-contents>=0.8.4',
         'django-categories>=1.0.0',
         'django-tag-parser>=1.0.0',
     ],
@@ -29,7 +30,7 @@ setup(
         'taggit': ['taggit', 'taggit-autocomplete-modified'],
         'blogpage': ['django-fluent-pages'],
     },
-    description='A blog engine based on django-fluent-contents.',
+    description='A blog engine with flexible block contents (based on django-fluent-contents).',
     long_description=open('README.rst').read(),
 
     author='Diederik van der Boor',
@@ -43,7 +44,7 @@ setup(
 
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',

@@ -20,7 +20,6 @@ Used applications:
 
 TODO:
 
-* Provide a mechanism for custom fields, for example by using django-polymorphic_ for entries or using a custom admin form.
 * Have integration with blog publication protocols (like django-blog-zinnia_ provides), built in a similar way like django.contrib.syndication_ works.
 
 

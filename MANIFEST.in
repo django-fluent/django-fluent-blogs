@@ -5,3 +5,4 @@ include LICENSE
 recursive-include fluent_blogs/static *.gif
 recursive-include fluent_blogs/locale *.po *.mo
 recursive-include fluent_blogs/templates *.html
+recursive-include fluent_blogs/pagetypes/blogpage/templates *.html
