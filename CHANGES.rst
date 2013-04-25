@@ -1,3 +1,9 @@
+Version 0.9.1
+-------------
+
+* Fix url reference to Entry model when using custom models
+
+
 Version 0.9.0
 -------------
 

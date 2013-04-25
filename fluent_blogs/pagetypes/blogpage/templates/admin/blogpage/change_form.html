@@ -41,7 +41,7 @@
                         <tr class="{% cycle 'row1' 'row2' %}">
                             <td>
                                 <span class="inline_label">
-                                    <a href="{% url 'admin:fluent_blogs_entry_change' entry.pk %}" target="_blank">{{ entry }}</a>
+                                    <a href="{% blog_entry_admin_change_url entry %}" target="_blank">{{ entry }}</a>
                                 </span>
                             </td>
                             <td>{% status_column entry %}</td>
