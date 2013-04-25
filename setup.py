@@ -15,7 +15,7 @@ if 'sdist' in sys.argv:
 
 setup(
     name='django-fluent-blogs',
-    version='0.9.0',
+    version='0.9.1',
     license='Apache License, Version 2.0',
 
     install_requires=[
