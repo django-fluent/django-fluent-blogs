@@ -1,3 +1,9 @@
+Version 0.9.2
+-------------
+
+* Fix initial south migrations, added missing dependencies.
+
+
 Version 0.9.1
 -------------
 
