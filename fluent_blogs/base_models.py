@@ -188,7 +188,7 @@ class CommentsEntryMixin(models.Model):
             # The project might be using DISQUS or Facebook comments instead.
             return _get_comment_relation_stub()
         else:
-            return CommentModel.objects.for_model(self).filter(is_public=True)
+            return CommentModel.objects.for_model(self).filter(is_public=True, is_removed=False)
 
 
     @property

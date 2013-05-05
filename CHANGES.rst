@@ -3,6 +3,7 @@ Version 0.9.2
 
 * Fix initial south migrations, added missing dependencies.
 * Fix automatic registration with django-fluent-comments_ and django-any-urlfield_ when not using custom models.
+* Fix comments count indicator, ``CommentsEntryMixin.comments`` also ignores removed comments now.
 
 
 Version 0.9.1
