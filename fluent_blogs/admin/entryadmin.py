@@ -5,7 +5,7 @@ from django.contrib.admin import widgets
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from fluent_blogs.base_models import AbstractEntryBase
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.utils.compat import now
@@ -66,7 +66,8 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
             try:
                 mixed_reverse('entry_archive_index')
             except PageTypeNotMounted:
-                context['preview_error'] = _("The blog entry can't be previewed yet, a 'Blog' page needs to be created first.")
+                from fluent_blogs.pagetypes.blogpage.models import BlogPage
+                context['preview_error'] = ugettext("The blog entry can't be previewed yet, a '{page_type_name}' page needs to be created first.").format(page_type_name=BlogPage._meta.verbose_name)
             except MultipleReverseMatch:
                 # When 'entry_archive_index is ambiguous (because there are multiple blog nodes in the fluent-pages tree),
                 # the edit page will automatically pick an option.

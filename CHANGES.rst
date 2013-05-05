@@ -1,3 +1,9 @@
+Version 0.9.3
+-------------
+
+* Improve error message when a blogmodule is not yet attached to the django-fluent-pages_ page tree.
+
+
 Version 0.9.2
 -------------
 
@@ -29,3 +35,4 @@ Main features:
 .. _django-any-urlfield: https://github.com/edoburu/django-any-urlfield
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
+.. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
