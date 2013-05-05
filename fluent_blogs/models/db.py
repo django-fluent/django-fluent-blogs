@@ -22,15 +22,18 @@ def get_entry_model():
     Return the actual entry model that is in use.
     """
     global _EntryModel
-    if not appsettings.FLUENT_BLOGS_ENTRY_MODEL:
-        return Entry
 
     if _EntryModel is None:
-        app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
-        _EntryModel = get_model(app_label, model_name)
+        # This method is likely called the first time when the admin initializes, the sitemaps module is imported, or BaseBlogMixin is used.
+        # Either way, it needs to happen after all apps have initialized, to make sure the model can be imported.
+        if not appsettings.FLUENT_BLOGS_ENTRY_MODEL:
+            _EntryModel = Entry
+        else:
+            app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
+            _EntryModel = get_model(app_label, model_name)
 
         # Auto-register with django-fluent-comments moderation
-        if 'fluent_comments' in settings.INSTALLED_APPS and isinstance(_EntryModel, CommentsEntryMixin):
+        if 'fluent_comments' in settings.INSTALLED_APPS and issubclass(_EntryModel, CommentsEntryMixin):
             from fluent_comments.moderation import moderate_model
             moderate_model(_EntryModel,
                 publication_date_field='publication_date',
