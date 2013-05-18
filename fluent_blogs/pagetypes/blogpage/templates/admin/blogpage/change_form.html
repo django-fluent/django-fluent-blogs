@@ -32,8 +32,8 @@
                         <tr>
                             <th>{% trans "Blog entry" %}</th>
                             <th width="80">{% trans "status" as t %}{{ t|title }}</th>
-                            <th width="160">{% trans "last modification" as t %}{{ t|title }}</th>
-                            <th width="120">{% trans "actions" %}</th>
+                            <th width="160">{% trans "publication date" as t %}{{ t|title }}</th>
+                            <th width="120">{% trans "actions" as t %}{{ t|title }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,7 +45,7 @@
                                 </span>
                             </td>
                             <td>{% status_column entry %}</td>
-                            <td class="nowrap">{{ entry.modification_date }}</td>
+                            <td class="nowrap">{{ entry.publication_date }}</td>
                             <td class="nowrap">{% actions_column entry %}</td>
                         </tr>
                         {% empty %}

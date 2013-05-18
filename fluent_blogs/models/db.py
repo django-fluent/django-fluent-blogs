@@ -11,6 +11,7 @@ class Entry(AbstractEntry):
     """
     class Meta:
         app_label = 'fluent_blogs'  # required for models subfolder
+        ordering = ('-publication_date',)  # This is not inherited
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
 

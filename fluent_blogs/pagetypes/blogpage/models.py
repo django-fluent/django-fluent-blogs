@@ -15,4 +15,4 @@ class BlogPage(Page):
         Return the entries that are published under this node.
         """
         # Since there is currently no filtering in place, return all entries.
-        return Entry.objects.all()
+        return Entry.objects.all().order_by('-publication_date')
