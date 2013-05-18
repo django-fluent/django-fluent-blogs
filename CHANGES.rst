@@ -3,6 +3,7 @@ Version 0.9.3
 
 * Improve error message when a blogmodule is not yet attached to the django-fluent-pages_ page tree.
 * Fix the blog ordering at the "Blog page" edit screen.
+* Fix running the code at Django 1.6
 
 
 Version 0.9.2
