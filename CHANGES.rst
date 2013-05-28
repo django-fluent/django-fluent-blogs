@@ -5,6 +5,7 @@ Version 0.9.3
 * Fix the blog ordering at the "Blog page" edit screen.
 * Fix running the code at Django 1.6
 * Fix 500 error feed view
+* Marked ``AbstractEntryBaseAdminForm`` and ``EntryManager`` as public classes
 
 
 Version 0.9.2

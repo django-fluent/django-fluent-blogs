@@ -15,9 +15,12 @@ from fluent_contents.admin import PlaceholderFieldAdmin
 EntryModel = get_entry_model()
 
 
-class EntryForm(ModelForm):
+class AbstractEntryBaseAdminForm(ModelForm):
+    """
+    Base form for blog entries
+    """
     def __init__(self, *args, **kwargs):
-        super(EntryForm, self).__init__(*args, **kwargs)
+        super(AbstractEntryBaseAdminForm, self).__init__(*args, **kwargs)
         self.fields['publication_date'].required = False  # The admin's .save() method fills in a default.
 
 
@@ -31,7 +34,7 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     date_hierarchy = 'publication_date'
     search_fields = ('slug', 'title')
     actions = ['make_published']
-    form = EntryForm
+    form = AbstractEntryBaseAdminForm
     prepopulated_fields = {'slug': ('title',),}
     radio_fields = {
         'status': admin.HORIZONTAL,
