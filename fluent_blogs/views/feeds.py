@@ -2,6 +2,8 @@ from categories.models import Category
 from django.contrib.sites.models import get_current_site
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
+from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
 from django.utils import feedgenerator
 from django.utils.translation import gettext
 from django.views.generic import View
@@ -78,11 +80,22 @@ class EntryFeedBase(FeedView):
     @property
     def description_template(self):
         EntryModel = get_entry_model()
-        return [
+        templates = [
             "{0}/{1}_feed_description.html".format(EntryModel._meta.app_label, EntryModel._meta.object_name.lower()),
             "fluent_blogs/entry_feed_description.html",  # New name
             "fluent_blogs/feeds/entry/description.html"  # Old name
         ]
+        # The value is passed to get_template by the Feed class, so reduce the list here manually.
+        for name in templates:
+            try:
+                get_template(name)
+            except TemplateDoesNotExist:
+                pass
+            else:
+                setattr(self.__class__, 'description_template', name)
+                return templates
+        return None
+
 
     def item_pubdate(self, entry):
         return entry.publication_date
