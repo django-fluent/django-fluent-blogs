@@ -1,3 +1,9 @@
+Version 0.9.4
+-------------
+
+* Support using the same slug in different months.
+
+
 Version 0.9.3
 -------------
 

@@ -5,6 +5,7 @@ from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArc
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
+from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import get_user_model
 
 
@@ -41,6 +42,21 @@ class BaseArchiveMixin(BaseBlogMixin):
 
 
 class BaseDetailMixin(BaseBlogMixin):
+    def get_queryset(self):
+        qs = super(BaseDetailMixin, self).get_queryset()
+
+        # Allow same slug in different dates
+        # The available arguments depend on the FLUENT_BLOGS_ENTRY_LINK_STYLE setting.
+        year = int(self.kwargs['year']) if 'year' in self.kwargs else None
+        month = int(self.kwargs['month']) if 'month' in self.kwargs else None
+        day = int(self.kwargs['day']) if 'day' in self.kwargs else None
+
+        range = get_date_range(year, month, day)
+        if range:
+            qs = qs.filter(publication_date__range=range)
+
+        return qs
+
     def get_template_names(self):
         names = super(BaseDetailMixin, self).get_template_names()
 

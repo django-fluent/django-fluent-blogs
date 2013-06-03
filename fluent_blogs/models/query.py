@@ -1,9 +1,12 @@
 """
 A query interface to retrieve blog models and tags.
 """
+from calendar import monthrange, isleap
+from datetime import datetime, timedelta
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
 from fluent_blogs.models.db import get_entry_model
+from fluent_blogs.utils.compat import utc
 
 __all__ = (
     'query_entries',
@@ -152,3 +155,28 @@ def query_tags(order=None, orderby=None, limit=None):
         queryset = queryset[:limit]
 
     return queryset
+
+
+def get_date_range(year=None, month=None, day=None):
+    """
+    Return a start..end range to query for a specific month, day or year.
+    """
+    if year is None:
+        return None
+
+    if month is None:
+        # year only
+        start = datetime(year, 1, 1, 0, 0, 0, tzinfo=utc)
+        end = datetime(year, 12, 31, 23, 59, 59, 999, tzinfo=utc)
+        return (start, end)
+
+    if day is None:
+        # year + month only
+        start = datetime(year, month, 1, 0, 0, 0, tzinfo=utc)
+        end = start + timedelta(days=monthrange(year, month)[1], microseconds=-1)
+        return (start, end)
+    else:
+        # Exact day
+        start = datetime(year, month, day, 0, 0, 0, tzinfo=utc)
+        end = start + timedelta(days=1, microseconds=-1)
+        return (start, end)

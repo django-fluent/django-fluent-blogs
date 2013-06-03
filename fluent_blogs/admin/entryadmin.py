@@ -2,12 +2,14 @@ import django
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import widgets
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
 from django.utils.translation import ugettext, ugettext_lazy as _
+from fluent_blogs import appsettings
 from fluent_blogs.base_models import AbstractEntryBase
 from fluent_blogs.models import get_entry_model
+from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
 
@@ -22,6 +24,51 @@ class AbstractEntryBaseAdminForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AbstractEntryBaseAdminForm, self).__init__(*args, **kwargs)
         self.fields['publication_date'].required = False  # The admin's .save() method fills in a default.
+
+    def clean(self):
+        cleaned_data = super(AbstractEntryBaseAdminForm, self).clean()
+        if 'slug' not in cleaned_data or 'publication_date' not in cleaned_data:
+            return cleaned_data
+
+        try:
+            self.validate_unique_slug(cleaned_data)
+        except ValidationError as e:
+            self._errors['slug'] = self.error_class(e.messages)
+
+        return cleaned_data
+
+    def validate_unique_slug(self, cleaned_data):
+        """
+        Test whether the slug is unique within a given time period.
+        """
+        kwargs = {}
+        error_msg = _("The slug is not unique")
+
+        # The /year/month/slug/ URL determines when a slug can be unique.
+        pubdate = cleaned_data['publication_date'] or now()
+        if '{year}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            kwargs['year'] = pubdate.year
+            error_msg = _("The slug is not unique within it's publication year.")
+        if '{month}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            kwargs['month'] = pubdate.month
+            error_msg = _("The slug is not unique within it's publication month.")
+        if '{day}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            kwargs['day'] = pubdate.day
+            error_msg = _("The slug is not unique within it's publication day.")
+
+        date_range = get_date_range(**kwargs)
+        if date_range:
+            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'], publication_date__range=date_range)
+        else:
+            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'])
+
+        if self.instance and self.instance.pk:
+            dup_qs = dup_qs.exclude(pk=self.instance.pk)
+
+        # Test whether the slug is unique in the current month
+        # Note: doesn't take changes to FLUENT_BLOGS_ENTRY_LINK_STYLE into account.
+        if dup_qs.exists():
+            raise ValidationError(error_msg)
 
 
 class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
