@@ -12,6 +12,7 @@ This is a basic blogging engine, with the following features:
 Used applications:
 
 * Categories based on django-categories_
+* WYSIWYG-Editor based on django-wysiwyg_
 * *Optional* comments based on django.contrib.comments_
 * *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
 * *Optional* integration with django-fluent-comments_ for Ajax-based comments
@@ -296,6 +297,7 @@ Pull requests are welcome too. :-)
 .. _django.contrib.comments: https://docs.djangoproject.com/en/dev/ref/contrib/comments/
 .. _django.contrib.sitemaps: https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
 .. _django-categories: https://github.com/callowayproject/django-categories
+.. _django-wysiwyg: https://github.com/pydanny/django-wysiwyg
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
