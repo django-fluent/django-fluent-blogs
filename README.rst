@@ -55,6 +55,7 @@ Add the applications to ``settings.py``::
         # Support libs
         'categories',
         'categories.editor',
+        # will be installed via "pip install django-fluent-contents[text]"
         'django_wysiwyg',
 
         # Optional commenting support
