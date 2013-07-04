@@ -1,2 +1,2 @@
 {# auto configure django-fluent-comments #}{% load static %}
-{% if HAS_DJANGO_FLUENT_COMMENTS %}    <link rel="stylesheet" type="text/css" href="{% get_static_prefix %}fluent_comments/css/ajaxcomments.css" />{% endif %}
+{% if HAS_DJANGO_FLUENT_COMMENTS and FLUENT_BLOGS_INCLUDE_STATIC_FILES %}    <link rel="stylesheet" type="text/css" href="{% get_static_prefix %}fluent_comments/css/ajaxcomments.css" />{% endif %}

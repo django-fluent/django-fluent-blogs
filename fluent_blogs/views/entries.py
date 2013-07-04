@@ -20,6 +20,7 @@ class BaseBlogMixin(object):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
         context['FLUENT_BLOGS_BASE_TEMPLATE'] = appsettings.FLUENT_BLOGS_BASE_TEMPLATE
         context['HAS_DJANGO_FLUENT_COMMENTS'] = 'fluent_comments' in settings.INSTALLED_APPS
+        context['FLUENT_BLOGS_INCLUDE_STATIC_FILES'] = appsettings.FLUENT_BLOGS_INCLUDE_STATIC_FILES
         if self.context_object_name:
             context[self.context_object_name] = getattr(self, self.context_object_name)  # e.g. author, category, tag
         return context

@@ -1,2 +1,2 @@
 {# auto configure django-fluent-comments #}{% load static %}
-{% if HAS_DJANGO_FLUENT_COMMENTS %}    <script type="text/javascript" src="{% get_static_prefix %}fluent_comments/js/ajaxcomments.js"></script>{% endif %}
+{% if HAS_DJANGO_FLUENT_COMMENTS and FLUENT_BLOGS_INCLUDE_STATIC_FILES %}    <script type="text/javascript" src="{% get_static_prefix %}fluent_comments/js/ajaxcomments.js"></script>{% endif %}

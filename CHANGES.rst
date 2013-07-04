@@ -1,3 +1,9 @@
+Version 0.9.5
+-------------
+
+* Add ``FLUENT_BLOGS_INCLUDE_STATIC_FILES`` setting, to disable automatic inclusion the CSS/JS files of django-fluent-comments_.
+
+
 Version 0.9.4
 -------------
 
