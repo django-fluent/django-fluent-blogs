@@ -32,7 +32,10 @@ First install the module, preferably in a virtual environment::
     cd django-fluent-blogs
     pip install .
 
-    # To add tagging support + autocomplete:
+    # Install the plugins of fluent-contents that you use:
+    pip install django-fluent-contents[text]
+
+    # Optional: to add tagging support + autocomplete use:
     pip install django-taggit django-taggit-autocomplete-modified
 
 
@@ -65,7 +68,7 @@ Add the applications to ``settings.py``::
     DJANGO_WYSIWYG_FLAVOR = "yui_advanced"
 
 Note that not all applications are required;
-tagging is optional, and so are the various ``fluent_contents`` plugins.
+tagging is optional, and so are the various ``fluent_contents.plugin.*`` packages.
 
 Include the apps in ``urls.py``::
 
@@ -75,9 +78,17 @@ Include the apps in ``urls.py``::
         url(r'^blog/', include('fluent_blogs.urls')),
     )
 
-The database can be created afterwards:
+The database can be created afterwards::
 
     ./manage.py syncdb
+
+In case additional plugins of django-fluent-contents_ are used, follow their
+`installation instructions <http://django-fluent-contents.readthedocs.org/en/latest/plugins/index.html>`_ as well.
+Typically this includes:
+
+* adding the package name to ``INSTALLED_APPS``.
+* running ``pip install django-fluent-contents[pluginname]``
+* running  ``./manage.py syncdb``
 
 
 Configuring the templates
