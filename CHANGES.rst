@@ -1,3 +1,9 @@
+Version 0.9.6
+-------------
+
+* Fix year formatting in the year archive pages (e.g. ``/blog/2013/``) when using Django 1.5 and up.
+
+
 Version 0.9.5
 -------------
 

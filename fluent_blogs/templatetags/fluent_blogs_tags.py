@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django.conf import settings
 from django.template import Library
 from fluent_blogs.models import get_entry_model
@@ -23,6 +24,21 @@ def blogurl(parser, token):
         # Using url from future, so the syntax is the same modern style.
         from django.templatetags.future import url
         return url(parser, token)
+
+
+@register.filter
+def format_year(year):
+    """
+    Compatibility tag for Django 1.4.
+    Format the year value of the ``YearArchiveView``,
+    which can be a integer or date object.
+    """
+    if isinstance(year, (date, datetime)):
+        # Django 1.5 and up, 'year' is a date object, consistent with month+day views.
+        return unicode(year.year)
+    else:
+        # Django 1.4 just passes the kwarg as string.
+        return unicode(year)
 
 
 @template_tag(register, 'get_entries')

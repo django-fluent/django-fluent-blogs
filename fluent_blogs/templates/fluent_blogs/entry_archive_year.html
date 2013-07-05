@@ -1,11 +1,11 @@
 {% extends "fluent_blogs/entry_archive.html" %}
-{% load i18n %}
+{% load i18n fluent_blogs_tags %}
 
-{% block meta-description %}{% blocktrans with year=year %}Archives of {{ year }}{% endblocktrans %}{% endblock %}
+{% block meta-description %}{% blocktrans with year=year|format_year %}Archives of {{ year }}{% endblocktrans %}{% endblock %}
 
-{% block title %}{% blocktrans with year=year %}Archives of {{ year }}{% endblocktrans %}{% endblock %}
+{% block title %}{% blocktrans with year=year|format_year %}Archives of {{ year }}{% endblocktrans %}{% endblock %}
 
-{% block content_title %}<h1>{% blocktrans with year=year %}Archives of {{ year }}{% endblocktrans %}</h1>{% endblock %}
+{% block content_title %}<h1>{% blocktrans with year=year|format_year %}Archives of {{ year }}{% endblocktrans %}</h1>{% endblock %}
 
 {% block content %}
   {{ block.super }}
