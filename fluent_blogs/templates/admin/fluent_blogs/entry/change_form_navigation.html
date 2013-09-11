@@ -1,0 +1,9 @@
+{% load i18n fluent_blogs_admin_tags %}
+{% if original %}
+    {% with next_entry=original.next_entry previous_entry=original.previous_entry %}
+        <p style="clear: both; padding-top: 1em">
+          {% if previous_entry %}<a style="float: left;" href="{% blog_entry_admin_change_url previous_entry %}" title="{{ previous_entry.title }}">&larr; {% trans "previous entry" %}</a>{% endif %}
+          {% if next_entry %}<a style="float: right;" href="{% blog_entry_admin_change_url next_entry %}" title="{{ next_entry.title }}">{% trans "next entry" %} &rarr;</a>{% endif %}
+        </p>
+    {% endwith %}
+{% endif %}
