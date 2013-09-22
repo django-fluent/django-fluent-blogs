@@ -13,6 +13,7 @@ Used applications:
 
 * Categories based on django-categories_
 * *Optional* comments based on django.contrib.comments_
+* *Optional* multilingual support based on django-parler_.
 * *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
 * *Optional* integration with django-fluent-comments_ for Ajax-based comments
 * *Optional* integration with django-fluent-pages_
@@ -310,6 +311,7 @@ Pull requests are welcome too. :-)
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
+.. _django-parler: https://github.com/edoburu/django-parler
 .. _django-polymorphic: https://github.com/bconstantin/django_polymorphic
 .. _django-taggit: https://github.com/alex/django-taggit
 .. _django-taggit-autocomplete-modified: http://packages.python.org/django-taggit-autocomplete-modified/

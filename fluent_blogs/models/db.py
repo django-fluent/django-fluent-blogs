@@ -1,16 +1,17 @@
 from django.conf import settings
+from django.db import models
 from django.db.models import get_model
 from django.utils.translation import ugettext_lazy as _
-from fluent_blogs.base_models import AbstractEntry, CommentsEntryMixin
+from fluent_blogs.base_models import CommentsEntryMixin, AbstractTranslatableEntry, AbstractTranslatedFieldsEntry
 from fluent_blogs import appsettings
 
 
-class Entry(AbstractEntry):
+class Entry(AbstractTranslatableEntry):
     """
     The actual blog entry.
 
-    This model is based on :class:`~fluent_blogs.base_models.AbstractEntry`.
-    When you use a custom model instead, you can overwrite :class:`~fluent_blogs.base_models.AbstractEntry`
+    This model is based on :class:`~fluent_blogs.base_models.AbstractTranslatableEntry`.
+    When you use a custom model instead, you can overwrite :class:`~fluent_blogs.base_models.AbstractTranslatableEntry`
     or create a custom mix of it's base classes.
 
     Throughout the code the model is fetched using :func:`get_entry_model`.
@@ -20,6 +21,20 @@ class Entry(AbstractEntry):
         ordering = ('-publication_date',)  # This is not inherited
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
+
+
+class UrlNode_Translation(AbstractTranslatedFieldsEntry):
+    """
+    The translated fields for the blog entry.
+    This model is constructed manually because the base table can be constructed from various mixins.
+    """
+    master = models.ForeignKey(Entry, related_name='translations', editable=False, null=True)
+
+    class Meta:
+        app_label = 'fluent_blogs'
+        verbose_name = _("Blog entry translation")
+        verbose_name_plural = _("Blog entry translations")
+
 
 
 _EntryModel = None

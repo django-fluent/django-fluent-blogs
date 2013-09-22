@@ -5,6 +5,7 @@ from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from parler.models import TranslatableModel, TranslatedFieldsModel
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager
 from fluent_blogs.utils.compat import get_user_model_name
@@ -13,13 +14,23 @@ from fluent_contents.models import PlaceholderField
 
 
 __all__ = (
-    'AbstractEntryBase',
+    # Mixins
+    'AbstractSharedEntryBaseMixin',
+    'AbstractTranslatedEntryBaseMixin',
     'ExcerptEntryMixin',
     'ContentsEntryMixin',
     'CommentsEntryMixin',
     'CategoriesEntryMixin',
     'TagsEntryMixin',
+
+    # Untranslated base classes
+    'AbstractEntryBase',
     'AbstractEntry',
+
+    # Translated base classes.
+    'AbstractTranslatableEntry',
+    'AbstractTranslatedFieldsEntry',
+
 )
 
 
@@ -45,7 +56,18 @@ def _get_current_site():
     return Site.objects.get_current()
 
 
-class AbstractEntryBase(models.Model):
+class AbstractTranslatedEntryBaseMixin(models.Model):
+    """
+    The base translated fields.
+    """
+    title = models.CharField(_("Title"), max_length=200)
+    slug = models.SlugField(_("Slug"))
+
+    class Meta:
+        abstract = True
+
+
+class AbstractSharedEntryBaseMixin(models.Model):
     """
     The basic interface for blog entries.
     """
@@ -57,8 +79,9 @@ class AbstractEntryBase(models.Model):
         (DRAFT, _('Draft')),
     )
 
-    title = models.CharField(_("Title"), max_length=200)
-    slug = models.SlugField(_("Slug"))
+    #title = TranslatedField(any_language=True)
+    #slug = TranslatedField()
+
     parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
     status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT, db_index=True)
@@ -251,6 +274,17 @@ class TagsEntryMixin(models.Model):
 
 
 
+# For compatibility with old untranslated models.
+class AbstractEntryBase(
+    AbstractSharedEntryBaseMixin,
+    AbstractTranslatedEntryBaseMixin):
+    """
+    The classic abstract entry base model.
+    """
+    class Meta:
+        abstract = True
+
+
 class AbstractEntry(
         AbstractEntryBase,
         ExcerptEntryMixin,
@@ -259,7 +293,32 @@ class AbstractEntry(
         CategoriesEntryMixin,
         TagsEntryMixin):
     """
-    The default abstract entry model.
+    The classic abstract entry model.
+    """
+    class Meta:
+        abstract = True
+
+
+class AbstractTranslatableEntry(
+    TranslatableModel,
+    AbstractSharedEntryBaseMixin,
+    ContentsEntryMixin,
+    CommentsEntryMixin,
+    CategoriesEntryMixin,
+    TagsEntryMixin):
+    """
+    The default entry model for translated blog posts.
+    """
+    class Meta:
+        abstract = True
+
+
+class AbstractTranslatedFieldsEntry(
+    TranslatedFieldsModel,
+    AbstractTranslatedEntryBaseMixin,
+    ExcerptEntryMixin):
+    """
+    The default translated fields model for blog posts.
     """
     class Meta:
         abstract = True

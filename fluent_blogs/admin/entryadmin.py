@@ -12,6 +12,9 @@ from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
+from parler.admin import TranslatableAdmin
+from parler.forms import TranslatableModelForm
+from parler.models import TranslatableModel
 
 
 EntryModel = get_entry_model()
@@ -41,26 +44,29 @@ class AbstractEntryBaseAdminForm(ModelForm):
         """
         Test whether the slug is unique within a given time period.
         """
-        kwargs = {}
+        date_kwargs = {}
         error_msg = _("The slug is not unique")
 
         # The /year/month/slug/ URL determines when a slug can be unique.
         pubdate = cleaned_data['publication_date'] or now()
         if '{year}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['year'] = pubdate.year
+            date_kwargs['year'] = pubdate.year
             error_msg = _("The slug is not unique within it's publication year.")
         if '{month}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['month'] = pubdate.month
+            date_kwargs['month'] = pubdate.month
             error_msg = _("The slug is not unique within it's publication month.")
         if '{day}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['day'] = pubdate.day
+            date_kwargs['day'] = pubdate.day
             error_msg = _("The slug is not unique within it's publication day.")
 
-        date_range = get_date_range(**kwargs)
+        date_range = get_date_range(**date_kwargs)
+
+        # Base filters are configurable for translation support.
+        dup_filters = self.get_unique_slug_filters(cleaned_data)
         if date_range:
-            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'], publication_date__range=date_range)
-        else:
-            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'])
+            dup_filters['publication_date__range'] = date_range
+
+        dup_qs = EntryModel.objects.filter(**dup_filters)
 
         if self.instance and self.instance.pk:
             dup_qs = dup_qs.exclude(pk=self.instance.pk)
@@ -70,10 +76,30 @@ class AbstractEntryBaseAdminForm(ModelForm):
         if dup_qs.exists():
             raise ValidationError(error_msg)
 
+    def get_unique_slug_filters(self, cleaned_data):
+        # Allow to override this for translations
+        return {
+            'slug': cleaned_data['slug'],
+        }
+
+
+
+class AbstractTranslatableEntryBaseAdminForm(TranslatableModelForm, AbstractEntryBaseAdminForm):
+    """
+    Base form for translatable blog entries
+    """
+    def get_unique_slug_filters(self, cleaned_data):
+        return {
+            'translations__slug': cleaned_data['slug'],
+            'translations__language_code': self.language_code
+        }
+
+
 
 class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     """
-    The base functionality of the admin, which only uses the fields of the :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
+    The base functionality of the admin, which only uses the fields of the
+    :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
     Everything else is branched off in the :class:`EntryAdmin` class.
     """
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
@@ -207,7 +233,30 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     make_published.short_description = _("Mark selected entries as published")
 
 
-class EntryAdmin(AbstractEntryBaseAdmin):
+
+class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdmin):
+    """
+    The base functionality of the admin, which only uses the fields of the
+    :class:`~fluent_blogs.base_models.AbstractTranslatedEntryBase` model.
+    Everything else is branched off in the :class:`EntryAdmin` class.
+    """
+    search_fields = ('translations__slug', 'translations__title')
+    prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
+
+    def get_prepopulated_fields(self, request, obj=None):
+        # Still allow to override self.prepopulated_fields in other custom classes,
+        # but default to the settings which are compatible with django-parler.
+        return self.prepopulated_fields or {'slug': ('title',),}
+
+
+
+if issubclass(EntryModel, TranslatableModel):
+    _entry_admin_base = AbstractTranslatableEntryBaseAdmin
+else:
+    _entry_admin_base = AbstractEntryBaseAdmin
+
+
+class EntryAdmin(_entry_admin_base):
     """
     The Django admin class for the default blog :class:`~fluent_blogs.models.Entry` model.
     When using a custom model, you can use :class:`AbstractEntryBaseAdmin`, which isn't attached to any of the optional fields.
