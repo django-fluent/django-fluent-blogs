@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from fluent_blogs.urlresolvers import blog_reverse
-from fluent_blogs.models.managers import EntryManager
+from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
 from fluent_contents.models import PlaceholderField
@@ -62,6 +62,8 @@ class AbstractTranslatedEntryBaseMixin(models.Model):
     """
     title = models.CharField(_("Title"), max_length=200)
     slug = models.SlugField(_("Slug"))
+
+    objects = TranslatableEntryManager()
 
     class Meta:
         abstract = True
@@ -295,6 +297,9 @@ class AbstractEntry(
     """
     The classic abstract entry model.
     """
+    # Not needed, but be explicit about the manager with this many base classes
+    objects = EntryManager()
+
     class Meta:
         abstract = True
 
@@ -309,6 +314,11 @@ class AbstractTranslatableEntry(
     """
     The default entry model for translated blog posts.
     """
+    # Correct ordering of base classes should avoid getting the TranslatableModel.manager
+    # to override the base classes. However, this caused other errors (django-parler not receiving abstract=True),
+    # so kept the ordering in human-logical form, and restore the manager here.
+    objects = TranslatableEntryManager()
+
     class Meta:
         abstract = True
 

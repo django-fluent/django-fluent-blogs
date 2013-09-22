@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from fluent_blogs.utils.compat import now
+from parler.managers import TranslatableManager, TranslatableQuerySet
 
 
 class EntryQuerySet(QuerySet):
@@ -23,16 +24,28 @@ class EntryQuerySet(QuerySet):
             )
 
 
+class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
+    pass
+
 
 class EntryManager(models.Manager):
     """
     Extra methods attached to ``Entry.objects`` .
     """
+    queryset_class = EntryQuerySet
+
     def get_query_set(self):
-        return EntryQuerySet(self.model, using=self._db)
+        return self.queryset_class(self.model, using=self._db)
 
     def published(self):
         """
         Return only published entries
         """
         return self.get_query_set().published()
+
+
+class TranslatableEntryManager(TranslatableManager, EntryManager):
+    """
+    Extra methods attached to ``Entry.objects``.
+    """
+    queryset_class = TranslatableEntryQuerySet
