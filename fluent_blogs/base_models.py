@@ -73,6 +73,9 @@ class AbstractSharedEntryBaseMixin(models.Model):
     """
     The basic interface for blog entries.
     """
+    #: Tagging marker for code to recognize translated models.
+    is_translatable_model = False
+
     # Some publication states
     DRAFT = 'd'
     PUBLISHED = 'p'
@@ -278,6 +281,9 @@ class AbstractTranslatableEntryBase(
     """
     The translatable abstract entry base model.
     """
+    # Update tagging marker
+    is_translatable_model = True
+
     title = TranslatedField(any_language=True)
     slug = TranslatedField()
 
