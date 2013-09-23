@@ -125,7 +125,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
                 'fluent_blogs.Entry': lambda o: "http://example.com" + o.default_url
             }
         """
-        root = blog_reverse('entry_archive_index', ignore_multiple=True)
+        root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
         return root + self._get_relative_url()
 
 
@@ -138,6 +138,10 @@ class AbstractSharedEntryBaseMixin(models.Model):
             slug = self.slug,
             pk = self.pk,
         )
+
+
+    def get_current_language(self):
+        return None  # Normal untranslated model: the API is there, but unused.
 
 
     def get_short_url(self):

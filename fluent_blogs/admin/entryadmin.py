@@ -138,9 +138,9 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
         # When the page is accessed via a pagetype, warn that the node can't be previewed yet.
         context['preview_error'] = ''
         if 'fluent_pages' in settings.INSTALLED_APPS:
-            from fluent_pages.urlresolvers import mixed_reverse, PageTypeNotMounted, MultipleReverseMatch
+            from fluent_pages.urlresolvers import PageTypeNotMounted, MultipleReverseMatch
             try:
-                mixed_reverse('entry_archive_index')
+                self._reverse_blogpage_index(request, obj)
             except PageTypeNotMounted:
                 from fluent_blogs.pagetypes.blogpage.models import BlogPage
                 context['preview_error'] = ugettext("The blog entry can't be previewed yet, a '{page_type_name}' page needs to be created first.").format(page_type_name=BlogPage._meta.verbose_name)
@@ -158,6 +158,12 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
 
         return super(AbstractEntryBaseAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
+
+    def _reverse_blogpage_index(self, request, obj=None):
+        # Internal method with "protected access" to handle translation differences.
+        # This is only called when 'fluent_pages' is in the INSTALLED_APPS.
+        from fluent_pages.urlresolvers import mixed_reverse
+        return mixed_reverse('entry_archive_index')
 
 
     # ---- List code ----
@@ -247,6 +253,12 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
         # Still allow to override self.prepopulated_fields in other custom classes,
         # but default to the settings which are compatible with django-parler.
         return self.prepopulated_fields or {'slug': ('title',),}
+
+    def _reverse_blogpage_index(self, request, obj=None):
+        # Updated mixed_reverse() call, with language code included.
+        from fluent_pages.urlresolvers import mixed_reverse
+        language_code = self.get_form_language(request, obj)
+        return mixed_reverse('entry_archive_index', language_code=language_code)
 
 
 
