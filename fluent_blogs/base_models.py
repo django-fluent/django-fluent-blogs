@@ -5,6 +5,7 @@ from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
@@ -16,7 +17,7 @@ from fluent_contents.models import PlaceholderField
 __all__ = (
     # Mixins
     'AbstractSharedEntryBaseMixin',
-    'AbstractTranslatedEntryBaseMixin',
+    'AbstractTranslatedFieldsEntryBaseMixin',
     'ExcerptEntryMixin',
     'ContentsEntryMixin',
     'CommentsEntryMixin',
@@ -28,9 +29,10 @@ __all__ = (
     'AbstractEntry',
 
     # Translated base classes.
+    'AbstractTranslatableEntryBase',
     'AbstractTranslatableEntry',
+    'AbstractTranslatedFieldsEntryBase',
     'AbstractTranslatedFieldsEntry',
-
 )
 
 
@@ -56,14 +58,12 @@ def _get_current_site():
     return Site.objects.get_current()
 
 
-class AbstractTranslatedEntryBaseMixin(models.Model):
+class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
     """
     The base translated fields.
     """
     title = models.CharField(_("Title"), max_length=200)
     slug = models.SlugField(_("Slug"))
-
-    objects = TranslatableEntryManager()
 
     class Meta:
         abstract = True
@@ -80,9 +80,6 @@ class AbstractSharedEntryBaseMixin(models.Model):
         (PUBLISHED, _('Published')),
         (DRAFT, _('Draft')),
     )
-
-    #title = TranslatedField(any_language=True)
-    #slug = TranslatedField()
 
     parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
@@ -275,14 +272,46 @@ class TagsEntryMixin(models.Model):
         abstract = True
 
 
+class AbstractTranslatableEntryBase(
+    TranslatableModel,
+    AbstractSharedEntryBaseMixin):
+    """
+    The translatable abstract entry base model.
+    """
+    title = TranslatedField(any_language=True)
+    slug = TranslatedField()
+
+    # Correct ordering of base classes should avoid getting the TranslatableModel.manager
+    # to override the base classes. However, this caused other errors (django-parler not receiving abstract=True),
+    # so kept the ordering in human-logical form, and restore the manager here.
+    objects = TranslatableEntryManager()
+
+    class Meta:
+        abstract = True
+
+
+class AbstractTranslatedFieldsEntryBase(
+    TranslatedFieldsModel,
+    AbstractTranslatedFieldsEntryBaseMixin):
+    """
+    The translatable fields for the base entry model.
+    """
+    master = None   # FK to shared model.
+
+    class Meta:
+        abstract = True
+
 
 # For compatibility with old untranslated models.
 class AbstractEntryBase(
     AbstractSharedEntryBaseMixin,
-    AbstractTranslatedEntryBaseMixin):
+    AbstractTranslatedFieldsEntryBaseMixin):
     """
     The classic abstract entry base model.
     """
+    # Not needed, but be explicit about the manager with this many base classes
+    objects = EntryManager()
+
     class Meta:
         abstract = True
 
@@ -295,40 +324,30 @@ class AbstractEntry(
         CategoriesEntryMixin,
         TagsEntryMixin):
     """
-    The classic abstract entry model.
+    The classic entry model, as abstract model.
     """
-    # Not needed, but be explicit about the manager with this many base classes
-    objects = EntryManager()
-
     class Meta:
         abstract = True
 
 
 class AbstractTranslatableEntry(
-    TranslatableModel,
-    AbstractSharedEntryBaseMixin,
+    AbstractTranslatableEntryBase,
     ContentsEntryMixin,
     CommentsEntryMixin,
     CategoriesEntryMixin,
     TagsEntryMixin):
     """
-    The default entry model for translated blog posts.
+    The default entry model for translated blog posts, as abstract model.
     """
-    # Correct ordering of base classes should avoid getting the TranslatableModel.manager
-    # to override the base classes. However, this caused other errors (django-parler not receiving abstract=True),
-    # so kept the ordering in human-logical form, and restore the manager here.
-    objects = TranslatableEntryManager()
-
     class Meta:
         abstract = True
 
 
 class AbstractTranslatedFieldsEntry(
-    TranslatedFieldsModel,
-    AbstractTranslatedEntryBaseMixin,
+    AbstractTranslatedFieldsEntryBase,
     ExcerptEntryMixin):
     """
-    The default translated fields model for blog posts.
+    The default translated fields model for blog posts, as abstract model.
     """
     class Meta:
         abstract = True
