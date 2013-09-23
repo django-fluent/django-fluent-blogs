@@ -1,5 +1,9 @@
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils import translation
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -16,6 +20,12 @@ class BaseBlogMixin(object):
     def get_queryset(self):
         # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
         return get_entry_model().objects.published()
+
+    def get_language(self):
+        """
+        Return the language to display in this view.
+        """
+        return translation.get_language()  # Assumes that middleware has set this properly.
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
@@ -44,16 +54,6 @@ class BaseArchiveMixin(BaseBlogMixin):
 
 
 class BaseDetailMixin(BaseBlogMixin):
-    slug_field = 'slug'
-    translated_slug_field = 'translations__slug'
-
-    def get_slug_field(self):
-        # Support both models with the same view
-        if issubclass(get_entry_model(), TranslatableModel):
-            return self.translated_slug_field
-        else:
-            return self.slug_field
-
     def get_queryset(self):
         qs = super(BaseDetailMixin, self).get_queryset()
 
@@ -68,6 +68,47 @@ class BaseDetailMixin(BaseBlogMixin):
             qs = qs.filter(publication_date__range=range)
 
         return qs
+
+    def get_object(self, queryset=None):
+        if issubclass(get_entry_model(), TranslatableModel):
+            # Filter by slug and language
+            return self._translated_get_object(queryset)
+        else:
+            # Regular slug check
+            return super(BaseDetailMixin, self).get_object(queryset)
+
+    def _translated_get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        language_code = self.get_language()
+        filters = dict(
+            translations__slug = self.kwargs['slug'],
+            translations__language_code = language_code
+        )
+        obj = None
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.filter(**filters).get()
+        except ObjectDoesNotExist:
+            fallback = _get_fallback_language(language_code)
+
+            if not fallback:
+                tried_msg = u", tried languages: {0}".format(language_code)
+            else:
+                filters['translations__language_code'] = fallback
+                tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
+                try:
+                    obj = queryset.filter(**filters).get()
+                except ObjectDoesNotExist:
+                    pass
+
+            if obj is None:
+                error_message = ugettext(u"No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name}
+                raise Http404(error_message + tried_msg)
+
+        return obj
 
     def get_template_names(self):
         names = super(BaseDetailMixin, self).get_template_names()
@@ -151,3 +192,14 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
         from taggit.models import Tag  # django-taggit is optional, hence imported here.
         self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
         return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)
+
+
+def _get_fallback_language(language_code):
+    """
+    Whether to try the default language.
+    """
+    lang_dict = appsettings.get_language_settings(language_code)
+    if not lang_dict['hide_untranslated'] and lang_dict['fallback'] != language_code:
+        return lang_dict['fallback']
+    else:
+        return None

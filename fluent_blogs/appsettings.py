@@ -26,3 +26,17 @@ FLUENT_BLOGS_LANGUAGES = parler_appsettings.add_default_language_settings(
     fallback=FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE,
     hide_untranslated=False,
 )
+
+
+def get_language_settings(language_code, site_id=None):
+    """
+    Return the language settings for the current site
+    """
+    if site_id is None:
+        site_id = settings.SITE_ID
+
+    for lang_dict in FLUENT_BLOGS_LANGUAGES.get(site_id, ()):
+        if lang_dict['code'] == language_code:
+            return lang_dict
+
+    return FLUENT_BLOGS_LANGUAGES['default']
