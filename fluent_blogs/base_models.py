@@ -111,6 +111,20 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
 
     def get_absolute_url(self):
+        return self.default_url
+
+
+    @property
+    def default_url(self):
+        """
+        The internal implementation of :func:`get_absolute_url`.
+        This function can be used when overriding :func:`get_absolute_url` in the settings.
+        For example::
+
+            ABSOLUTE_URL_OVERRIDES = {
+                'fluent_blogs.Entry': lambda o: "http://example.com" + o.default_url
+            }
+        """
         root = blog_reverse('entry_archive_index', ignore_multiple=True)
         return root + self._get_relative_url()
 
