@@ -23,7 +23,7 @@ class Entry(AbstractTranslatableEntry):
         verbose_name_plural = _("Blog entries")
 
 
-class UrlNode_Translation(AbstractTranslatedFieldsEntry):
+class Entry_Translation(AbstractTranslatedFieldsEntry):
     """
     The translated fields for the blog entry.
     This model is constructed manually because the base table can be constructed from various mixins.

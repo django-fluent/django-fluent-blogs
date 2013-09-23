@@ -8,7 +8,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext, ugettext_lazy as _
 from fluent_blogs import appsettings
 from fluent_blogs.base_models import AbstractEntryBase
-from fluent_blogs.models import get_entry_model
+from fluent_blogs.models import get_entry_model, Entry_Translation
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
@@ -250,10 +250,13 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
 
 
 
+_model_fields = EntryModel._meta.get_all_field_names()
 if issubclass(EntryModel, TranslatableModel):
     _entry_admin_base = AbstractTranslatableEntryBaseAdmin
+    _model_fields += Entry_Translation.get_translated_fields()
 else:
     _entry_admin_base = AbstractEntryBaseAdmin
+
 
 
 class EntryAdmin(_entry_admin_base):
@@ -279,7 +282,6 @@ class EntryAdmin(_entry_admin_base):
 
 
 # Add all fields
-_fields = EntryModel._meta.get_all_field_names()
 for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
-    if _f in _fields:
+    if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)

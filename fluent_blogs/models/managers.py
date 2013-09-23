@@ -44,7 +44,7 @@ class EntryManager(models.Manager):
         return self.get_query_set().published()
 
 
-class TranslatableEntryManager(TranslatableManager, EntryManager):
+class TranslatableEntryManager(EntryManager, TranslatableManager):
     """
     Extra methods attached to ``Entry.objects``.
     """

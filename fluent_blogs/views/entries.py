@@ -7,6 +7,7 @@ from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import get_user_model
+from parler.models import TranslatableModel
 
 
 class BaseBlogMixin(object):
@@ -43,6 +44,16 @@ class BaseArchiveMixin(BaseBlogMixin):
 
 
 class BaseDetailMixin(BaseBlogMixin):
+    slug_field = 'slug'
+    translated_slug_field = 'translations__slug'
+
+    def get_slug_field(self):
+        # Support both models with the same view
+        if issubclass(get_entry_model(), TranslatableModel):
+            return self.translated_slug_field
+        else:
+            return self.slug_field
+
     def get_queryset(self):
         qs = super(BaseDetailMixin, self).get_queryset()
 
