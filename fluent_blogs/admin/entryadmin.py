@@ -8,10 +8,13 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext, ugettext_lazy as _
 from fluent_blogs import appsettings
 from fluent_blogs.base_models import AbstractEntryBase
-from fluent_blogs.models import get_entry_model
+from fluent_blogs.models import get_entry_model, Entry_Translation
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
+from parler.admin import TranslatableAdmin
+from parler.forms import TranslatableModelForm
+from parler.models import TranslatableModel
 
 
 EntryModel = get_entry_model()
@@ -41,26 +44,29 @@ class AbstractEntryBaseAdminForm(ModelForm):
         """
         Test whether the slug is unique within a given time period.
         """
-        kwargs = {}
+        date_kwargs = {}
         error_msg = _("The slug is not unique")
 
         # The /year/month/slug/ URL determines when a slug can be unique.
         pubdate = cleaned_data['publication_date'] or now()
         if '{year}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['year'] = pubdate.year
+            date_kwargs['year'] = pubdate.year
             error_msg = _("The slug is not unique within it's publication year.")
         if '{month}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['month'] = pubdate.month
+            date_kwargs['month'] = pubdate.month
             error_msg = _("The slug is not unique within it's publication month.")
         if '{day}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            kwargs['day'] = pubdate.day
+            date_kwargs['day'] = pubdate.day
             error_msg = _("The slug is not unique within it's publication day.")
 
-        date_range = get_date_range(**kwargs)
+        date_range = get_date_range(**date_kwargs)
+
+        # Base filters are configurable for translation support.
+        dup_filters = self.get_unique_slug_filters(cleaned_data)
         if date_range:
-            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'], publication_date__range=date_range)
-        else:
-            dup_qs = EntryModel.objects.filter(slug=cleaned_data['slug'])
+            dup_filters['publication_date__range'] = date_range
+
+        dup_qs = EntryModel.objects.filter(**dup_filters)
 
         if self.instance and self.instance.pk:
             dup_qs = dup_qs.exclude(pk=self.instance.pk)
@@ -70,10 +76,30 @@ class AbstractEntryBaseAdminForm(ModelForm):
         if dup_qs.exists():
             raise ValidationError(error_msg)
 
+    def get_unique_slug_filters(self, cleaned_data):
+        # Allow to override this for translations
+        return {
+            'slug': cleaned_data['slug'],
+        }
+
+
+
+class AbstractTranslatableEntryBaseAdminForm(TranslatableModelForm, AbstractEntryBaseAdminForm):
+    """
+    Base form for translatable blog entries
+    """
+    def get_unique_slug_filters(self, cleaned_data):
+        return {
+            'translations__slug': cleaned_data['slug'],
+            'translations__language_code': self.language_code
+        }
+
+
 
 class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     """
-    The base functionality of the admin, which only uses the fields of the :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
+    The base functionality of the admin, which only uses the fields of the
+    :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
     Everything else is branched off in the :class:`EntryAdmin` class.
     """
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
@@ -112,9 +138,9 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
         # When the page is accessed via a pagetype, warn that the node can't be previewed yet.
         context['preview_error'] = ''
         if 'fluent_pages' in settings.INSTALLED_APPS:
-            from fluent_pages.urlresolvers import mixed_reverse, PageTypeNotMounted, MultipleReverseMatch
+            from fluent_pages.urlresolvers import PageTypeNotMounted, MultipleReverseMatch
             try:
-                mixed_reverse('entry_archive_index')
+                self._reverse_blogpage_index(request, obj)
             except PageTypeNotMounted:
                 from fluent_blogs.pagetypes.blogpage.models import BlogPage
                 context['preview_error'] = ugettext("The blog entry can't be previewed yet, a '{page_type_name}' page needs to be created first.").format(page_type_name=BlogPage._meta.verbose_name)
@@ -132,6 +158,12 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
 
         return super(AbstractEntryBaseAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
+
+    def _reverse_blogpage_index(self, request, obj=None):
+        # Internal method with "protected access" to handle translation differences.
+        # This is only called when 'fluent_pages' is in the INSTALLED_APPS.
+        from fluent_pages.urlresolvers import mixed_reverse
+        return mixed_reverse('entry_archive_index')
 
 
     # ---- List code ----
@@ -207,7 +239,39 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     make_published.short_description = _("Mark selected entries as published")
 
 
-class EntryAdmin(AbstractEntryBaseAdmin):
+
+class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdmin):
+    """
+    The base functionality of the admin, which only uses the fields of the
+    :class:`~fluent_blogs.base_models.AbstractTranslatedEntryBase` model.
+    Everything else is branched off in the :class:`EntryAdmin` class.
+    """
+    search_fields = ('translations__slug', 'translations__title')
+    prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
+
+    def get_prepopulated_fields(self, request, obj=None):
+        # Still allow to override self.prepopulated_fields in other custom classes,
+        # but default to the settings which are compatible with django-parler.
+        return self.prepopulated_fields or {'slug': ('title',),}
+
+    def _reverse_blogpage_index(self, request, obj=None):
+        # Updated mixed_reverse() call, with language code included.
+        from fluent_pages.urlresolvers import mixed_reverse
+        language_code = self.get_form_language(request, obj)
+        return mixed_reverse('entry_archive_index', language_code=language_code)
+
+
+
+_model_fields = EntryModel._meta.get_all_field_names()
+if issubclass(EntryModel, TranslatableModel):
+    _entry_admin_base = AbstractTranslatableEntryBaseAdmin
+    _model_fields += Entry_Translation.get_translated_fields()
+else:
+    _entry_admin_base = AbstractEntryBaseAdmin
+
+
+
+class EntryAdmin(_entry_admin_base):
     """
     The Django admin class for the default blog :class:`~fluent_blogs.models.Entry` model.
     When using a custom model, you can use :class:`AbstractEntryBaseAdmin`, which isn't attached to any of the optional fields.
@@ -230,7 +294,6 @@ class EntryAdmin(AbstractEntryBaseAdmin):
 
 
 # Add all fields
-_fields = EntryModel._meta.get_all_field_names()
 for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
-    if _f in _fields:
+    if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)

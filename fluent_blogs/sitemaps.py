@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
+from django.utils.translation import get_language
+from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.utils.compat import get_user_model
+from parler.models import TranslatableModel
 
 User = get_user_model()
 EntryModel = get_entry_model()
@@ -12,10 +15,18 @@ CategoryModel = get_category_model()
 
 class EntrySitemap(Sitemap):
     """
-    The sitemap definition for the pages created with django-fluent-pages.
+    The sitemap definition for the pages created with django-fluent-blogs.
     """
     def items(self):
-        return EntryModel.objects.published().order_by('slug')
+        qs = EntryModel.objects.published().order_by('-publication_date')
+
+        if issubclass(EntryModel, TranslatableModel):
+            # Note that .active_translations() can't be combined with other filters for translations__.. fields.
+            qs = qs.active_translations()
+            return qs.order_by('-publication_date', 'translations__language_code')
+        else:
+            return qs.order_by('-publication_date')
+
 
     def lastmod(self, urlnode):
         """Return the last modification of the entry."""

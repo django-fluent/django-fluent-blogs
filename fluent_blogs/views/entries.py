@@ -1,5 +1,9 @@
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils import translation
+from django.utils.translation import ugettext
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -7,6 +11,7 @@ from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import get_user_model
+from parler.models import TranslatableModel
 
 
 class BaseBlogMixin(object):
@@ -15,6 +20,12 @@ class BaseBlogMixin(object):
     def get_queryset(self):
         # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
         return get_entry_model().objects.published()
+
+    def get_language(self):
+        """
+        Return the language to display in this view.
+        """
+        return translation.get_language()  # Assumes that middleware has set this properly.
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogMixin, self).get_context_data(**kwargs)
@@ -31,6 +42,10 @@ class BaseArchiveMixin(BaseBlogMixin):
     month_format = '%m'
     allow_future = False
     paginate_by = 10
+
+    def get_queryset(self):
+        qs = super(BaseArchiveMixin, self).get_queryset()
+        return qs.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
 
     def get_template_names(self):
         names = super(BaseArchiveMixin, self).get_template_names()
@@ -57,6 +72,47 @@ class BaseDetailMixin(BaseBlogMixin):
             qs = qs.filter(publication_date__range=range)
 
         return qs
+
+    def get_object(self, queryset=None):
+        if issubclass(get_entry_model(), TranslatableModel):
+            # Filter by slug and language
+            return self._translated_get_object(queryset)
+        else:
+            # Regular slug check
+            return super(BaseDetailMixin, self).get_object(queryset)
+
+    def _translated_get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        language_code = self.get_language()
+        language_choices = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
+        filters = dict(
+            translations__slug = self.kwargs['slug'],
+            translations__language_code = language_code
+        )
+        obj = None
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.filter(**filters).get()
+        except ObjectDoesNotExist:
+            if len(language_choices) <= 1:
+                tried_msg = u", tried languages: {0}".format(language_code)
+            else:
+                fallback = language_choices[1]
+                filters['translations__language_code'] = fallback
+                tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
+                try:
+                    obj = queryset.filter(**filters).get()
+                except ObjectDoesNotExist:
+                    pass
+
+            if obj is None:
+                error_message = ugettext(u"No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name}
+                raise Http404(error_message + tried_msg)
+
+        return obj
 
     def get_template_names(self):
         names = super(BaseDetailMixin, self).get_template_names()

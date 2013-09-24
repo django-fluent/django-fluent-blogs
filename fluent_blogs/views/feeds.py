@@ -24,7 +24,7 @@ __all__ = (
 
 def get_entry_queryset():
     # Avoid being cached at module level, always return a new queryset.
-    return get_entry_model().objects.published().order_by('-publication_date')
+    return get_entry_model().objects.published().active_translations().order_by('-publication_date')
 
 _max_items = appsettings.FLUENT_BLOGS_MAX_FEED_ITEMS
 

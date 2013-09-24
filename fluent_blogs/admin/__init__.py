@@ -1,9 +1,14 @@
 from django.contrib import admin
-from fluent_blogs.admin.entryadmin import AbstractEntryBaseAdmin, EntryAdmin, AbstractEntryBaseAdminForm
+from fluent_blogs.admin.entryadmin import AbstractEntryBaseAdminForm, AbstractTranslatableEntryBaseAdminForm, AbstractEntryBaseAdmin, AbstractTranslatableEntryBaseAdmin, EntryAdmin
 from fluent_blogs.models import get_entry_model, Entry
 
 __all__ = (
-    'AbstractEntryBaseAdmin', 'EntryAdmin', 'AbstractEntryBaseAdminForm',
+    'AbstractEntryBaseAdminForm',
+    'AbstractTranslatableEntryBaseAdminForm',
+
+    'AbstractEntryBaseAdmin',
+    'AbstractTranslatableEntryBaseAdmin',
+    'EntryAdmin',
 )
 
 

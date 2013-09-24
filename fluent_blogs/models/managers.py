@@ -4,7 +4,9 @@ The manager class for the CMS models
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
+from fluent_blogs import appsettings
 from fluent_blogs.utils.compat import now
+from parler.managers import TranslatableManager, TranslatableQuerySet
 
 
 class EntryQuerySet(QuerySet):
@@ -23,16 +25,31 @@ class EntryQuerySet(QuerySet):
             )
 
 
+class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
+    def active_translations(self, language_code=None):
+        # overwritten to honor our settings instead of the django-parler defaults
+        language_codes = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
+        return self.translated(*language_codes)
+
 
 class EntryManager(models.Manager):
     """
     Extra methods attached to ``Entry.objects`` .
     """
+    queryset_class = EntryQuerySet
+
     def get_query_set(self):
-        return EntryQuerySet(self.model, using=self._db)
+        return self.queryset_class(self.model, using=self._db)
 
     def published(self):
         """
         Return only published entries
         """
         return self.get_query_set().published()
+
+
+class TranslatableEntryManager(EntryManager, TranslatableManager):
+    """
+    Extra methods attached to ``Entry.objects``.
+    """
+    queryset_class = TranslatableEntryQuerySet

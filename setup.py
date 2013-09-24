@@ -39,6 +39,7 @@ setup(
         'django-fluent-contents>=0.8.4',
         'django-categories>=1.0.0',
         'django-tag-parser>=1.0.0',
+        'django-parler>=0.9.3',
     ],
     requires=[
         'Django (>=1.3)',   # Using staticfiles
