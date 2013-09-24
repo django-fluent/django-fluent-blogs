@@ -14,7 +14,7 @@ from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
-from parler.models import TranslatableModel
+from parler.models import TranslatableModel, TranslationDoesNotExist
 
 
 EntryModel = get_entry_model()
@@ -209,10 +209,10 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     @classmethod
     def _actions_column_icons(cls, entry):
         actions = []
-        if hasattr(entry, 'get_absolute_url') and entry.is_published:
+        if cls.can_preview_object(entry):
             try:
                 url = entry.get_absolute_url()
-            except NoReverseMatch:
+            except (NoReverseMatch, TranslationDoesNotExist):
                 # A Blog Entry is already added, but the URL can no longer be resolved.
                 # This can either mean that urls.py is missing a 'fluent_blogs.urls' (unlikely),
                 # or that this is a PageTypeNotMounted exception because the "Blog page" node was removed.
@@ -224,6 +224,12 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
                         url=url, title=_('View on site'), static=settings.STATIC_URL)
                 )
         return actions
+
+
+    @classmethod
+    def can_preview_object(cls, entry):
+        """ Override whether the node can be previewed. """
+        return hasattr(entry, 'get_absolute_url') and entry.is_published
 
 
     def actions_column(self, entry):

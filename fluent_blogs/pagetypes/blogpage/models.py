@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
-from fluent_blogs.models import Entry
+from fluent_blogs.models import get_entry_model
 from fluent_pages.models import Page
+from parler.models import TranslatableModel
 
 
 class BlogPage(Page):
@@ -15,4 +16,12 @@ class BlogPage(Page):
         Return the entries that are published under this node.
         """
         # Since there is currently no filtering in place, return all entries.
-        return Entry.objects.all().order_by('-publication_date')
+        EntryModel = get_entry_model()
+        qs = get_entry_model().objects.order_by('-publication_date')
+
+        # Only limit to current language when this makes sense.
+        if issubclass(EntryModel, TranslatableModel):
+            admin_form_language = self.get_current_language()  # page object is in current language tab.
+            qs = qs.active_translations(admin_form_language).language(admin_form_language)
+
+        return qs
