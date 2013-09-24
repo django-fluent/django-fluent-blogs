@@ -1,3 +1,14 @@
+Version 1.0 (dev)
+-----------------
+
+* Added optional multilingual Support
+
+ * Based on django-parler_
+ * Integrated with abstract base classes
+
+* Fixed missing ``block.super`` call for the ``link`` template block.
+
+
 Version 0.9.6
 -------------
 
@@ -59,3 +70,4 @@ Main features:
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
+.. _django-parler: https://github.com/edoburu/django-parler
