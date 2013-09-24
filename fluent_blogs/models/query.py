@@ -1,7 +1,7 @@
 """
 A query interface to retrieve blog models and tags.
 """
-from calendar import monthrange, isleap
+from calendar import monthrange
 from datetime import datetime, timedelta
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
