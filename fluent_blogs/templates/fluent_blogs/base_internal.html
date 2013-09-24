@@ -3,7 +3,7 @@
 
 {% block og-type %}blog{% endblock %}
 
-{% block link %}
+{% block link %}{{ block.super }}
     <link rel="index" href="{% blogurl 'entry_archive_index' %}" />
     <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest entries" %}" href="{% blogurl 'entry_archive_index_rss' %}" />
 {% endblock %}
