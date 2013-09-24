@@ -1,0 +1,7 @@
+{% extends "admin/change_list.html" %}
+
+{% block result_list %}
+  {% if FLUENT_BLOGS_IS_TRANSLATABLE %}<div class="translated">{% endif %}
+  {{ block.super }}
+  {% if FLUENT_BLOGS_IS_TRANSLATABLE %}</div>{% endif %}
+{% endblock %}

@@ -122,6 +122,12 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     })
 
 
+    class Media:
+        css = {
+            'all': ('fluent_blogs/admin/admin.css',)
+        }
+
+
     def save_model(self, request, obj, form, change):
         # Automatically store the user in the author field.
         if not change:
@@ -246,6 +252,7 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
     :class:`~fluent_blogs.base_models.AbstractTranslatedEntryBase` model.
     Everything else is branched off in the :class:`EntryAdmin` class.
     """
+    list_display = ('title', 'language_column', 'status_column', 'modification_date', 'actions_column')
     search_fields = ('translations__slug', 'translations__title')
     prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
 
@@ -260,6 +267,16 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
         language_code = self.get_form_language(request, obj)
         return mixed_reverse('entry_archive_index', language_code=language_code)
 
+    def get_language_short_title(self, language_code):
+        """
+        Turn the language code to uppercase.
+        """
+        return language_code.upper()
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['FLUENT_BLOGS_IS_TRANSLATABLE'] = True
+        return super(AbstractTranslatableEntryBaseAdmin, self).changelist_view(request, extra_context)
 
 
 _model_fields = EntryModel._meta.get_all_field_names()

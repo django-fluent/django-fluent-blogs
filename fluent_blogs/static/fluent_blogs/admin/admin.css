@@ -1,0 +1,18 @@
+.available-languages {
+  font-weight: normal;
+  float: right;
+  padding-right: 5px;
+  font-size: 9px;
+  color: #666;
+}
+
+/* Unfortunately, can't filter language_column out before Django 1.6 */
+
+#changelist .translated table tbody td:nth-child(3) {
+  border-left: 0;
+}
+
+#changelist .translated table thead th:nth-child(3) {
+  visibility: hidden;
+  border-left: 0;
+}
