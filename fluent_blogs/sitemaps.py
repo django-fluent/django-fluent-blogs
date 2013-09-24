@@ -21,13 +21,8 @@ class EntrySitemap(Sitemap):
         qs = EntryModel.objects.published().order_by('-publication_date')
 
         if issubclass(EntryModel, TranslatableModel):
-            # Limit to current languages
-            lang_dict = appsettings.get_language_settings(get_language())
-            if not lang_dict['hide_untranslated'] and lang_dict['fallback'] != lang_dict['code']:
-                qs = qs.filter(translations__language_code__in=(lang_dict['code'], lang_dict['fallback'])).distinct()
-            else:
-                qs = qs.filter(translations__language_code=lang_dict['code'])
-
+            # Note that .active_translations() can't be combined with other filters for translations__.. fields.
+            qs = qs.active_translations()
             return qs.order_by('-publication_date', 'translations__language_code')
         else:
             return qs.order_by('-publication_date')

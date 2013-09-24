@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import translation
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -42,6 +42,10 @@ class BaseArchiveMixin(BaseBlogMixin):
     month_format = '%m'
     allow_future = False
     paginate_by = 10
+
+    def get_queryset(self):
+        qs = super(BaseArchiveMixin, self).get_queryset()
+        return qs.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
 
     def get_template_names(self):
         names = super(BaseArchiveMixin, self).get_template_names()
@@ -82,6 +86,7 @@ class BaseDetailMixin(BaseBlogMixin):
             queryset = self.get_queryset()
 
         language_code = self.get_language()
+        language_choices = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
         filters = dict(
             translations__slug = self.kwargs['slug'],
             translations__language_code = language_code
@@ -92,11 +97,10 @@ class BaseDetailMixin(BaseBlogMixin):
             # Get the single item from the filtered queryset
             obj = queryset.filter(**filters).get()
         except ObjectDoesNotExist:
-            fallback = _get_fallback_language(language_code)
-
-            if not fallback:
+            if len(language_choices) <= 1:
                 tried_msg = u", tried languages: {0}".format(language_code)
             else:
+                fallback = language_choices[1]
                 filters['translations__language_code'] = fallback
                 tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
                 try:
@@ -192,14 +196,3 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
         from taggit.models import Tag  # django-taggit is optional, hence imported here.
         self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
         return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)
-
-
-def _get_fallback_language(language_code):
-    """
-    Whether to try the default language.
-    """
-    lang_dict = appsettings.get_language_settings(language_code)
-    if not lang_dict['hide_untranslated'] and lang_dict['fallback'] != language_code:
-        return lang_dict['fallback']
-    else:
-        return None
