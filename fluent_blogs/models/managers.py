@@ -10,6 +10,9 @@ from parler.managers import TranslatableManager, TranslatableQuerySet
 
 
 class EntryQuerySet(QuerySet):
+    """
+    The QuerySet for entry models.
+    """
     def published(self):
         """
         Return only published entries
