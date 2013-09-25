@@ -1,5 +1,8 @@
 from django.conf import settings
+from distutils.version import StrictVersion
+from django.core.exceptions import ImproperlyConfigured
 from parler import appsettings as parler_appsettings
+import fluent_contents
 
 
 # Configurable permalink style, yeah!
@@ -40,3 +43,9 @@ def get_language_settings(language_code, site_id=None):
             return lang_dict
 
     return FLUENT_BLOGS_LANGUAGES['default']
+
+
+# Perform version checks
+if len(FLUENT_BLOGS_LANGUAGES.get(settings.SITE_ID, ())) > 1:
+    if StrictVersion(fluent_contents.__version__) < StrictVersion('1.0a1'):
+        raise ImproperlyConfigured("Using the multilingual support requires django-fluent-contents 1.0dev")
