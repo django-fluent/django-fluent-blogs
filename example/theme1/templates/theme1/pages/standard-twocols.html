@@ -1,0 +1,16 @@
+{% extends "theme1/base.html" %}{% load fluent_contents_tags %}
+
+{% block headtitle %}{{ simplecms_page.title }}{% endblock %}
+{% block bodyclass %}twocols{% endblock %}
+
+{% block main %}
+  <h1>{{ simplecms_page.title }}</h1>
+
+  <div id="content">
+    {% page_placeholder simplecms_page "main1" title="Main content" role="main" %}
+  </div>
+
+  <div id="sidebar">
+    {% page_placeholder simplecms_page "sidebar" title="Sidebar" role="sidebar" %}
+  </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load fluent_blogs_tags %}
+<div id="sidecol">
+  <div id="todo" class="postit">
+    <div class="text">
+      {% get_entries limit=2 as latest_entries %}
+      {% if latest_entries %}
+        Latest entries:
+         <ul>
+           {% for entry in latest_entries %}
+            <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
+           {% endfor %}
+         </ul>
+      {% endif %}
+
+      {% get_tags limit=10 as popular_tags %}
+      {% if popular_tags %}
+        Popular tags:
+         <ul>
+           {% for tag in popular_tags %}
+             <a href="{% blogurl 'entry_archive_tag' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+           {% endfor %}
+         </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="contact">
+    <h2>Contact:</h2>
+    <p>
+      <a href="mailto:you@example.com">E-mail</a>
+      <a href="http://twitter.com">Twitter</a>
+      <a href="http://www.linkedin.com">Linked-IN</a>
+    </p>
+  </div>
+</div>
