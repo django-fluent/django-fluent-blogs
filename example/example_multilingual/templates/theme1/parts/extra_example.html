@@ -1,0 +1,24 @@
+{% load i18n parler_tags %}{% load url from future %}
+
+<p>Set visitor language:</p>
+<form method="post" action="{% url 'django.views.i18n.set_language' %}">
+  {% csrf_token %}
+
+  <select name="language" onchange="this.form.next.value = this.options[this.selectedIndex].getAttribute('data-next-url') || '';">
+    {% for code in MULTILINGUAL_LANGUAGES %}
+      {% get_language_info for code as lang %}
+      <option value="{{ code }}" {% if LANGUAGE_CODE == code %} selected="selected"{% endif %}
+        {# when the current page displays a blog entry, make sure the correct URL will be used in switching languages #}
+        {% if entry %}{% objectlanguage entry code %}data-next-url="{{ object.url }}"{% endobjectlanguage %}{% endif %}>
+
+          {{ lang.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <input type="hidden" name="next" value=""/>
+  <input type="submit" value="Set!"/>
+</form>
+<p>
+  (note that slugs may change between translations)
+</p>
