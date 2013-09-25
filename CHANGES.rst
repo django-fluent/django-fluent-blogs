@@ -1,3 +1,9 @@
+Version 0.9.7
+-------------
+
+* Fix a circular import in ``base_models.py`` which happened with ``DEBUG = False`` only.
+
+
 Version 0.9.6
 -------------
 
