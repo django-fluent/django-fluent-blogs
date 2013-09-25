@@ -1,0 +1,14 @@
+{% extends "theme1/base.html" %}{% load fluent_pages_tags %}
+
+{% block headtitle %}{% block title %}{% endblock %} - Blog example{% endblock %}
+
+{% block menu %}
+  {% render_menu %}
+{% endblock %}
+
+{# map the blocks #}
+{% block main %}
+  <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+{% endblock %}

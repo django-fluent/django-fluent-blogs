@@ -6,6 +6,11 @@ Version 1.0 (dev)
  * Based on django-parler_
  * Integrated with abstract base classes
 
+
+Version 0.9.7
+-------------
+
+* Fix a circular import in ``base_models.py`` which happened with ``DEBUG = False`` only.
 * Fixed missing ``block.super`` call for the ``link`` template block.
 
 
