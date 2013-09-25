@@ -38,7 +38,7 @@ setup(
     install_requires=[
         'django-fluent-contents>=0.8.4',
         'django-categories>=1.0.0',
-        'django-tag-parser>=1.0.0',
+        'django-tag-parser>=1.0.2',
         'django-parler>=0.9.3',
     ],
     requires=[
