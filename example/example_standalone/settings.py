@@ -23,7 +23,7 @@ DATABASES = {
 }
 
 TIME_ZONE = 'Europe/Amsterdam'
-LANGUAGE_CODE = 'en'   # Important for dev version when switching to multilingual support!
+LANGUAGE_CODE = 'en'   # Important when switching to multilingual support!
 SITE_ID = 1
 
 USE_I18N = True
@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'django_wysiwyg',                # for 'text' plugin
     #'disqus',                       # for 'disqus' plugin
     #'form_designer',                # for 'formdesignerlink' plugin
+    'parler',                        # provides the multilingual support.
     'taggit',                        # optional tagging support.
     'taggit_autocomplete_modified',  # optional autocompletion support for tags
     'tinymce',                       # Used by 'text' plugin, see DJANGO_WYSIWYG_FLAVOR
