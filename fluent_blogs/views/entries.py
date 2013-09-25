@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 from django.utils import translation
 from django.utils.translation import ugettext
@@ -95,8 +95,10 @@ class BaseDetailMixin(BaseBlogMixin):
 
         try:
             # Get the single item from the filtered queryset
-            obj = queryset.filter(**filters).get()
+            # NOTE. Explicitly set language to the state the object was fetched in.
+            obj = queryset.filter(**filters).language(language_code).get()
         except ObjectDoesNotExist:
+            # Translated object not found, try the fallback
             if len(language_choices) <= 1:
                 tried_msg = u", tried languages: {0}".format(language_code)
             else:
@@ -104,7 +106,12 @@ class BaseDetailMixin(BaseBlogMixin):
                 filters['translations__language_code'] = fallback
                 tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
                 try:
-                    obj = queryset.filter(**filters).get()
+                    # NOTE. Explicitly set language to the state the object was fetched in.
+                    obj = queryset.filter(**filters).language(fallback).get()
+
+                    # NOTE: it could happen that objects are resolved using their fallback language,
+                    # but the actual translation also exists. This is handled in render_to_response() below.
+                    setattr(obj, "_fetched_in_fallback_language", True)
                 except ObjectDoesNotExist:
                     pass
 
@@ -113,6 +120,20 @@ class BaseDetailMixin(BaseBlogMixin):
                 raise Http404(error_message + tried_msg)
 
         return obj
+
+    def render_to_response(self, context, **response_kwargs):
+        if isinstance(self.object, TranslatableModel):
+            # Check whether the object was fetched in the fallback language
+            requested_language = self.get_language()
+            if getattr(self.object, '_fetched_in_fallback_language', False) \
+               and self.object.has_translation(requested_language):
+                # The object was resolved via the fallback language,
+                # but it has an official URL in the translated language.
+                # Either get_object() could have raised a 404, but in this case provide some service:
+                self.object.set_current_language(requested_language)
+                return HttpResponsePermanentRedirect(self.object.get_absolute_url())
+
+        return super(BaseDetailMixin, self).render_to_response(context, **response_kwargs)
 
     def get_template_names(self):
         names = super(BaseDetailMixin, self).get_template_names()
