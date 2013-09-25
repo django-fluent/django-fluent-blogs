@@ -258,6 +258,7 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
     :class:`~fluent_blogs.base_models.AbstractTranslatedEntryBase` model.
     Everything else is branched off in the :class:`EntryAdmin` class.
     """
+    form = AbstractTranslatableEntryBaseAdminForm
     list_display = ('title', 'language_column', 'status_column', 'modification_date', 'actions_column')
     search_fields = ('translations__slug', 'translations__title')
     prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
@@ -304,7 +305,11 @@ class EntryAdmin(_entry_admin_base):
         'fields': ('title', 'slug', 'status',),  # is filled with ('intro', 'contents', 'categories', 'tags', 'enable_comments') below
     })
 
-    fieldsets = (
+    # For Django 1.4, the fieldsets shouldn't be declared with 'fieldsets ='
+    # as the admin validation won't recognize the translated fields.
+    # The 1.4 validation didn't check the form at all, but only checks the model fields.
+    # As of Django 1.5, using 'fieldsets = ..' with translated fields just works.
+    declared_fieldsets = (
         FIELDSET_GENERAL,
         AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
     )
