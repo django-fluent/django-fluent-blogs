@@ -11,7 +11,7 @@ from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
-from fluent_contents.models import PlaceholderField
+from fluent_contents.models import PlaceholderField, ContentItemRelation
 
 
 __all__ = (
@@ -199,6 +199,9 @@ class ContentsEntryMixin(models.Model):
     Mixin for adding contents to a blog entry
     """
     contents = PlaceholderField("blog_contents")
+
+    # Adding the ContentItemRelation makes sure the admin can find all deleted objects too.
+    contentitem_set = ContentItemRelation()
 
     class Meta:
         abstract = True
