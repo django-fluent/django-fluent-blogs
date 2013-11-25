@@ -1,6 +1,4 @@
 from django.conf import settings
-from django.contrib import comments
-from django.contrib.comments.moderation import moderator, CommentModerator
 from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
@@ -10,7 +8,6 @@ from fluent_blogs.models.managers import EntryManager
 from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
 from fluent_contents.models import PlaceholderField, ContentItemRelation
-
 
 __all__ = (
     'AbstractEntryBase',
@@ -32,13 +29,23 @@ elif 'taggit' in settings.INSTALLED_APPS:
 
 
 # Optional commenting support
+# Make sure that django.contrib.comments is not imported in the app,
+# unless it exists in INSTALLED_APPS. Otherwise, the User delete view
+# breaks because it tries to delete comments associated with the user.
+comments = None
+moderator = None
 CommentModel = None
+CommentModerator = None
 if 'django.contrib.comments' in settings.INSTALLED_APPS:
+    from django.contrib import comments
+    from django.contrib.comments.moderation import moderator, CommentModerator
     CommentModel = comments.get_model()
 
 def _get_comment_relation_stub():
-    from django.contrib.comments.models import Comment
-    return Comment.objects.get_empty_query_set()
+    #from django.contrib.comments.models import Comment
+    #return Comment.objects.get_empty_query_set()
+    from django.db.models.query import EmptyQuerySet
+    return EmptyQuerySet()
 
 
 def _get_current_site():
