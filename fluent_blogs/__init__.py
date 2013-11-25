@@ -6,4 +6,3 @@ __version__ = "0.9.7"
 # base_models -> models/managers.py -> invoking models/__init__.py -> models/db.py -> base_models.py
 #
 # This doesn't occur when the models are imported first.
-import fluent_blogs.models
