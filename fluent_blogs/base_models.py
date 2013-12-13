@@ -20,6 +20,7 @@ __all__ = (
     'CommentsEntryMixin',
     'CategoriesEntryMixin',
     'TagsEntryMixin',
+    'SeoEntryMixin',
 
     # Untranslated base classes
     'AbstractEntryBase',
@@ -303,6 +304,17 @@ class TagsEntryMixin(models.Model):
         abstract = True
 
 
+class SeoEntryMixin(models.Model):
+    """
+    Mixin for adding SEO fields to a blog entry.
+    """
+    meta_keywords = models.CharField(_('keywords'), max_length=255, blank=True, default='', help_text=_("When this field is not filled in, the the tags will be used."))
+    meta_description = models.CharField(_('description'), max_length=255, blank=True, default='', help_text=_("When this field is not filled in, the contents or intro text will be used."))
+
+    class Meta:
+        abstract = True
+
+
 class AbstractTranslatableEntryBase(
     TranslatableModel,
     AbstractSharedEntryBaseMixin):
@@ -356,7 +368,8 @@ class AbstractEntry(
         ContentsEntryMixin,
         CommentsEntryMixin,
         CategoriesEntryMixin,
-        TagsEntryMixin):
+        TagsEntryMixin,
+        SeoEntryMixin):
     """
     The classic entry model, as abstract model.
     """
@@ -379,7 +392,8 @@ class AbstractTranslatableEntry(
 
 class AbstractTranslatedFieldsEntry(
     AbstractTranslatedFieldsEntryBase,
-    ExcerptEntryMixin):
+    ExcerptEntryMixin,
+    SeoEntryMixin):
     """
     The default translated fields model for blog posts, as abstract model.
     """

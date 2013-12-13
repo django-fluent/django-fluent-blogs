@@ -2,6 +2,7 @@ import django
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import widgets
+from django.contrib.admin.widgets import AdminTextInputWidget, AdminTextareaWidget
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import ModelForm
@@ -138,6 +139,17 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
             # default fills the field before the post is written (too early)
             obj.publication_date = now()
         obj.save()
+
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        """
+        Allow formfield_overrides to contain field names too.
+        """
+        overrides = self.formfield_overrides.get(db_field.name)
+        if overrides:
+            kwargs.update(overrides)
+
+        return super(AbstractEntryBaseAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
@@ -294,8 +306,28 @@ else:
     _entry_admin_base = AbstractEntryBaseAdmin
 
 
+class SeoEntryAdminMixin(object):
+    """
+    Mixin for the SEO fields.
+    """
+    FIELDSET_SEO = (_('SEO settings'), {
+        'fields': ('meta_keywords', 'meta_description'),
+        'classes': ('collapse',),
+    })
 
-class EntryAdmin(_entry_admin_base):
+    # AbstractEntryBaseAdmin allows to specify the widgets by field name,
+    # which formfield_overrides doesn't support by default.
+    formfield_overrides = {
+        'meta_keywords': {
+            'widget': AdminTextInputWidget(attrs={'class': 'vLargeTextField'})
+        },
+        'meta_description': {
+            'widget': AdminTextareaWidget(attrs={'rows': 3})
+        },
+    }
+
+
+class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     """
     The Django admin class for the default blog :class:`~fluent_blogs.models.Entry` model.
     When using a custom model, you can use :class:`AbstractEntryBaseAdmin`, which isn't attached to any of the optional fields.
@@ -312,13 +344,16 @@ class EntryAdmin(_entry_admin_base):
     declared_fieldsets = (
         FIELDSET_GENERAL,
         AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
+        SeoEntryAdminMixin.FIELDSET_SEO,
     )
 
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        if db_field.name == 'intro':
-            kwargs['widget'] = widgets.AdminTextareaWidget(attrs={'rows': 4})
-        return super(EntryAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+    formfield_overrides = {}
+    formfield_overrides.update(SeoEntryAdminMixin.formfield_overrides)
+    formfield_overrides.update({
+        'intro': {
+            'widget': widgets.AdminTextareaWidget(attrs={'rows': 4})
+        },
+    })
 
 
 # Add all fields

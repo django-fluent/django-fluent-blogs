@@ -6,6 +6,8 @@ Version 1.0 (dev)
  * Based on django-parler_
  * Integrated with abstract base classes
 
+* Added meta keywords/description fields.
+
 
 Version 0.9.7
 -------------

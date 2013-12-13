@@ -9,9 +9,9 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 
-{% block meta-keywords %}{% if object.tags %}{{ object.tags.all|join:', ' }}{% else %}{{ block.super }}{% endif %}{% endblock %}
-{% block meta-description %}{% if object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
-{% block og-description %}{% if object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
+{% block meta-keywords %}{% if object.meta_keywords %}{{ object.meta_keywords }}{% elif object.tags %}{{ object.tags.all|join:', ' }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block meta-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
+{% block og-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
 
 {% block link %}{{ block.super }}{% with next=object.next_entry previous=object.previous_entry %}
     <link rel="canonical" href="{{ object.get_absolute_url }}" />
