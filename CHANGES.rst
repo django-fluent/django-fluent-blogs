@@ -7,6 +7,7 @@ Version 1.0 (dev)
  * Integrated with abstract base classes
 
 * Added meta keywords/description fields.
+* Allow ``formfield_overrides`` to contain field names too.
 
 
 Version 0.9.7
