@@ -138,7 +138,8 @@ def query_tags(order=None, orderby=None, limit=None):
     from taggit.models import Tag, TaggedItem    # feature is still optional
     EntryModel = get_entry_model()
     ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
-    entry_tag_ids = TaggedItem.objects.filter(content_type=ct).filter(entry__status=get_entry_model().PUBLISHED).values_list('tag_id')
+    published_filter = {'{0}__status'.format(ct.model.lower()): EntryModel.PUBLISHED}  # e.g. entry__status=, or newsitem__status=
+    entry_tag_ids = TaggedItem.objects.filter(content_type=ct).filter(**published_filter).values_list('tag_id')
 
     # get tags
     queryset = Tag.objects.filter(id__in=entry_tag_ids)
