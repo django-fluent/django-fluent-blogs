@@ -8,6 +8,8 @@ Version 1.0 (dev)
 
 * Added meta keywords/description fields.
 * Allow ``formfield_overrides`` to contain field names too.
+* Fix ``get_tags`` template tag to returns tags for unpublished entries only.
+* Fix ``get_tags`` template tag to handle multple ``BlogPage`` instances.
 
 
 Version 0.9.7
