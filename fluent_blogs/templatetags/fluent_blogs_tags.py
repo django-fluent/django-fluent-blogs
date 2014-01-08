@@ -41,8 +41,27 @@ def format_year(year):
         return unicode(year)
 
 
+class BlogAssignmentOrInclusionNode(BaseAssignmentOrInclusionNode):
+    """
+    Internal class, to make sure additional context is passed to the inclusion-templates.
+    """
+
+    def get_context_data(self, parent_context, *tag_args, **tag_kwargs):
+        context = super(BlogAssignmentOrInclusionNode, self).get_context_data(parent_context, *tag_args, **tag_kwargs)
+
+        # Also pass 'request' and 'page' if they are available.
+        # This helps the 'blogurl' and 'appurl' tags to resolve the current blog pagetype,
+        # if there are multiple pagetypes available.
+        for var in ('request', 'page'):
+            value = parent_context.get(var)
+            if value:
+                context[var] = value
+
+        return context
+
+
 @template_tag(register, 'get_entries')
-class GetEntriesNode(BaseAssignmentOrInclusionNode):
+class GetEntriesNode(BlogAssignmentOrInclusionNode):
     """
     Query the entries in the database, and render them.
     This template tag supports the following syntax:
@@ -95,17 +114,17 @@ class GetEntriesNode(BaseAssignmentOrInclusionNode):
 
 
 @template_tag(register, 'get_tags')
-class GetPopularTagsNode(BaseAssignmentOrInclusionNode):
+class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
     """
     Find the popular tags associated with blog entries.
     This template tag supports the following syntax:
 
     .. code-block:: html+django
 
-        {% get_popular_tags order="name" as tags %}
+        {% get_tags order="name" as tags %}
         {% for tag in tags %}...{% endfor %}
 
-        {% get_popular_tags template="name/of/template.html" %}
+        {% get_tags template="name/of/template.html" %}
 
     The allowed query parameters are:
 
