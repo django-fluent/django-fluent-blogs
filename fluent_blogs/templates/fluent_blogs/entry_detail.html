@@ -39,12 +39,14 @@
 {% block script %}{% include "fluent_blogs/entry_detail/comments_script.html" %}{% endblock %}
 
 {% block content %}
-  <article id="entry-{{ object.pk }}" class="blog-entry">
-    {% include "fluent_blogs/entry_detail/contents.html" %}
-  </article>
+    <div class="blog-entry-wrapper">
+      <article id="entry-{{ object.pk }}" class="blog-entry">
+        {% include "fluent_blogs/entry_detail/contents.html" %}
+      </article>
 
-  {% include "fluent_blogs/entry_detail/widgets.html" %}
-  {% include "fluent_blogs/entry_detail/navigation.html" %}
-  {% include "fluent_blogs/entry_detail/comments.html" %}
-  {% include "fluent_blogs/entry_detail/page_footer.html" %}
+      {% include "fluent_blogs/entry_detail/widgets.html" %}
+      {% include "fluent_blogs/entry_detail/navigation.html" %}
+      {% include "fluent_blogs/entry_detail/comments.html" %}
+      {% include "fluent_blogs/entry_detail/page_footer.html" %}
+    </div>
 {% endblock %}

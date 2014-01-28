@@ -38,13 +38,15 @@
 
 
   {% block object_list %}
-    {% for object in object_list %}
-      <article id="blog-entry-{{ object.pk }}" class="blog-entry">
-        {% include "fluent_blogs/entry_archive/item.html" %}
-      </article>
-    {% empty %}
-      {% include "fluent_blogs/entry_archive/empty.html" %}
-    {% endfor %}
+    <div class="blog-archive-wrapper">
+      {% for object in object_list %}
+        <article id="blog-entry-{{ object.pk }}" class="blog-entry">
+          {% include "fluent_blogs/entry_archive/item.html" %}
+        </article>
+      {% empty %}
+        {% include "fluent_blogs/entry_archive/empty.html" %}
+      {% endfor %}
+    </div>
   {% endblock %}
 
   {% block pagination %}

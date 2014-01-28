@@ -7,6 +7,7 @@ Version 1.0 (dev)
  * Integrated with abstract base classes
 
 * Added meta keywords/description fields.
+* Added ``blog-entry-wrapper`` and ``blog-archive-wrapper`` classes in the template
 * Allow ``formfield_overrides`` to contain field names too.
 * Fix ``get_tags`` template tag to returns tags for unpublished entries only.
 * Fix ``get_tags`` template tag to handle multple ``BlogPage`` instances.
