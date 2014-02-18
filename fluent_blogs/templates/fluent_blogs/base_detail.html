@@ -1,0 +1,52 @@
+{% extends "fluent_blogs/base_internal.html" %}
+{% load i18n %}
+{% comment %}
+
+    This is the central template for detail pages.
+    The layout can be customized easily by overwriting the included templates.
+
+{% endcomment %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block meta-keywords %}{% if object.meta_keywords %}{{ object.meta_keywords }}{% elif object.tags %}{{ object.tags.all|join:', ' }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block meta-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
+{% block og-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
+
+{% block link %}{{ block.super }}{% with next=object.next_entry previous=object.previous_entry %}
+    <link rel="canonical" href="{{ object.get_absolute_url }}" />
+    {% if object.short_url %}<link rel="shortlink" href="{{ object.short_url }}" />{% endif %}
+    {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{{ previous.get_absolute_url }}" />{% endif %}
+    {% if next %}<link rel="next" title="{{ next.title }}" href="{{ next.get_absolute_url }}" />{% endif %}
+
+
+    {% comment %}
+    {% with object.creation_date|date:"Y" as year %}
+      {% with object.creation_date|date:"m" as month %}
+        {% with object.creation_date|date:"d" as day %}
+          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of discussions on" %} '{{ object.title }}'"
+                href="{% url zinnia_entry_discussion_feed year month day object.slug %}" />
+          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of comments on" %} '{{ object.title }}'"
+                href="{% url zinnia_entry_comment_feed year month day object.slug %}" />
+        {% endwith %}
+      {% endwith %}
+    {% endwith %}
+    {% endcomment %}
+
+    {% include "fluent_blogs/entry_detail/comments_css.html" %}
+{% endwith %}{% endblock %}
+
+{% block script %}{% include "fluent_blogs/entry_detail/comments_script.html" %}{% endblock %}
+
+{% block content %}
+    <div class="blog-entry-wrapper">
+      <article id="entry-{{ object.pk }}" class="blog-entry">
+        {% include "fluent_blogs/entry_detail/contents.html" %}
+      </article>
+
+      {% include "fluent_blogs/entry_detail/widgets.html" %}
+      {% include "fluent_blogs/entry_detail/navigation.html" %}
+      {% include "fluent_blogs/entry_detail/comments.html" %}
+      {% include "fluent_blogs/entry_detail/page_footer.html" %}
+    </div>
+{% endblock %}
