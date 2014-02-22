@@ -28,11 +28,12 @@ class EntryQuerySet(QuerySet):
             )
 
 
+
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
-    def active_translations(self, language_code=None):
+    def active_translations(self, language_code=None, **translated_fields):
         # overwritten to honor our settings instead of the django-parler defaults
         language_codes = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
-        return self.translated(*language_codes)
+        return self.translated(*language_codes, **translated_fields)
 
 
 class EntryManager(models.Manager):
