@@ -129,6 +129,16 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
         }
 
 
+    def queryset(self, request):
+        qs = super(AbstractEntryBaseAdmin, self).queryset(request)
+
+        # Admin only shows current site for now,
+        # until there is decent filtering for it.
+        if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+            qs = qs.filter(parent_site=settings.SITE_ID)
+        return qs
+
+
     def save_model(self, request, obj, form, change):
         # Automatically store the user in the author field.
         if not change:

@@ -1,6 +1,7 @@
 """
 The manager class for the CMS models
 """
+from django.conf import settings
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
@@ -13,11 +14,22 @@ class EntryQuerySet(QuerySet):
     """
     The QuerySet for entry models.
     """
+    def parent_site(self, site):
+        """
+        Filter to the given site.
+        """
+        return self.filter(parent_site=site)
+
     def published(self):
         """
-        Return only published entries
+        Return only published entries for the current site.
         """
-        return self \
+        if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+            qs = self.parent_site(settings.SITE_ID)
+        else:
+            qs = self
+
+        return qs \
             .filter(status=self.model.PUBLISHED) \
             .filter(
                 Q(publication_date__isnull=True) |
@@ -45,9 +57,15 @@ class EntryManager(models.Manager):
     def get_query_set(self):
         return self.queryset_class(self.model, using=self._db)
 
+    def parent_site(self, site):
+        """
+        Filter to the given site.
+        """
+        return self.get_query_set().parent_site(site)
+
     def published(self):
         """
-        Return only published entries
+        Return only published entries for the current site.
         """
         return self.get_query_set().published()
 

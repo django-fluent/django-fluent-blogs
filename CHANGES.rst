@@ -6,6 +6,7 @@ Version 1.0 (dev)
  * Based on django-parler_
  * Integrated with abstract base classes
 
+* Added multisite support.
 * Added meta keywords/description fields.
 * Added new base templates to make overriding ``entry_archive.html`` and ``entry_details.html`` easier.
 * Added ``blog-entry-wrapper`` and ``blog-archive-wrapper`` classes in the template
