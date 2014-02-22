@@ -16,10 +16,15 @@ from parler.models import TranslatableModel
 
 class BaseBlogMixin(object):
     context_object_name = None
+    prefetch_translations = False
+
 
     def get_queryset(self):
-        # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
-        return get_entry_model().objects.published()
+        # NOTE: This is also workaround, defining the queryset static somehow caused results to remain cached.
+        qs = get_entry_model().objects.published()
+        if self.prefetch_translations:
+            qs = qs.prefetch_related('translations')
+        return qs
 
     def get_language(self):
         """
@@ -58,6 +63,9 @@ class BaseArchiveMixin(BaseBlogMixin):
 
 
 class BaseDetailMixin(BaseBlogMixin):
+    # Only relevant at the detail page, e.g. for a language switch menu.
+    prefetch_translations = appsettings.FLUENT_BLOGS_PREFETCH_TRANSLATIONS
+
     def get_queryset(self):
         qs = super(BaseDetailMixin, self).get_queryset()
 
