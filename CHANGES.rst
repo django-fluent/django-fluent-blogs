@@ -11,6 +11,7 @@ Version 1.0 (dev)
 * Added new base templates to make overriding ``entry_archive.html`` and ``entry_details.html`` easier.
 * Added ``blog-entry-wrapper`` and ``blog-archive-wrapper`` classes in the template
 * Allow ``formfield_overrides`` to contain field names too.
+* Fix comments-stub support for Django 1.6
 * Fix ``get_tags`` template tag to returns tags for unpublished entries only.
 * Fix ``get_tags`` template tag to handle multple ``BlogPage`` instances.
 

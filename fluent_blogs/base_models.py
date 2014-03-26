@@ -55,11 +55,12 @@ if 'django.contrib.comments' in settings.INSTALLED_APPS:
     from django.contrib.comments.moderation import moderator, CommentModerator
     CommentModel = comments.get_model()
 
-def _get_comment_relation_stub():
-    #from django.contrib.comments.models import Comment
-    #return Comment.objects.get_empty_query_set()
-    from django.db.models.query import EmptyQuerySet
-    return EmptyQuerySet()
+# Can't use EmptyQueryset stub in Django 1.6 anymore,
+# using this model to build a queryset instead.
+class CommentModelStub(models.Model):
+    class Meta:
+        managed = False
+        db_table = "django_comments_stub"
 
 
 def _get_current_site():
@@ -226,7 +227,9 @@ class CommentsEntryMixin(models.Model):
     if CommentModel is not None:
         all_comments = GenericRelation(CommentModel, verbose_name=_("Comments"), object_id_field='object_pk')
     else:
-        all_comments = _get_comment_relation_stub()
+        # Provide a stub so templates don't break.
+        # This avoids importing django.contrib.comments models when the app is not used.
+        all_comments = CommentModelStub.objects.none()
 
     class Meta:
         abstract = True
@@ -240,7 +243,7 @@ class CommentsEntryMixin(models.Model):
         if CommentModel is None:
             # No local comments, return empty queryset.
             # The project might be using DISQUS or Facebook comments instead.
-            return _get_comment_relation_stub()
+            return CommentModelStub.objects.none()
         else:
             return CommentModel.objects.for_model(self).filter(is_public=True, is_removed=False)
 
