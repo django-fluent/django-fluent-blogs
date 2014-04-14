@@ -1,14 +1,14 @@
 Version 1.0 (dev)
 -----------------
 
-* Added optional multilingual Support
-
- * Based on django-parler_
- * Integrated with abstract base classes
+Released in 1.0b1:
+~~~~~~~~~~~~~~~~~~
 
 * Added multisite support.
+* Added optional multilingual support, based on django-parler_.
 * Added meta keywords/description fields.
 * Added new base templates to make overriding ``entry_archive.html`` and ``entry_details.html`` easier.
+* Added abstract base classes for multilingual support.
 * Added ``blog-entry-wrapper`` and ``blog-archive-wrapper`` classes in the template
 * Allow ``formfield_overrides`` to contain field names too.
 * Fix comments-stub support for Django 1.6
