@@ -36,10 +36,10 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
-        'django-fluent-contents>=0.8.4',
+        'django-fluent-contents>=1.0b1',
         'django-categories>=1.0.0',
-        'django-tag-parser>=1.0.2',
-        'django-parler>=0.9.3',
+        'django-tag-parser>=1.0.3',
+        'django-parler>=0.9.4',
     ],
     requires=[
         'Django (>=1.3)',   # Using staticfiles
