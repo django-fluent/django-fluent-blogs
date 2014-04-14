@@ -3,8 +3,10 @@ A query interface to retrieve blog models and tags.
 """
 from calendar import monthrange
 from datetime import datetime, timedelta
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
+from fluent_blogs import appsettings
 from fluent_blogs.models.db import get_entry_model
 from fluent_blogs.utils.compat import utc
 
@@ -75,6 +77,9 @@ def query_entries(queryset=None,
     if queryset is None:
         queryset = get_entry_model().objects.all()
 
+    if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+        queryset = queryset.parent_site(settings.SITE_ID)
+
     if not future:
         queryset = queryset.published()
 
@@ -136,9 +141,17 @@ def query_tags(order=None, orderby=None, limit=None):
     This interface is mainly used by the ``get_tags`` template tag.
     """
     from taggit.models import Tag, TaggedItem    # feature is still optional
+
+    # Get queryset filters for published entries
     EntryModel = get_entry_model()
     ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
-    published_filter = {'{0}__status'.format(ct.model.lower()): EntryModel.PUBLISHED}  # e.g. entry__status=, or newsitem__status=
+    rel_name = ct.model.lower()
+    published_filter = {
+        '{0}__status'.format(rel_name): EntryModel.PUBLISHED  # e.g. entry__status=, or newsitem__status=
+    }
+    if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+        published_filter['{0}__parent_site'.format(rel_name)] = settings.SITE_ID
+
     entry_tag_ids = TaggedItem.objects.filter(content_type=ct).filter(**published_filter).values_list('tag_id')
 
     # get tags
