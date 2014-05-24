@@ -186,7 +186,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
         if not self.publication_date:
             # Protection for manually created models (Entry.objects.create())
             return None
-        entries = self.__class__.objects.published().filter(publication_date__lt=self.publication_date).order_by('-publication_date')[:1]
+        qs = self.__class__.objects.published()
+        if self.is_translatable_model:
+            qs = qs.translated()
+
+        entries = qs.filter(publication_date__lt=self.publication_date).order_by('-publication_date')[:1]
         return entries[0] if entries else None
 
 
@@ -197,7 +201,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
         """
         if not self.publication_date:
             return None
-        entries = self.__class__.objects.published().filter(publication_date__gt=self.publication_date).order_by('publication_date')[:1]
+        qs = self.__class__.objects.published()
+        if self.is_translatable_model:
+            qs = qs.translated()
+
+        entries = qs.filter(publication_date__gt=self.publication_date).order_by('publication_date')[:1]
         return entries[0] if entries else None
 
 

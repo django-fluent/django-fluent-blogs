@@ -2,6 +2,7 @@ Version 1.0 (dev)
 -----------------
 
 * Fixed entry URLs to be relative to the current ``BlogPage`` root.
+* Fixed next/previous URLs for translated content (in case the next URL only exists in certain languages).
 
 
 Released in 1.0b1:
