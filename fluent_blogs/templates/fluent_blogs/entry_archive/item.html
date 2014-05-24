@@ -1,5 +1,5 @@
 {% extends "fluent_blogs/entry_contents_base.html" %}
-{% load i18n %}
+{% load i18n fluent_blogs_tags %}
 
 {% block entry-body-contents %}
     {{ block.super }}
@@ -15,15 +15,16 @@
 
     {# Archive typically gives short summary, whereas the details page displays the full set of comments #}
     <p class="entry-meta">
+      {% get_entry_url object as entry_url %}
       {% if comment_count %}
-        <a href="{{ object.get_absolute_url }}#comments" title="{{ object.title }}">{% blocktrans count comment_count as comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
+        <a href="{{ entry_url }}#comments" title="{{ object.title }}">{% blocktrans count comment_count as comment_count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}</a>
       {% else %}
         {% if object.comments_are_open %}{# no comments are closed message here, only encourage to post #}
           <a href="{{ comments_url }}" title="{{ object.title }}">{% trans "Post a comment" %}</a>
         {% endif %}
       {% endif %}
 
-      {% if pingback_count %}<a href="{{ object.get_absolute_url }}#pingbacks" title="{{ object.title }}">{% blocktrans count pingback_count as pingback_count %}{{ pingback_count }} pingback{% plural %}{{ pingback_count }} pingbacks{% endblocktrans %}</a>{% endif %}
-      {% if trackback_count %}<a href="{{ object.get_absolute_url }}#trackbacks" title="{{ object.title }}">{% blocktrans count trackback_count as trackback_count %}{{ trackback_count }} trackback{% plural %}{{ trackback_count }} trackbacks{% endblocktrans %}</a>{% endif %}
+      {% if pingback_count %}<a href="{{ entry_url }}#pingbacks" title="{{ object.title }}">{% blocktrans count pingback_count as pingback_count %}{{ pingback_count }} pingback{% plural %}{{ pingback_count }} pingbacks{% endblocktrans %}</a>{% endif %}
+      {% if trackback_count %}<a href="{{ entry_url }}#trackbacks" title="{{ object.title }}">{% blocktrans count trackback_count as trackback_count %}{{ trackback_count }} trackback{% plural %}{{ trackback_count }} trackbacks{% endblocktrans %}</a>{% endif %}
     </p>
 {% endblock %}

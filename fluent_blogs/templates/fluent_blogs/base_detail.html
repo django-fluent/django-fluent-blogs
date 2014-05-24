@@ -1,5 +1,5 @@
 {% extends "fluent_blogs/base_internal.html" %}
-{% load i18n %}
+{% load i18n fluent_blogs_tags %}
 {% comment %}
 
     This is the central template for detail pages.
@@ -14,10 +14,10 @@
 {% block og-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
 
 {% block link %}{{ block.super }}{% with next=object.next_entry previous=object.previous_entry %}
-    <link rel="canonical" href="{{ object.get_absolute_url }}" />
+    <link rel="canonical" href="{{ object.get_absolute_url }}" />{# only exposed on one BlogPage node #}
     {% if object.short_url %}<link rel="shortlink" href="{{ object.short_url }}" />{% endif %}
-    {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{{ previous.get_absolute_url }}" />{% endif %}
-    {% if next %}<link rel="next" title="{{ next.title }}" href="{{ next.get_absolute_url }}" />{% endif %}
+    {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{% get_entry_url previous %}" />{% endif %}
+    {% if next %}<link rel="next" title="{{ next.title }}" href="{% get_entry_url next %}" />{% endif %}
 
 
     {% comment %}

@@ -1,6 +1,9 @@
 Version 1.0 (dev)
 -----------------
 
+* Fixed entry URLs to be relative to the current ``BlogPage`` root.
+
+
 Released in 1.0b1:
 ~~~~~~~~~~~~~~~~~~
 

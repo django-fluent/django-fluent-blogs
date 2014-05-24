@@ -135,10 +135,13 @@ class AbstractSharedEntryBaseMixin(models.Model):
             }
         """
         root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
-        return root + self._get_relative_url()
+        return root + self.get_relative_url()
 
 
-    def _get_relative_url(self):
+    def get_relative_url(self):
+        """
+        Return the link path from the archive page.
+        """
         # Return the link style, using the permalink style setting.
         return appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
             year = self.publication_date.strftime('%Y'),

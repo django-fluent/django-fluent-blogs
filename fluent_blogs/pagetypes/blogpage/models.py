@@ -25,3 +25,10 @@ class BlogPage(Page):
             qs = qs.active_translations(admin_form_language).language(admin_form_language)
 
         return qs
+
+
+    def get_entry_url(self, entry):
+        """
+        Return the URL of a blog entry, relative to this page.
+        """
+        return self.get_absolute_url() + entry.get_relative_url()

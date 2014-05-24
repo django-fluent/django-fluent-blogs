@@ -1,10 +1,9 @@
 {# default template for the {% get_entries %} tag if no template is given, or "as var" is used. #}
+{% load fluent_blogs_tags %}
 {% if entries %}
   <ul>
     {% for entry in entries %}
-      {% with entry_url=entry.get_absolute_url %}
-        <li><a href="{{ entry_url }}" title="{{ entry.intro|default:entry.title }}">{{ entry.title }}</a></li>
-      {% endwith %}
+      <li><a href="{% get_entry_url entry %}" title="{{ entry.intro|default:entry.title }}">{{ entry.title }}</a></li>
     {% endfor %}
   </ul>
 {% else %}

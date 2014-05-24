@@ -12,12 +12,14 @@
   When both pages differ a lot, simply place the desired HTML in those pages instead of extending this base template.
 
 {% endcomment %}
-{% with comments_url=object.get_absolute_url|add:"#comments" comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
+{% with comment_count=object.comments.count pingback_count=object.pingbacks.count trackback_count=object.trackbacks.count %}
+  {% get_entry_url object as entry_url %}
+  {% with comments_url=entry_url|add:"#comments" %}{# preserving backwards compatibility #}
 
   {% block entry-header %}
     <header class="entry-header clearfix">
       {% block entry-header-contents %}
-      <h2><a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a></h2>
+      <h2><a href="{{ entry_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a></h2>
       <p class="entry-info">
         {% block entry-header-info %}
           <abbr class="published" title="{{ object.creation_date }}">{{ object.creation_date|date:"DATE_FORMAT" }}</abbr>
@@ -56,4 +58,6 @@
       {% endblock %}
     </footer>
   {% endblock %}
+
+  {% endwith %}
 {% endwith %}
