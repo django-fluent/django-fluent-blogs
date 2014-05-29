@@ -94,28 +94,23 @@ class BaseDetailMixin(BaseBlogMixin):
             queryset = self.get_queryset()
 
         language_code = self.get_language()
-        language_choices = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
-        filters = dict(
-            translations__slug = self.kwargs['slug'],
-            translations__language_code = language_code
-        )
+        slug = self.kwargs['slug']
         obj = None
 
         try:
             # Get the single item from the filtered queryset
             # NOTE. Explicitly set language to the state the object was fetched in.
-            obj = queryset.filter(**filters).language(language_code).get()
+            obj = queryset.translated(language_code, slug=slug).language(language_code).get()
         except ObjectDoesNotExist:
             # Translated object not found, try the fallback
-            if len(language_choices) <= 1:
+            fallback = appsettings.FLUENT_BLOGS_LANGUAGES.get_fallback_language(language_code)
+            if not fallback:
                 tried_msg = u", tried languages: {0}".format(language_code)
             else:
-                fallback = language_choices[1]
-                filters['translations__language_code'] = fallback
                 tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
                 try:
                     # NOTE. Explicitly set language to the state the object was fetched in.
-                    obj = queryset.filter(**filters).language(fallback).get()
+                    obj = queryset.translated(fallback, slug=slug).language(fallback).get()
 
                     # NOTE: it could happen that objects are resolved using their fallback language,
                     # but the actual translation also exists. This is handled in render_to_response() below.
