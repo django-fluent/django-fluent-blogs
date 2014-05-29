@@ -10,6 +10,7 @@ from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
 from fluent_contents.models import PlaceholderField, ContentItemRelation
+from parler.utils.context import switch_language
 
 __all__ = (
     # Mixins
@@ -353,6 +354,14 @@ class AbstractTranslatableEntryBase(
 
     class Meta:
         abstract = True
+
+    @property
+    def default_url(self):
+        """
+        Make sure that the URL is translated in the current language.
+        """
+        with switch_language(self):
+            return super(AbstractTranslatableEntryBase, self).default_url
 
 
 class AbstractTranslatedFieldsEntryBase(
