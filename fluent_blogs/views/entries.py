@@ -137,7 +137,12 @@ class EntryShortLink(SingleObjectMixin, RedirectView):
 
     def get_redirect_url(self, **kwargs):
         entry = self.get_object()
-        return entry.get_absolute_url()
+        try:
+            return entry.get_absolute_url()
+        except TranslationDoesNotExist as e:
+            # Some entries may not have a language for the current site/subpath.
+            raise Http404(str(e))
+
 
 
 class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
