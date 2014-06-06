@@ -1,9 +1,7 @@
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponsePermanentRedirect
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import translation
-from django.utils.translation import ugettext
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -11,7 +9,8 @@ from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.models.query import get_date_range
 from fluent_blogs.utils.compat import get_user_model
-from parler.models import TranslatableModel
+from parler.models import TranslatableModel, TranslationDoesNotExist
+from parler.views import TranslatableSlugMixin
 
 
 class BaseBlogMixin(object):
@@ -62,7 +61,7 @@ class BaseArchiveMixin(BaseBlogMixin):
         return names
 
 
-class BaseDetailMixin(BaseBlogMixin):
+class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
     # Only relevant at the detail page, e.g. for a language switch menu.
     prefetch_translations = appsettings.FLUENT_BLOGS_PREFETCH_TRANSLATIONS
 
@@ -84,59 +83,15 @@ class BaseDetailMixin(BaseBlogMixin):
     def get_object(self, queryset=None):
         if issubclass(get_entry_model(), TranslatableModel):
             # Filter by slug and language
-            return self._translated_get_object(queryset)
+            # Note that translation support is still optional,
+            # even though the class inheritance includes it.
+            return TranslatableSlugMixin.get_object(self, queryset)
         else:
-            # Regular slug check
-            return super(BaseDetailMixin, self).get_object(queryset)
+            # Regular slug check, skip TranslatableSlugMixin
+            return SingleObjectMixin.get_object(self, queryset)
 
-    def _translated_get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        language_code = self.get_language()
-        slug = self.kwargs['slug']
-        obj = None
-
-        try:
-            # Get the single item from the filtered queryset
-            # NOTE. Explicitly set language to the state the object was fetched in.
-            obj = queryset.translated(language_code, slug=slug).language(language_code).get()
-        except ObjectDoesNotExist:
-            # Translated object not found, try the fallback
-            fallback = appsettings.FLUENT_BLOGS_LANGUAGES.get_fallback_language(language_code)
-            if not fallback:
-                tried_msg = u", tried languages: {0}".format(language_code)
-            else:
-                tried_msg = u", tried languages: {0}, {1}".format(language_code, fallback)
-                try:
-                    # NOTE. Explicitly set language to the state the object was fetched in.
-                    obj = queryset.translated(fallback, slug=slug).language(fallback).get()
-
-                    # NOTE: it could happen that objects are resolved using their fallback language,
-                    # but the actual translation also exists. This is handled in render_to_response() below.
-                    setattr(obj, "_fetched_in_fallback_language", True)
-                except ObjectDoesNotExist:
-                    pass
-
-            if obj is None:
-                error_message = ugettext(u"No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name}
-                raise Http404(error_message + tried_msg)
-
-        return obj
-
-    def render_to_response(self, context, **response_kwargs):
-        if isinstance(self.object, TranslatableModel):
-            # Check whether the object was fetched in the fallback language
-            requested_language = self.get_language()
-            if getattr(self.object, '_fetched_in_fallback_language', False) \
-               and self.object.has_translation(requested_language):
-                # The object was resolved via the fallback language,
-                # but it has an official URL in the translated language.
-                # Either get_object() could have raised a 404, but in this case provide some service:
-                self.object.set_current_language(requested_language)
-                return HttpResponsePermanentRedirect(self.object.get_absolute_url())
-
-        return super(BaseDetailMixin, self).render_to_response(context, **response_kwargs)
+    def get_language_choices(self):
+        return appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices()
 
     def get_template_names(self):
         names = super(BaseDetailMixin, self).get_template_names()
