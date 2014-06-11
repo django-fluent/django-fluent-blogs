@@ -98,7 +98,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
-    author = models.ForeignKey(get_user_model_name(), verbose_name=_('author'), editable=False)
+    author = models.ForeignKey(get_user_model_name(), verbose_name=_('author'))
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 

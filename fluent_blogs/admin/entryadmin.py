@@ -27,7 +27,16 @@ class AbstractEntryBaseAdminForm(ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(AbstractEntryBaseAdminForm, self).__init__(*args, **kwargs)
-        self.fields['publication_date'].required = False  # The admin's .save() method fills in a default.
+
+        # The admin's .save() method fills in a default:
+        self.fields['publication_date'].required = False
+        try:
+            author_field = self.fields['author']
+        except KeyError:
+            pass
+        else:
+            author_field.required = False
+            self.initial.setdefault('author', author_field.user)
 
     def clean(self):
         cleaned_data = super(AbstractEntryBaseAdminForm, self).clean()
@@ -40,6 +49,10 @@ class AbstractEntryBaseAdminForm(ModelForm):
             self._errors['slug'] = self.error_class(e.messages)
 
         return cleaned_data
+
+    def clean_author(self):
+        # Make sure the form never assigns None to the author value.
+        return self.cleaned_data['author'] or self.fields['author'].user
 
     def validate_unique_slug(self, cleaned_data):
         """
@@ -113,12 +126,13 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
     radio_fields = {
         'status': admin.HORIZONTAL,
     }
+    raw_id_fields = ('author',)
 
     FIELDSET_GENERAL = (None, {
         'fields': ('title', 'slug', 'status',),
     })
     FIELDSET_PUBLICATION = (_('Publication settings'), {
-        'fields': ('publication_date', 'publication_end_date',),
+        'fields': ('publication_date', 'publication_end_date', 'author'),
         'classes': ('collapse',),
     })
 
@@ -138,10 +152,15 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
             qs = qs.filter(parent_site=settings.SITE_ID)
         return qs
 
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(super(AbstractEntryBaseAdmin, self).get_readonly_fields(request, obj))
+        if not request.user.is_superuser:
+            readonly_fields.append('author')
+        return readonly_fields
 
     def save_model(self, request, obj, form, change):
         # Automatically store the user in the author field.
-        if not change:
+        if not obj.author_id:
             obj.author = request.user
 
         if not obj.publication_date:
@@ -159,7 +178,12 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
         if overrides:
             kwargs.update(overrides)
 
-        return super(AbstractEntryBaseAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        field = super(AbstractEntryBaseAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+        # Pass user to the form.
+        if db_field.name == 'author':
+            field.user = kwargs['request'].user
+        return field
 
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
