@@ -39,6 +39,20 @@ class EntryQuerySet(QuerySet):
                 Q(publication_end_date__gte=now())
             )
 
+    def tagged(self, *tag_slugs):
+        """
+        Return the items which are tagged with a specific tag.
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        if getattr(self.model, 'tags', None) is None:
+            raise AttributeError("The {0} does not include TagsEntryMixin".format(self.model.__name__))
+
+        qs = self.filter(tags__slug__in=tag_slugs)
+        if len(tag_slugs) > 1:
+            qs = qs.distinct()
+
+        return qs
+
 
 
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
@@ -68,6 +82,13 @@ class EntryManager(models.Manager):
         Return only published entries for the current site.
         """
         return self.get_query_set().published()
+
+    def tagged(self, *tag_slugs):
+        """
+        Return the items which are tagged with a specific tag.
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        return self.get_query_set().tagged(*tag_slugs)
 
 
 class TranslatableEntryManager(EntryManager, TranslatableManager):
