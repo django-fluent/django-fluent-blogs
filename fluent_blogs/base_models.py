@@ -37,7 +37,9 @@ __all__ = (
 
 # Optional tagging support
 TaggableManager = None
-if 'taggit_autocomplete_modified' in settings.INSTALLED_APPS:
+if 'taggit_autosuggest' in settings.INSTALLED_APPS:
+    from taggit_autosuggest.managers import TaggableManager
+elif 'taggit_autocomplete_modified' in settings.INSTALLED_APPS:
     from taggit_autocomplete_modified.managers import TaggableManagerAutocomplete as TaggableManager
 elif 'taggit' in settings.INSTALLED_APPS:
     from taggit.managers import TaggableManager

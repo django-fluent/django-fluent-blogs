@@ -1,6 +1,7 @@
 Version 1.0 (dev)
 -----------------
 
+* Added support for django-taggit-autosuggest_.
 * Fixed entry URLs to be relative to the current ``BlogPage`` root.
 * Fixed next/previous URLs for translated content (in case the next URL only exists in certain languages).
 
@@ -89,3 +90,4 @@ Main features:
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
 .. _django-parler: https://github.com/edoburu/django-parler
+.. _django-taggit-autosuggest: https://bitbucket.org/fabian/django-taggit-autosuggest
