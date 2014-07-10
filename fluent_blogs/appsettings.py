@@ -1,5 +1,4 @@
 from django.conf import settings
-from distutils.version import StrictVersion
 from django.core.exceptions import ImproperlyConfigured
 from parler import appsettings as parler_appsettings
 from parler.utils import normalize_language_code, is_supported_django_language
@@ -61,6 +60,13 @@ def get_language_settings(language_code, site_id=None):
 
 # Perform version checks
 if len(FLUENT_BLOGS_LANGUAGES.get(settings.SITE_ID, ())) > 1:
+    import sys
+    from distutils.version import StrictVersion, LooseVersion
+    if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+        Version = LooseVersion  # 2.6 does not allow 1.0c1
+    else:
+        Version = StrictVersion
+
     import fluent_contents
-    if StrictVersion(fluent_contents.__version__) < StrictVersion('1.0a1'):
-        raise ImproperlyConfigured("Using the multilingual support requires django-fluent-contents 1.0dev")
+    if Version(fluent_contents.__version__) < Version('1.0a1'):
+        raise ImproperlyConfigured("Using the multilingual support requires django-fluent-contents 1.0")
