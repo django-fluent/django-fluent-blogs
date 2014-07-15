@@ -1,9 +1,13 @@
 Version 1.0 (dev)
 -----------------
 
+Released in 1.0b2:
+~~~~~~~~~~~~~~~~~~
+
 * Added support for django-taggit-autosuggest_.
 * Fixed entry URLs to be relative to the current ``BlogPage`` root.
 * Fixed next/previous URLs for translated content (in case the next URL only exists in certain languages).
+* Include editable author field in the "Publication settings" tab.
 
 
 Released in 1.0b1:
