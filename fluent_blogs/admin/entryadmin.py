@@ -34,6 +34,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         SeoEntryAdminMixin.FIELDSET_SEO,
     )
 
+    list_filter = list(_entry_admin_base.list_filter)
     formfield_overrides = {}
     formfield_overrides.update(SeoEntryAdminMixin.formfield_overrides)
     formfield_overrides.update({
@@ -47,3 +48,9 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
 for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
+
+if 'categories' in _model_fields:
+    EntryAdmin.list_filter.append('categories')
+# This should only display tags that are in use, sorted by count:
+#if 'tags' in _model_fields:
+#    EntryAdmin.list_filter.append('tags')
