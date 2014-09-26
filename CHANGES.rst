@@ -1,6 +1,10 @@
 Version 1.0 (dev)
 -----------------
 
+* Admin: show categories in the list.
+* Add SEO keywords/description/title fields to the ``BlogPage`` root.
+
+
 Released in 1.0b2:
 ~~~~~~~~~~~~~~~~~~
 
