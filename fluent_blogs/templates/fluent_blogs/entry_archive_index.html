@@ -1,0 +1,7 @@
+{% extends "fluent_blogs/entry_archive.html" %}
+{% load i18n %}
+
+{# If the BlogPage is used, display it's values on the top-level index. #}
+{% block fullheadtitle %}{% if page.meta_title %}{{ page.meta_title }}{% if page_obj.number > 1 %} | {% trans "Page" %} {{ page_obj.number }}{% endif %}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block meta-keywords %}{% if page.meta_keywords %}{{ page.meta_keywords }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block meta-description %}{% if page.meta_description %}{{ page.meta_description }}{% else %}{{ block.super }}{% endif %}{% endblock %}

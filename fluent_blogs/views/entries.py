@@ -119,6 +119,7 @@ class EntryArchiveIndex(BaseArchiveMixin, ArchiveIndexView):
     """
     view_url_name = 'entry_archive_index'
     view_url_name_paginated = 'entry_archive_index_paginated'
+    template_name_suffix = '_archive_index'
     allow_empty = True
 
 
