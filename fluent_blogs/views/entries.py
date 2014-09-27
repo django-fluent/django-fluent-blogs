@@ -8,14 +8,16 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.models.query import get_date_range
-from fluent_blogs.utils.compat import get_user_model
+from fluent_utils.django_compat import get_user_model
+from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
 from parler.views import TranslatableSlugMixin
 
 
-class BaseBlogMixin(object):
+class BaseBlogMixin(CurrentPageMixin):
     context_object_name = None
     prefetch_translations = False
+    view_url_name_paginated = None
 
 
     def get_queryset(self):
@@ -39,6 +41,15 @@ class BaseBlogMixin(object):
         if self.context_object_name:
             context[self.context_object_name] = getattr(self, self.context_object_name)  # e.g. author, category, tag
         return context
+
+    def get_view_url(self):
+        # Support both use cases of the same view:
+        if 'page' in self.kwargs:
+            view_url_name = self.view_url_name_paginated
+        else:
+            view_url_name = self.view_url_name
+        return mixed_reverse(view_url_name, args=self.args, kwargs=self.kwargs, current_page=self.get_current_page())
+
 
 
 class BaseArchiveMixin(BaseBlogMixin):
@@ -106,26 +117,29 @@ class EntryArchiveIndex(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive index page.
     """
+    view_url_name = 'entry_archive_index'
+    view_url_name_paginated = 'entry_archive_index_paginated'
     allow_empty = True
 
 
 class EntryYearArchive(BaseArchiveMixin, YearArchiveView):
+    view_url_name = 'entry_archive_year'
     make_object_list = True
 
 
 class EntryMonthArchive(BaseArchiveMixin, MonthArchiveView):
-    pass
+    view_url_name = 'entry_archive_month'
 
 
 class EntryDayArchive(BaseArchiveMixin, DayArchiveView):
-    pass
+    view_url_name = 'entry_archive_day'
 
 
 class EntryDetail(BaseDetailMixin, DetailView):
     """
     Blog detail page.
     """
-    pass
+    view_url_name = 'entry_detail'
 
 
 class EntryShortLink(SingleObjectMixin, RedirectView):
@@ -149,6 +163,8 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
+    view_url_name = 'entry_archive_category'
+    view_url_name_paginated = 'entry_archive_category_paginated'
     template_name_suffix = '_archive_category'
     context_object_name = 'category'
 
@@ -157,10 +173,13 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
         return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
 
 
+
 class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
+    view_url_name = 'entry_archive_author'
+    view_url_name_paginated = 'entry_archive_author_paginated'
     template_name_suffix = '_archive_author'
     context_object_name = 'author'
 
@@ -173,6 +192,8 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
+    view_url_name = 'entry_archive_tag'
+    view_url_name_paginated = 'entry_archive_tag_paginated'
     template_name_suffix = '_archive_tag'
     context_object_name = 'tag'
 

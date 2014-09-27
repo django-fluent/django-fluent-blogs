@@ -4,12 +4,12 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget, AdminTextareaWidget
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
+from django.utils.timezone import now
 from django.utils.translation import ugettext, ugettext_lazy as _
 from fluent_blogs import appsettings
 from fluent_blogs.admin.forms import AbstractEntryBaseAdminForm, AbstractTranslatableEntryBaseAdminForm
 from fluent_blogs.base_models import AbstractEntryBase
 from fluent_blogs.models import get_entry_model
-from fluent_blogs.utils.compat import now
 from fluent_contents.admin import PlaceholderFieldAdmin
 from parler.admin import TranslatableAdmin
 from parler.models import TranslationDoesNotExist

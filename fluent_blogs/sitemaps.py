@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
-from django.utils.translation import get_language
-from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.urlresolvers import blog_reverse
-from fluent_blogs.utils.compat import get_user_model
+from fluent_utils.django_compat import get_user_model
 from parler.models import TranslatableModel
 
 User = get_user_model()

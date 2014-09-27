@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
+from django.utils.timezone import utc
 from fluent_blogs import appsettings
 from fluent_blogs.models.db import get_entry_model
-from fluent_blogs.utils.compat import utc
 
 __all__ = (
     'query_entries',

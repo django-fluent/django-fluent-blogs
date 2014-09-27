@@ -1,5 +1,5 @@
 from django.conf import settings
-from fluent_blogs.utils.compat import patterns, url
+from django.conf.urls import patterns, url
 from fluent_blogs.views.entries import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive, EntryAuthorArchive, EntryTagArchive
 from fluent_blogs.views.feeds import LatestEntriesFeed, LatestCategoryEntriesFeed, LatestAuthorEntriesFeed, LatestTagEntriesFeed
 from fluent_blogs import appsettings

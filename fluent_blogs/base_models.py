@@ -1,16 +1,19 @@
-from django.conf import settings
-from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
+from parler.utils.context import switch_language
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
-from fluent_blogs.utils.compat import get_user_model_name
 from fluent_blogs import appsettings
 from fluent_contents.models import PlaceholderField, ContentItemRelation
-from parler.utils.context import switch_language
+from fluent_utils.django_compat import AUTH_USER_MODEL
+from fluent_utils.softdeps.comments import CommentsMixin
+from fluent_utils.softdeps.taggit import TagsMixin
+
+# Rename to old class names
+CommentsEntryMixin = CommentsMixin
 
 __all__ = (
     # Mixins
@@ -33,38 +36,6 @@ __all__ = (
     'AbstractTranslatedFieldsEntryBase',
     'AbstractTranslatedFieldsEntry',
 )
-
-
-# Optional tagging support
-TaggableManager = None
-if 'taggit_autosuggest' in settings.INSTALLED_APPS:
-    from taggit_autosuggest.managers import TaggableManager
-elif 'taggit_autocomplete_modified' in settings.INSTALLED_APPS:
-    from taggit_autocomplete_modified.managers import TaggableManagerAutocomplete as TaggableManager
-elif 'taggit' in settings.INSTALLED_APPS:
-    from taggit.managers import TaggableManager
-
-
-# Optional commenting support
-# Make sure that django.contrib.comments is not imported in the app,
-# unless it exists in INSTALLED_APPS. Otherwise, the User delete view
-# breaks because it tries to delete comments associated with the user.
-comments = None
-moderator = None
-CommentModel = None
-CommentModerator = None
-if 'django.contrib.comments' in settings.INSTALLED_APPS:
-    from django.contrib import comments
-    from django.contrib.comments.moderation import moderator, CommentModerator
-    CommentModel = comments.get_model()
-
-# Can't use EmptyQueryset stub in Django 1.6 anymore,
-# using this model to build a queryset instead.
-class CommentModelStub(models.Model):
-    class Meta:
-        managed = False
-        db_table = "django_comments_stub"
-
 
 
 class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
@@ -100,7 +71,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
-    author = models.ForeignKey(get_user_model_name(), verbose_name=_('author'))
+    author = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('author'))
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 
@@ -232,73 +203,6 @@ class ContentsEntryMixin(models.Model):
         abstract = True
 
 
-class CommentsEntryMixin(models.Model):
-    """
-    Mixin for adding comments support to a blog entry.
-    """
-    enable_comments = models.BooleanField(_("Enable comments"), default=True)
-
-
-    # Make association with django.contrib.comments optional
-    if CommentModel is not None:
-        all_comments = GenericRelation(CommentModel, verbose_name=_("Comments"), object_id_field='object_pk')
-    else:
-        # Provide a stub so templates don't break.
-        # This avoids importing django.contrib.comments models when the app is not used.
-        all_comments = CommentModelStub.objects.none()
-
-    class Meta:
-        abstract = True
-
-
-    @property
-    def comments(self):
-        """
-        Return the visible comments.
-        """
-        if CommentModel is None:
-            # No local comments, return empty queryset.
-            # The project might be using DISQUS or Facebook comments instead.
-            return CommentModelStub.objects.none()
-        else:
-            return CommentModel.objects.for_model(self).filter(is_public=True, is_removed=False)
-
-
-    @property
-    def comments_are_open(self):
-        """
-        Check if comments are open
-        """
-        if not self.enable_comments or CommentModel is None:
-            return False
-
-        try:
-            # Get the moderator which is installed for this model.
-            mod = moderator._registry[self.__class__]
-        except KeyError:
-            return True
-
-        # Check the 'enable_field', 'auto_close_field' and 'close_after',
-        # by reusing the basic Django policies.
-        return CommentModerator.allow(mod, None, self, None)
-
-
-    @property
-    def comments_are_moderated(self):
-        """
-        Check if comments are moderated
-        """
-        try:
-            # Get the moderator which is installed for this model.
-            mod = moderator._registry[self.__class__]
-        except KeyError:
-            return False
-
-        # Check the 'auto_moderate_field', 'moderate_after',
-        # by reusing the basic Django policies.
-        return CommentModerator.moderate(mod, None, self, None)
-
-
 class CategoriesEntryMixin(models.Model):
     """
     Mixin for adding category support to a blog entry.
@@ -309,18 +213,20 @@ class CategoriesEntryMixin(models.Model):
         abstract = True
 
 
-class TagsEntryMixin(models.Model):
+class TagsEntryMixin(TagsMixin):
     """
     Mixin for adding tags to a blog entry
     """
-    # Make association with tags optional.
-    if TaggableManager is not None:
-        tags = TaggableManager(blank=True)
-    else:
-        tags = None
-
     class Meta:
         abstract = True
+
+    def similar_objects(self, num=None, **filters):
+        """
+        Find similar objects using related tags.
+        """
+        if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+            filters.setdefault('parent_site', self.parent_site_id)
+        return super(TagsEntryMixin).similar_objects(num=num, **filters)
 
 
 class SeoEntryMixin(models.Model):
@@ -426,16 +332,3 @@ class AbstractTranslatedFieldsEntry(
     """
     class Meta:
         abstract = True
-
-
-# Make sure the 'tags' field is ignored by South
-try:
-    from south.modelsinspector import add_ignored_fields
-except ImportError:
-    pass
-else:
-    # South should ignore the tags field as it's a RelatedField.
-    add_ignored_fields((
-        "^taggit\.managers\.TaggableManager",
-        "^taggit_autocomplete_modified\.managers\.TaggableManagerAutocomplete",
-    ))

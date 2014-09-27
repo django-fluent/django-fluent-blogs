@@ -10,7 +10,7 @@ from django.views.generic import View
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.urlresolvers import blog_reverse
-from fluent_blogs.utils.compat import get_user_model
+from fluent_utils.django_compat import get_user_model
 
 _FEED_FORMATS = {
     'atom1': feedgenerator.Atom1Feed,

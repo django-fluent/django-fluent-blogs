@@ -5,8 +5,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
+from django.utils.timezone import now
 from fluent_blogs import appsettings
-from fluent_blogs.utils.compat import now
 from parler.managers import TranslatableManager, TranslatableQuerySet
 
 
