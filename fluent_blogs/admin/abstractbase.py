@@ -10,6 +10,7 @@ from fluent_blogs import appsettings
 from fluent_blogs.admin.forms import AbstractEntryBaseAdminForm, AbstractTranslatableEntryBaseAdminForm
 from fluent_blogs.base_models import AbstractEntryBase
 from fluent_blogs.models import get_entry_model
+from fluent_utils.dry.admin import MultiSiteAdminMixin
 from fluent_contents.admin import PlaceholderFieldAdmin
 from parler.admin import TranslatableAdmin
 from parler.models import TranslationDoesNotExist
@@ -19,12 +20,13 @@ EntryModel = get_entry_model()
 
 
 
-class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
+class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
     """
     The base functionality of the admin, which only uses the fields of the
     :class:`~fluent_blogs.base_models.AbstractEntryBase` model.
     Everything else is branched off in the :class:`EntryAdmin` class.
     """
+    filter_site = appsettings.FLUENT_BLOGS_FILTER_SITE_ID
     list_display = ('title', 'status_column', 'modification_date', 'actions_column')
     list_filter = ('status',)
     date_hierarchy = 'publication_date'
@@ -50,16 +52,6 @@ class AbstractEntryBaseAdmin(PlaceholderFieldAdmin):
         css = {
             'all': ('fluent_blogs/admin/admin.css',)
         }
-
-
-    def queryset(self, request):
-        qs = super(AbstractEntryBaseAdmin, self).queryset(request)
-
-        # Admin only shows current site for now,
-        # until there is decent filtering for it.
-        if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
-            qs = qs.filter(parent_site=settings.SITE_ID)
-        return qs
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super(AbstractEntryBaseAdmin, self).get_readonly_fields(request, obj))

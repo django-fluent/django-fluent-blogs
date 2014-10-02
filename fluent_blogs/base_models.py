@@ -224,9 +224,11 @@ class TagsEntryMixin(TagsMixin):
         """
         Find similar objects using related tags.
         """
-        if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
-            filters.setdefault('parent_site', self.parent_site_id)
-        return super(TagsEntryMixin).similar_objects(num=num, **filters)
+        #TODO: filter appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+        #    filters.setdefault('parent_site', self.parent_site_id)
+
+        # FIXME: Using super() doesn't work, calling directly.
+        return TagsMixin.similar_objects(self, num=num, **filters)
 
 
 class SeoEntryMixin(models.Model):
