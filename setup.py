@@ -37,7 +37,7 @@ setup(
 
     install_requires=[
         'django-fluent-contents>=1.0b1',
-        'django-fluent-utils>=1.0',        # DRY utility code
+        'django-fluent-utils>=1.1',        # DRY utility code
         'django-categories>=1.0.0',
         'django-tag-parser>=1.1',
         'django-parler>=1.0b2',
