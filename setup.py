@@ -47,7 +47,7 @@ setup(
     ],
     extras_require = {
         'taggit': ['taggit', 'taggit-autocomplete-modified'],
-        'blogpage': ['django-fluent-pages'],
+        'blogpage': ['django-fluent-pages>=0.9'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',
     long_description=read('README.rst'),
