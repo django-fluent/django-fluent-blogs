@@ -1,6 +1,7 @@
 """
 The manager class for the CMS models
 """
+import django
 from django.conf import settings
 from django.db import models
 from django.db.models.query import QuerySet
@@ -68,27 +69,30 @@ class EntryManager(models.Manager):
     """
     queryset_class = EntryQuerySet
 
-    def get_query_set(self):
+    def get_queryset(self):
         return self.queryset_class(self.model, using=self._db)
 
     def parent_site(self, site):
         """
         Filter to the given site.
         """
-        return self.get_query_set().parent_site(site)
+        # NOTE: by using .all(), the correct get_queryset() or get_query_set() method is called.
+        # Just calling self.get_queryset() will break the RelatedManager.get_query_set() override in Django 1.5
+        # This avoids all issues with Django 1.5/1.6/1.7 compatibility.
+        return self.all().parent_site(site)
 
     def published(self):
         """
         Return only published entries for the current site.
         """
-        return self.get_query_set().published()
+        return self.all().published()
 
     def tagged(self, *tag_slugs):
         """
         Return the items which are tagged with a specific tag.
         When multiple tags are provided, they operate as "OR" query.
         """
-        return self.get_query_set().tagged(*tag_slugs)
+        return self.all().tagged(*tag_slugs)
 
 
 class TranslatableEntryManager(EntryManager, TranslatableManager):
