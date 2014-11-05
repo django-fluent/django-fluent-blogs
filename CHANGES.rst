@@ -1,8 +1,13 @@
 Version 1.0 (dev)
 -----------------
 
-* Admin: show categories in the list.
+Released in 1.0b3:
+~~~~~~~~~~~~~~~~~~
+
+* Added Django 1.7 support.
+* Add "fluent_blogs_archive_index.html" template for the index view.
 * Add SEO keywords/description/title fields to the ``BlogPage`` root.
+* Admin: show categories in the list.
 
 
 Released in 1.0b2:
