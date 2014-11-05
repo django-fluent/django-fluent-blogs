@@ -38,6 +38,10 @@ __all__ = (
 )
 
 
+def _get_current_site():
+    return Site.objects.get_current().pk
+
+
 class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
     """
     The base translated fields.
@@ -64,7 +68,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
         (DRAFT, _('Draft')),
     )
 
-    parent_site = models.ForeignKey(Site, editable=False, default=Site.objects.get_current)
+    parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
 
     status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT, db_index=True)
     publication_date = models.DateTimeField(_('publication date'), null=True, db_index=True, help_text=_('''When the entry should go live, status must be "Published".'''))
