@@ -11,6 +11,12 @@ import sys
 if 'sdist' in sys.argv or 'develop' in sys.argv:
     try:
         os.chdir('fluent_blogs')
+
+        from django.core.management.commands.compilemessages import Command
+        command = Command()
+        command.execute(stdout=sys.stderr, verbosity=1)
+    except ImportError:
+        # < Django 1.7
         from django.core.management.commands.compilemessages import compile_messages
         compile_messages(sys.stderr)
     finally:
@@ -36,18 +42,18 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
-        'django-fluent-contents>=1.0b1',
-        'django-fluent-utils>=1.1',        # DRY utility code
+        'django-fluent-contents>=1.0c3',
+        'django-fluent-utils>=1.1.1',      # DRY utility code
         'django-categories>=1.0.0',
         'django-tag-parser>=1.1',
-        'django-parler>=1.0b2',
+        'django-parler>=1.0',
     ],
     requires=[
-        'Django (>=1.3)',   # Using staticfiles
+        'Django (>=1.4)',
     ],
     extras_require = {
-        'taggit': ['taggit', 'taggit-autocomplete-modified'],
-        'blogpage': ['django-fluent-pages>=0.9'],
+        'taggit': ['taggit', 'taggit-autosuggest'],
+        'blogpage': ['django-fluent-pages>=0.9b3'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',
     long_description=read('README.rst'),
