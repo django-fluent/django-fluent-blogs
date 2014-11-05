@@ -11,6 +11,8 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'example_multilingual.context_processors.multilingual',
 )
 
+SITE_ID = 1
+
 PARLER_LANGUAGES = {
     # site ID 1:
     1: (

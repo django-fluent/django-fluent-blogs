@@ -1,5 +1,6 @@
 # Django settings for example project.
 from os.path import join, dirname, realpath
+import django
 
 # Add parent path,
 # Allow starting the app without installing the module.
@@ -117,9 +118,17 @@ INSTALLED_APPS = (
     #'form_designer',                # for 'formdesignerlink' plugin
     'parler',                        # provides the multilingual support.
     'taggit',                        # optional tagging support.
-    'taggit_autocomplete_modified',  # optional autocompletion support for tags
+    'taggit_autosuggest',            # optional autocompletion support for tags
     'tinymce',                       # Used by 'text' plugin, see DJANGO_WYSIWYG_FLAVOR
 )
+
+if django.VERSION < (1,7):
+    INSTALLED_APPS += (
+        # For DB upgrades
+        'south',
+    )
+else:
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'  # silence system checks
 
 DJANGO_WYSIWYG_FLAVOR = 'tinymce_advanced'
 

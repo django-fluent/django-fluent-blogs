@@ -14,7 +14,7 @@ django-parler>=0.9.3
 # Optional requirements
 django-categories>=1.2.2
 django-taggit>=0.10
-django-taggit-autocomplete-modified>=0.1.0b4
+django-taggit-autosuggest>=0.2.4
 django-tinymce>=1.5.1
 
 # For other examples:
