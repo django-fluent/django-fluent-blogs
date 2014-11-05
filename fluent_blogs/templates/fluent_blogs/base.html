@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="keywords" content="{% block meta-keywords %}{% endblock %}" />
     <meta name="description" content="{% block meta-description %}{% endblock %}" />
-    <title>{% block title %}{% endblock %} - No base template</title>
+    <title>{% block meta-title %}{% block title %}{% endblock %} - No base template{% endblock %}</title>
 
     <meta property="og:type" content="{% block og-type %}website{% endblock %}" />
     <meta property="og:description" content="{% block og-description %}{% endblock %}" />
@@ -28,6 +28,7 @@
     <tr><td><kbd>title</kbd></td><td>The contents for the <code>&lt;title&gt;</code> tag.</td></tr>
     <tr><td><kbd>link</kbd></td><td>The placeholder for <code>&lt;link&gt;</code> tags for RSS feeds and CSS.</td></tr>
     <tr><td><kbd>script</kbd></td><td>The placeholder for <code>&lt;script&gt;</code> tags.</td></tr>
+    <tr><td><kbd>meta-title</kbd></td><td>The content for the <code>&lt;title&gt;</code> tag, completely overriding the default title.</td></tr>
     <tr><td><kbd>meta-description</kbd></td><td>The content for the <code>&lt;meta name="description"&gt;</code> tag.</td></tr>
     <tr><td><kbd>meta-keywords</kbd></td><td>The content for the <code>&lt;meta name="keywords"&gt;</code> tag.</td></tr>
     <tr><td><kbd>og-type</kbd></td><td>The content for the <code>&lt;meta property="og:type"&gt;</code> tag for Facebook (optional)</td></tr>
