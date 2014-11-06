@@ -1,6 +1,12 @@
 Version 1.0 (dev)
 -----------------
 
+Released in 1.0b4:
+~~~~~~~~~~~~~~~~~~
+
+* Fixed check for django-fluent-contents_ some python versions.
+
+
 Released in 1.0b3:
 ~~~~~~~~~~~~~~~~~~
 
