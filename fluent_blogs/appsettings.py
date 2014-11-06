@@ -60,13 +60,10 @@ def get_language_settings(language_code, site_id=None):
 
 # Perform version checks
 if len(FLUENT_BLOGS_LANGUAGES.get(settings.SITE_ID, ())) > 1:
+    # Some versions of Python/distutils/setuptools can't parse the 'c' marker,
+    # Therefore using LooseVersion. StrictVersion only works in newer package versions
     import sys
-    from distutils.version import StrictVersion, LooseVersion
-    if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-        Version = LooseVersion  # 2.6 does not allow 1.0c1
-    else:
-        Version = StrictVersion
-
     import fluent_contents
-    if Version(fluent_contents.__version__) < Version('1.0a1'):
+    from distutils.version import LooseVersion
+    if LooseVersion(fluent_contents.__version__) < LooseVersion('1.0a1'):
         raise ImproperlyConfigured("Using the multilingual support requires django-fluent-contents 1.0")
