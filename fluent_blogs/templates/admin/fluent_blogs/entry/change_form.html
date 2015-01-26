@@ -2,7 +2,7 @@
 
 {% block object-tools-items %}
 <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
-{% if has_absolute_url %}<li><a href="{{ original.url }}" {% if preview_error %}onclick="alert('{{ preview_error|escapejs }}'); return false;"{% endif %} class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+{% if has_absolute_url %}<li><a {% if preview_error %}onclick="alert('{{ preview_error|escapejs }}'); return false;" href="#"{% else %}href="{{ original.url }}"{% endif %} class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
 {% endblock %}
 
 
