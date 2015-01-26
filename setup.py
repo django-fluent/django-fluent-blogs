@@ -45,15 +45,15 @@ setup(
         'django-fluent-contents>=1.0c3',
         'django-fluent-utils>=1.1.1',      # DRY utility code
         'django-categories>=1.0.0',
-        'django-tag-parser>=1.1',
         'django-parler>=1.0',
+        'django-tag-parser>=2.0.1',
     ],
     requires=[
         'Django (>=1.4)',
     ],
     extras_require = {
-        'taggit': ['taggit', 'taggit-autosuggest'],
         'blogpage': ['django-fluent-pages>=0.9b4'],
+        'taggit': ['taggit', 'taggit-autosuggest'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',
     long_description=read('README.rst'),
