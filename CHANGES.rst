@@ -1,6 +1,9 @@
 Version 1.0 (dev)
 -----------------
 
+* Fixed ``{% get_tags %}`` for Django 1.6.
+
+
 Released in 1.0b4:
 ~~~~~~~~~~~~~~~~~~
 

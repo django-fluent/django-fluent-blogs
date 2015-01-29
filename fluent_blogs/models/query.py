@@ -145,18 +145,25 @@ def query_tags(order=None, orderby=None, limit=None):
     # Get queryset filters for published entries
     EntryModel = get_entry_model()
     ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
-    rel_name = ct.model.lower()
-    published_filter = {
-        '{0}__status'.format(rel_name): EntryModel.PUBLISHED  # e.g. entry__status=, or newsitem__status=
+
+    # In Django 1.5, it was possible to call TaggedItem.objects.filter(entry__status=..)
+    # this rel-name depended on the model name. In Django 1.6, this is no longer possible,
+    # so have to run a subquery for the object id instead.
+    entry_filter = {
+        'status': EntryModel.PUBLISHED
     }
     if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
-        published_filter['{0}__parent_site'.format(rel_name)] = settings.SITE_ID
+        entry_filter['parent_site'] = settings.SITE_ID
 
-    entry_tag_ids = TaggedItem.objects.filter(content_type=ct).filter(**published_filter).values_list('tag_id')
+    entry_qs = EntryModel.objects.filter(**entry_filter).values_list('pk')
 
     # get tags
-    queryset = Tag.objects.filter(id__in=entry_tag_ids)
-    queryset = queryset.annotate(count=Count('taggit_taggeditem_items'))  # Related name differed in Django 1.2
+    queryset = Tag.objects.filter(
+        taggit_taggeditem_items__content_type=ct,
+        taggit_taggeditem_items__object_id__in=entry_qs
+    ).annotate(
+        count=Count('taggit_taggeditem_items')
+    )
 
     # Ordering
     if orderby:
