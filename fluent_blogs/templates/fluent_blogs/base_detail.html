@@ -37,7 +37,7 @@
     {% include "fluent_blogs/entry_detail/comments_css.html" %}
 {% endwith %}{% endblock %}
 
-{% block script %}{% include "fluent_blogs/entry_detail/comments_script.html" %}{% endblock %}
+{% block script %}{{ block.super }}{% include "fluent_blogs/entry_detail/comments_script.html" %}{% endblock %}
 
 {% block content %}
     <div class="blog-entry-wrapper">
