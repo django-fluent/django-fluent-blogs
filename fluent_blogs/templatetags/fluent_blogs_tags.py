@@ -189,3 +189,11 @@ class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
 
     def get_value(self, context, *tag_args, **tag_kwargs):
         return query_tags(**tag_kwargs)
+
+
+if False and __debug__:
+    # This only exists to make PyCharm happy:
+    # The real syntax should be passing the ``.parse`` method to the function.
+    register.tag('get_entries', GetEntriesNode)
+    register.tag('get_entry_url', GetEntryUrl)
+    register.tag('get_tags', GetPopularTagsNode)
