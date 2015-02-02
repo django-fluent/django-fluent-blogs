@@ -7,7 +7,7 @@ from parler.utils.context import switch_language
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
-from fluent_contents.models import PlaceholderField, ContentItemRelation
+from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
 from fluent_utils.django_compat import AUTH_USER_MODEL
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
@@ -205,6 +205,17 @@ class ContentsEntryMixin(models.Model):
 
     class Meta:
         abstract = True
+
+    def create_placeholder(self, slot="blog_contents", role='m', title=None):
+        """
+        Create a placeholder on this blog entry.
+
+        To fill the content items, use
+        :func:`ContentItemModel.objects.create_for_placeholder() <fluent_contents.models.managers.ContentItemManager.create_for_placeholder>`.
+
+        :rtype: :class:`~fluent_contents.models.Placeholder`
+        """
+        return Placeholder.objects.create_for_object(self, slot, role=role, title=title)
 
 
 class CategoriesEntryMixin(models.Model):
