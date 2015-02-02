@@ -22,9 +22,9 @@
 
 
     {% comment %}
-    {% with object.creation_date|date:"Y" as year %}
-      {% with object.creation_date|date:"m" as month %}
-        {% with object.creation_date|date:"d" as day %}
+    {% with object.publication_date|date:"Y" as year %}
+      {% with object.publication_date|date:"m" as month %}
+        {% with object.publication_date|date:"d" as day %}
           <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of discussions on" %} '{{ object.title }}'"
                 href="{% url zinnia_entry_discussion_feed year month day object.slug %}" />
           <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of comments on" %} '{{ object.title }}'"

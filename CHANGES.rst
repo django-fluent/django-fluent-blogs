@@ -2,6 +2,7 @@ Version 1.0 (dev)
 -----------------
 
 * Fixed ``{% get_tags %}`` for Django 1.6.
+* Fixed using ``publication_date`` instead of ``creation_date`` in the templates.
 
 
 Released in 1.0b4:
