@@ -1,6 +1,7 @@
-Version 1.0 (dev)
------------------
+Version 1.0
+-----------
 
+* Added Django 1.7/1.8 compatibility
 * Fixed ``{% get_tags %}`` for Django 1.6.
 * Fixed using ``publication_date`` instead of ``creation_date`` in the templates.
 * Added ``Entry.create_placeholder()`` API function.

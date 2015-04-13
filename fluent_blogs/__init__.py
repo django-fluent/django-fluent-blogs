@@ -1,5 +1,5 @@
 # following PEP 386
-__version__ = "1.0b4"
+__version__ = "1.0"
 
 # Fix for internal messy imports.
 # When base_models is imported before models/__init__.py runs, there is a circular import:
