@@ -56,14 +56,3 @@ def get_language_settings(language_code, site_id=None):
             return lang_dict
 
     return FLUENT_BLOGS_LANGUAGES['default']
-
-
-# Perform version checks
-if len(FLUENT_BLOGS_LANGUAGES.get(settings.SITE_ID, ())) > 1:
-    # Some versions of Python/distutils/setuptools can't parse the 'c' marker,
-    # Therefore using LooseVersion. StrictVersion only works in newer package versions
-    import sys
-    import fluent_contents
-    from distutils.version import LooseVersion
-    if LooseVersion(fluent_contents.__version__) < LooseVersion('1.0a1'):
-        raise ImproperlyConfigured("Using the multilingual support requires django-fluent-contents 1.0")
