@@ -39,14 +39,14 @@ def find_version(*parts):
 setup(
     name='django-fluent-blogs',
     version=find_version('fluent_blogs', '__init__.py'),
-    license='Apache License, Version 2.0',
+    license='Apache 2.0',
 
     install_requires=[
-        'django-fluent-contents>=1.0c3',
+        'django-fluent-contents>=1.0',
         'django-fluent-utils>=1.1.4',      # DRY utility code
         'django-categories>=1.0.0',
-        'django-parler>=1.3',
-        'django-tag-parser>=2.0.1',
+        'django-parler>=1.4',              # Ensure Django 1.8 compatibility
+        'django-tag-parser>=2.1',          # Ensure Django 1.8 compatibility
     ],
     requires=[
         'Django (>=1.4)',
