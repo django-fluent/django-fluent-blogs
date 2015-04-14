@@ -49,7 +49,7 @@ def get_language_settings(language_code, site_id=None):
     Return the language settings for the current site
     """
     if site_id is None:
-        site_id = settings.SITE_ID
+        site_id = getattr(settings, 'SITE_ID', None)
 
     for lang_dict in FLUENT_BLOGS_LANGUAGES.get(site_id, ()):
         if lang_dict['code'] == language_code:

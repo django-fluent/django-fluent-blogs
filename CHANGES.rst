@@ -1,3 +1,8 @@
+Version 1.0.1 (git)
+-------------------
+
+* Fix having a mandatory ``SITE_ID`` setting.
+
 Version 1.0
 -----------
 
