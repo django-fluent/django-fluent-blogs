@@ -1,7 +1,10 @@
-Version 1.0.1 (git)
--------------------
+Version 1.0.1 (2015-08-19)
+--------------------------
 
 * Fix having a mandatory ``SITE_ID`` setting.
+* Fix ``DeprecationWarning`` for using ``placeholder_tags`` instead of ``fluent_contents_tags`` in RSS feed.
+* Small stylefix for *django-suit*
+
 
 Version 1.0
 -----------
