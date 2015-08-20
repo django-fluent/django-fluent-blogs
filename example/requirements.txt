@@ -9,10 +9,11 @@ South>=1.0.1
 pytz>=2014.9
 
 # Requirements for fluent-blogs
-django-fluent-contents[text,code,markup,oembeditem,picture]>=1.0c3
-django-tag-parser>=1.1
-django-parler>=1.2.1
+django-fluent-contents[text,code,markup,oembeditem,picture]>=1.0
 django-fluent-utils>=1.1
+django-parler>=1.2.1
+django-slug-preview>=0.9
+django-tag-parser>=1.1
 
 # Optional requirements
 django-categories>=1.2.2

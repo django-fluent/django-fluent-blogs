@@ -57,6 +57,7 @@ Add the applications to ``settings.py``::
         'categories',
         'categories.editor',
         'django_wysiwyg',
+        'slug_preview',
 
         # Optional commenting support
         'django.contrib.comments',

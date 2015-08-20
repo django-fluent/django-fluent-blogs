@@ -7,12 +7,13 @@ from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_date_range
 from parler.forms import TranslatableModelForm
+from slug_preview.forms import SlugPreviewFormMixin
 
 
 EntryModel = get_entry_model()
 
 
-class AbstractEntryBaseAdminForm(ModelForm):
+class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
     """
     Base form for blog entries
     """

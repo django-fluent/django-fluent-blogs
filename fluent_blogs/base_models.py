@@ -1,9 +1,11 @@
 from django.contrib.sites.models import Site
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from parler.utils.context import switch_language
+from slug_preview.models import SlugPreviewField
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
@@ -47,7 +49,7 @@ class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
     The base translated fields.
     """
     title = models.CharField(_("Title"), max_length=200)
-    slug = models.SlugField(_("Slug"))
+    slug = SlugPreviewField(_("Slug"))
 
     class Meta:
         abstract = True
@@ -96,6 +98,20 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
     def get_absolute_url(self):
         return self.default_url
+
+
+    def get_absolute_url_format(self):
+        # For django-slug-preview
+        root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
+        publication_date = self.publication_date or now()
+        relative_url = appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
+            year = publication_date.strftime('%Y'),
+            month = publication_date.strftime('%m'),
+            day = publication_date.strftime('%d'),
+            slug = '{slug}',
+            pk = '{pk}',
+        )
+        return root + relative_url
 
 
     @property
