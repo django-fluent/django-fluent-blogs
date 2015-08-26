@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from django.conf import settings
 from django.template import Library
-from fluent_blogs.models import get_entry_model
+from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.models.query import query_entries, query_tags
 from tag_parser import template_tag
 from tag_parser.basetags import BaseAssignmentOrInclusionNode, BaseAssignmentOrOutputNode
@@ -191,9 +191,44 @@ class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
         return query_tags(**tag_kwargs)
 
 
+@template_tag(register, 'get_categories')
+class GetCategoriesNode(BlogAssignmentOrInclusionNode):
+    """
+    Query the entries in the database, and render them.
+    This template tag supports the following syntax:
+
+    .. code-block:: html+django
+
+        {% get_categories as categories %}
+        {% for category in categories %}...{% endfor %}
+
+    The allowed query parameters are:
+
+    * ``order``: Which field to order on, this can be:
+
+     * ``slug``: The URL name of the entry.
+     * ``name``: The category name.
+
+    * ``orderby``: can be ASC/ascending or DESC/descending. The default depends on the ``order`` field.
+    * ``limit``: The maximum number of entries to return.
+    """
+    template_name = "fluent_blogs/templatetags/entries.html"
+    context_value_name = 'entries'
+    allowed_kwargs = (
+        'orderby', 'order', 'limit',
+    )
+    model = get_category_model()
+
+    def get_value(self, context, *tag_args, **tag_kwargs):
+        only_ids = GetEntriesNode.model.objects.published().values('categories').order_by().distinct()
+        qs = self.model.objects.filter(id__in=only_ids)
+        return qs
+
+
 if False and __debug__:
     # This only exists to make PyCharm happy:
     # The real syntax should be passing the ``.parse`` method to the function.
     register.tag('get_entries', GetEntriesNode)
     register.tag('get_entry_url', GetEntryUrl)
     register.tag('get_tags', GetPopularTagsNode)
+    register.tag('get_categories', GetCategoriesNode)
