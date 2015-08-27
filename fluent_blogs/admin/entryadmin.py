@@ -45,7 +45,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
 
 
 # Add all fields
-for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
+for _f in ('intro', 'image', 'contents', 'categories', 'tags', 'enable_comments'):
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
 

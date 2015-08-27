@@ -1,9 +1,12 @@
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from athumb.fields import ImageWithThumbsField
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from parler.utils.context import switch_language
+
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
@@ -36,7 +39,6 @@ __all__ = (
     'AbstractTranslatedFieldsEntryBase',
     'AbstractTranslatedFieldsEntry',
 )
-
 
 def _get_current_site():
     return Site.objects.get_current().pk
@@ -79,8 +81,21 @@ class AbstractSharedEntryBaseMixin(models.Model):
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 
-    objects = EntryManager()
+    # Image with thumbnail
+    image = ImageWithThumbsField(
+        upload_to="blog_images",
+        thumbs=(
+            ('50x50_cropped', {'size': (50, 50), 'crop': True}),
+            ('60x60', {'size': (60, 60)}),
+            ('100x100', {'size': (100, 100)}),
+            ('front_page', {'size': (300, 300)}),
+            ('medium', {'size': (600, 600)}),
+            ('large', {'size': (1000, 1000)}),
+        ),
+        blank=True, null=True,
+    )
 
+    objects = EntryManager()
 
     class Meta:
         verbose_name = _("Blog entry")
