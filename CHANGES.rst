@@ -1,3 +1,10 @@
+Version 1.0.2 (git)
+-------------------
+
+* Fix ``fullheadtitle`` => ``meta-title`` template block name.
+* Avoid import errors with ``get_entry_model()``.
+
+
 Version 1.0.1 (2015-08-19)
 --------------------------
 
