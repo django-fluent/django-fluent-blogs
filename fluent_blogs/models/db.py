@@ -56,7 +56,9 @@ def get_entry_model():
             _EntryModel = Entry
         else:
             app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
-            _EntryModel = get_model(app_label, model_name)
+            _EntryModel = get_model(app_label, model_name, only_installed=False)
+            if _EntryModel is None:
+                raise ImportError("{app_label}.{model_name} could not be imported.".format(app_label=app_label, model_name=model_name))
 
         # Auto-register with django-fluent-comments moderation
         if 'fluent_comments' in settings.INSTALLED_APPS and issubclass(_EntryModel, CommentsEntryMixin):
