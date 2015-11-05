@@ -44,6 +44,8 @@ setup(
         'django-categories>=1.0.0',
         'django-parler>=1.4',              # Ensure Django 1.8 compatibility
         'django-tag-parser>=2.1',          # Ensure Django 1.8 compatibility
+        'django-athumb>=2.0',
+        'django-storages>=1.1.8',
     ],
     requires=[
         'Django (>=1.4)',

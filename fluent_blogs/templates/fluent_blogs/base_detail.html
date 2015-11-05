@@ -20,7 +20,6 @@
     {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{% get_entry_url previous %}" />{% endif %}
     {% if next %}<link rel="next" title="{{ next.title }}" href="{% get_entry_url next %}" />{% endif %}
 
-
     {% comment %}
     {% with object.publication_date|date:"Y" as year %}
       {% with object.publication_date|date:"m" as month %}
