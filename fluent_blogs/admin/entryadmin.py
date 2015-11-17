@@ -10,8 +10,10 @@ _model_fields = EntryModel._meta.get_all_field_names()
 if issubclass(EntryModel, TranslatableModel):
     _entry_admin_base = AbstractTranslatableEntryBaseAdmin
     _model_fields += Entry_Translation.get_translated_fields()
+    _is_translated = True
 else:
     _entry_admin_base = AbstractEntryBaseAdmin
+    _is_translated = False
 
 
 class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
@@ -34,7 +36,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         SeoEntryAdminMixin.FIELDSET_SEO,
     )
 
-    list_filter = list(_entry_admin_base.list_filter)
+    list_filter = ['status']  # reset, is rebuilt below.
     formfield_overrides = {}
     formfield_overrides.update(SeoEntryAdminMixin.formfield_overrides)
     formfield_overrides.update({
@@ -44,13 +46,16 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     })
 
 
-# Add all fields
+# Add all optional mixin fields
 for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
 
+# Add filters for optional mixin fields
+# Note, not adding 'tags' yet. It should only display tags that are in use, sorted by count.
 if 'categories' in _model_fields:
     EntryAdmin.list_filter.append('categories')
-# This should only display tags that are in use, sorted by count:
-#if 'tags' in _model_fields:
-#    EntryAdmin.list_filter.append('tags')
+if _is_translated:
+    EntryAdmin.list_filter.append('translations__language_code')
+if 'enable_comments' in _model_fields:
+    EntryAdmin.list_filter.append('enable_comments')
