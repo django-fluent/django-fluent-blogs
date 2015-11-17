@@ -1,5 +1,5 @@
-Version 1.0.2 (git)
--------------------
+Version 1.0.2 (2015-11-17)
+--------------------------
 
 * Added stub ``% render_comment_list %]`` / ``{% render_comment_form %}`` template tags in case no comments app is installed.
 * Added more fields in the default ``list_filter``.
