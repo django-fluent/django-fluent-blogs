@@ -207,7 +207,9 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
     """
     form = AbstractTranslatableEntryBaseAdminForm
     list_display = ('title', 'language_column', 'status_column', 'modification_date', 'actions_column')
-    list_filter = ('status', 'translations__language_code')
+    list_filter = ['status']
+    if getattr(settings, 'PARLER_LANGUAGES', None):
+        list_filter.append('translations__language_code')
     search_fields = ('translations__slug', 'translations__title')
     prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
 

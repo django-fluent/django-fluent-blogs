@@ -1,4 +1,5 @@
 import django
+from django.conf import settings
 from django.contrib.admin import widgets
 from fluent_blogs.admin.abstractbase import AbstractEntryBaseAdmin, AbstractTranslatableEntryBaseAdmin, SeoEntryAdminMixin
 from fluent_blogs.models import get_entry_model
@@ -65,7 +66,7 @@ for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
 # Note, not adding 'tags' yet. It should only display tags that are in use, sorted by count.
 if 'categories' in _model_fields:
     EntryAdmin.list_filter.append('categories')
-if _is_translated:
+if _is_translated and getattr(settings, 'PARLER_LANGUAGES', None):
     EntryAdmin.list_filter.append('translations__language_code')
 if 'enable_comments' in _model_fields:
     EntryAdmin.list_filter.append('enable_comments')
