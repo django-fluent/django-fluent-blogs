@@ -3,6 +3,8 @@ Version 1.0.2 (git)
 
 * Added stub ``% render_comment_list %]`` / ``{% render_comment_form %}`` template tags in case no comments app is installed.
 * Added more fields in the default ``list_filter``.
+* Fix the ``EntryAdmin`` to fully support custom models in the ``fieldsets``.
+* Fix the ``EntryAdmin`` to use ``fieldsets`` instead of ``declared_fieldsets``.
 * Fix ``fullheadtitle`` => ``meta-title`` template block name.
 * Fix import errors with ``get_entry_model()``.
 
