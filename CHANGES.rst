@@ -1,8 +1,10 @@
 Version 1.0.2 (git)
 -------------------
 
+* Added stub ``% render_comment_list %]`` / ``{% render_comment_form %}`` template tags in case no comments app is installed.
+* Added more fields in the default ``list_filter``.
 * Fix ``fullheadtitle`` => ``meta-title`` template block name.
-* Avoid import errors with ``get_entry_model()``.
+* Fix import errors with ``get_entry_model()``.
 
 
 Version 1.0.1 (2015-08-19)
