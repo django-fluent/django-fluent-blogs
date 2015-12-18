@@ -121,7 +121,6 @@ def query_entries(queryset=None,
     if author_slug:
         queryset = queryset.filter(author__username=author_slug)
 
-
     # Ordering
     if orderby:
         queryset = queryset.order_by(*_get_order_by(order, orderby, ENTRY_ORDER_BY_FIELDS))

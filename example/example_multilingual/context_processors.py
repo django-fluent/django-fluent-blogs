@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 def multilingual(request):
     lang_list = settings.PARLER_LANGUAGES.get(settings.SITE_ID, ())
     return {

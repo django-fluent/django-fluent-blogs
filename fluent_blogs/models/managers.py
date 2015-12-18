@@ -15,6 +15,7 @@ class EntryQuerySet(QuerySet):
     """
     The QuerySet for entry models.
     """
+
     def parent_site(self, site):
         """
         Filter to the given site.
@@ -55,8 +56,8 @@ class EntryQuerySet(QuerySet):
         return qs
 
 
-
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
+
     def active_translations(self, language_code=None, **translated_fields):
         # overwritten to honor our settings instead of the django-parler defaults
         language_codes = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)

@@ -16,6 +16,7 @@ class AbstractEntryBaseAdminForm(ModelForm):
     """
     Base form for blog entries
     """
+
     def __init__(self, *args, **kwargs):
         super(AbstractEntryBaseAdminForm, self).__init__(*args, **kwargs)
 
@@ -88,11 +89,11 @@ class AbstractEntryBaseAdminForm(ModelForm):
         }
 
 
-
 class AbstractTranslatableEntryBaseAdminForm(TranslatableModelForm, AbstractEntryBaseAdminForm):
     """
     Base form for translatable blog entries
     """
+
     def get_unique_slug_filters(self, cleaned_data):
         return {
             'translations__slug': cleaned_data['slug'],

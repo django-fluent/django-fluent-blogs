@@ -39,7 +39,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     if 'meta_keywords' in _model_fields:
         fieldsets.append(SeoEntryAdminMixin.FIELDSET_SEO)
 
-    if django.VERSION < (1,5):
+    if django.VERSION < (1, 5):
         # For Django 1.4, the fieldsets shouldn't be declared with 'fieldsets ='
         # as the admin validation won't recognize the translated fields.
         # The 1.4 validation didn't check the form at all, but only checks the model fields.

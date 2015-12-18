@@ -22,6 +22,7 @@ __all__ = (
     'LatestEntriesFeed', 'LatestCategoryEntriesFeed', 'LatestAuthorEntriesFeed', 'LatestTagEntriesFeed'
 )
 
+
 def get_entry_queryset():
     # Avoid being cached at module level, always return a new queryset.
     return get_entry_model().objects.published().active_translations().order_by('-publication_date')
@@ -53,14 +54,13 @@ class FeedView(View, Feed):
         return self.__call__(request, *args, **kwargs)
 
 
-
 class EntryFeedBase(FeedView):
     """
     Base class for all feeds returning blog entries.
     """
+
     def items(self, object=None):
         return get_entry_queryset()[:_max_items]
-
 
     def reverse(self, viewname, args=None, kwargs=None):
         """
@@ -70,7 +70,6 @@ class EntryFeedBase(FeedView):
         # TODO: django-fluent-pages needs a public API to get the current page.
         current_page = getattr(self.request, '_current_fluent_page', None)
         return blog_reverse(viewname, args=args, kwargs=kwargs, current_page=current_page)
-
 
     # -- general
 
@@ -96,7 +95,6 @@ class EntryFeedBase(FeedView):
                 return templates
         return None
 
-
     def item_pubdate(self, entry):
         return entry.publication_date
 
@@ -107,7 +105,6 @@ class EntryFeedBase(FeedView):
     # item_enclosure_length
     # item_enclosure_mime_type
     # item_copyright
-
 
     # -- sub objects
 
@@ -124,11 +121,11 @@ class EntryFeedBase(FeedView):
         return [category.name for category in entry.categories.all()]
 
 
-
 class LatestEntriesFeed(EntryFeedBase):
     """
     Feed for the latest entries of the blog.
     """
+
     def get_object(self, request, *args, **kwargs):
         return get_current_site(request)
 

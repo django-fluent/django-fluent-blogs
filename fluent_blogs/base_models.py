@@ -81,7 +81,6 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
     objects = EntryManager()
 
-
     class Meta:
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
@@ -89,14 +88,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
         get_latest_by = "publication_date"  # Support Entry.objects.latest() call.
         abstract = True
 
-
     def __unicode__(self):
         return self.title
 
-
     def get_absolute_url(self):
         return self.default_url
-
 
     @property
     def default_url(self):
@@ -112,7 +108,6 @@ class AbstractSharedEntryBaseMixin(models.Model):
         root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
         return root + self.get_relative_url()
 
-
     def get_relative_url(self):
         """
         Return the link path from the archive page.
@@ -126,14 +121,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
             pk = self.pk,
         )
 
-
     def get_current_language(self):
         return None  # Normal untranslated model: the API is there, but unused.
 
-
     def get_short_url(self):
         return blog_reverse('entry_shortlink', kwargs={'pk': self.pk}, ignore_multiple=True)
-
 
     @property
     def url(self):
@@ -142,16 +134,13 @@ class AbstractSharedEntryBaseMixin(models.Model):
         """
         return self.get_absolute_url()
 
-
     @property
     def is_published(self):
         return self.status == self.PUBLISHED
 
-
     @property
     def is_draft(self):
         return self.status == self.DRAFT
-
 
     @property
     def previous_entry(self):
@@ -167,7 +156,6 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
         entries = qs.filter(publication_date__lt=self.publication_date).order_by('-publication_date')[:1]
         return entries[0] if entries else None
-
 
     @property
     def next_entry(self):

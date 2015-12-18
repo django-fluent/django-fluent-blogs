@@ -37,8 +37,8 @@ class Entry_Translation(AbstractTranslatedFieldsEntry):
         verbose_name_plural = _("Blog entry translations")
 
 
-
 _EntryModel = None
+
 
 def get_entry_model():
     """

@@ -5,10 +5,10 @@ from parler.models import TranslatableModel
 
 
 class BlogPage(HtmlPage):
+
     class Meta:
         verbose_name = _("Blog module")
         verbose_name_plural = _("Blog modules")
-
 
     @property
     def entries(self):
@@ -25,7 +25,6 @@ class BlogPage(HtmlPage):
             qs = qs.active_translations(admin_form_language).language(admin_form_language)
 
         return qs
-
 
     def get_entry_url(self, entry):
         """

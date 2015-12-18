@@ -4,6 +4,7 @@ from fluent_blogs.views.entries import EntryArchiveIndex, EntryYearArchive, Entr
 from fluent_blogs.views.feeds import LatestEntriesFeed, LatestCategoryEntriesFeed, LatestAuthorEntriesFeed, LatestTagEntriesFeed
 from fluent_blogs import appsettings
 
+
 def _get_entry_regex():
     # Configurable permalink style!
     regex = appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE \

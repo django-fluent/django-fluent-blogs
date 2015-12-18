@@ -19,7 +19,6 @@ class BaseBlogMixin(CurrentPageMixin):
     prefetch_translations = False
     view_url_name_paginated = None
 
-
     def get_queryset(self):
         # NOTE: This is also workaround, defining the queryset static somehow caused results to remain cached.
         qs = get_entry_model().objects.published()
@@ -49,7 +48,6 @@ class BaseBlogMixin(CurrentPageMixin):
         else:
             view_url_name = self.view_url_name
         return mixed_reverse(view_url_name, args=self.args, kwargs=self.kwargs, current_page=self.get_current_page())
-
 
 
 class BaseArchiveMixin(BaseBlogMixin):
@@ -159,7 +157,6 @@ class EntryShortLink(SingleObjectMixin, RedirectView):
             raise Http404(str(e))
 
 
-
 class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
@@ -172,7 +169,6 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     def get_queryset(self):
         self.category = get_object_or_404(get_category_model(), slug=self.kwargs['slug'])
         return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
-
 
 
 class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):

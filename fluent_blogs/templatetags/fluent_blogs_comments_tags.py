@@ -38,4 +38,3 @@ else:
             "Make sure either 'django.contrib.comments' or 'django_comments' is in INSTALLED_APPS"
         )
         return mark_safe("<!-- no comment plugin installed! -->")
-

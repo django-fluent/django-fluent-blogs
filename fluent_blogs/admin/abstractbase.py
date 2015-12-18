@@ -19,7 +19,6 @@ from parler.models import TranslationDoesNotExist
 EntryModel = get_entry_model()
 
 
-
 class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
     """
     The base functionality of the admin, which only uses the fields of the
@@ -33,7 +32,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
     search_fields = ('slug', 'title')
     actions = ['make_published']
     form = AbstractEntryBaseAdminForm
-    prepopulated_fields = {'slug': ('title',),}
+    prepopulated_fields = {'slug': ('title',), }
     radio_fields = {
         'status': admin.HORIZONTAL,
     }
@@ -46,7 +45,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         'fields': ('publication_date', 'publication_end_date', 'author'),
         'classes': ('collapse',),
     })
-
 
     class Media:
         css = {
@@ -70,7 +68,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
             obj.publication_date = now()
         obj.save()
 
-
     def formfield_for_dbfield(self, db_field, **kwargs):
         """
         Allow formfield_overrides to contain field names too.
@@ -85,7 +82,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         if db_field.name == 'author':
             field.user = kwargs['request'].user
         return field
-
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         # When the page is accessed via a pagetype, warn that the node can't be previewed yet.
@@ -111,13 +107,11 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
 
         return super(AbstractEntryBaseAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
-
     def _reverse_blogpage_index(self, request, obj=None):
         # Internal method with "protected access" to handle translation differences.
         # This is only called when 'fluent_pages' is in the INSTALLED_APPS.
         from fluent_pages.urlresolvers import mixed_reverse
         return mixed_reverse('entry_archive_index')
-
 
     # ---- List code ----
 
@@ -125,7 +119,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         (AbstractEntryBase.PUBLISHED, 'icon-yes.gif'),
         (AbstractEntryBase.DRAFT,     'icon-unknown.gif'),
     )
-
 
     @classmethod
     def get_status_column(cls, entry):
@@ -139,7 +132,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
             admin = settings.ADMIN_MEDIA_PREFIX + 'img/admin/'
         return u'<img src="{admin}{icon}" width="10" height="10" alt="{title}" title="{title}" />'.format(admin=admin, icon=icon, title=title)
 
-
     def status_column(self, entry):
         # Method is needed because can't assign attributes to a class method
         return self.get_status_column(entry)
@@ -147,11 +139,9 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
     status_column.allow_tags = True
     status_column.short_description = _('Status')
 
-
     @classmethod
     def get_actions_column(cls, entry):
         return u' '.join(cls._actions_column_icons(entry))
-
 
     @classmethod
     def _actions_column_icons(cls, entry):
@@ -172,19 +162,16 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
                 )
         return actions
 
-
     @classmethod
     def can_preview_object(cls, entry):
         """ Override whether the node can be previewed. """
         return hasattr(entry, 'get_absolute_url') and entry.is_published
-
 
     def actions_column(self, entry):
         return self.get_actions_column(entry)
 
     actions_column.allow_tags = True
     actions_column.short_description = _('Actions')
-
 
     def make_published(self, request, queryset):
         rows_updated = queryset.update(status=AbstractEntryBase.PUBLISHED)
@@ -196,7 +183,6 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         self.message_user(request, message)
 
     make_published.short_description = _("Mark selected entries as published")
-
 
 
 class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdmin):
@@ -216,7 +202,7 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
     def get_prepopulated_fields(self, request, obj=None):
         # Still allow to override self.prepopulated_fields in other custom classes,
         # but default to the settings which are compatible with django-parler.
-        return self.prepopulated_fields or {'slug': ('title',),}
+        return self.prepopulated_fields or {'slug': ('title',), }
 
     def _reverse_blogpage_index(self, request, obj=None):
         # Updated mixed_reverse() call, with language code included.
@@ -234,7 +220,6 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
         extra_context = extra_context or {}
         extra_context['FLUENT_BLOGS_IS_TRANSLATABLE'] = True
         return super(AbstractTranslatableEntryBaseAdmin, self).changelist_view(request, extra_context)
-
 
 
 class SeoEntryAdminMixin(object):

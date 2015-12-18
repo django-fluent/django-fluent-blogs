@@ -15,6 +15,7 @@ class EntrySitemap(Sitemap):
     """
     The sitemap definition for the pages created with django-fluent-blogs.
     """
+
     def items(self):
         qs = EntryModel.objects.published().order_by('-publication_date')
 
@@ -24,7 +25,6 @@ class EntrySitemap(Sitemap):
             return qs.order_by('-publication_date', 'translations__language_code')
         else:
             return qs.order_by('-publication_date')
-
 
     def lastmod(self, urlnode):
         """Return the last modification of the entry."""
@@ -36,6 +36,7 @@ class EntrySitemap(Sitemap):
 
 
 class CategoryArchiveSitemap(Sitemap):
+
     def items(self):
         only_ids = EntryModel.objects.published().values('categories').order_by().distinct()
         return CategoryModel.objects.filter(id__in=only_ids)
@@ -51,6 +52,7 @@ class CategoryArchiveSitemap(Sitemap):
 
 
 class AuthorArchiveSitemap(Sitemap):
+
     def items(self):
         only_ids = EntryModel.objects.published().values('author').order_by().distinct()
         return User.objects.filter(id__in=only_ids)
@@ -66,6 +68,7 @@ class AuthorArchiveSitemap(Sitemap):
 
 
 class TagArchiveSitemap(Sitemap):
+
     def items(self):
         # Tagging is optional. When it's not used, it's ignored.
         if 'taggit' not in settings.INSTALLED_APPS:

@@ -122,7 +122,7 @@ INSTALLED_APPS = (
     'tinymce',                       # Used by 'text' plugin, see DJANGO_WYSIWYG_FLAVOR
 )
 
-if django.VERSION < (1,7):
+if django.VERSION < (1, 7):
     INSTALLED_APPS += (
         # For DB upgrades
         'south',

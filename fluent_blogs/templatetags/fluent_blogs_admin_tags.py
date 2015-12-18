@@ -6,6 +6,7 @@ from fluent_blogs.models import get_entry_model
 
 register = Library()
 
+
 @register.simple_tag()
 def status_column(entry):
     return EntryAdmin.get_status_column(entry)
@@ -24,7 +25,7 @@ def blog_entry_admin_change_url(entry):
 
 # Despite using django-fluent-utils,
 # this is only used here and fine as inline.
-if django.VERSION >= (1,6):
+if django.VERSION >= (1, 6):
     def _get_meta_model_name(opts):
         return opts.model_name
 else:
