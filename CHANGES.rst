@@ -1,3 +1,11 @@
+Version 1.1 (2015-12-29)
+------------------------
+
+* Added Django 1.9 support.
+* Support translatable category names.
+* Using  django-categories-i18n_ as new default for the category model.
+
+
 Version 1.0.2 (2015-11-17)
 --------------------------
 
@@ -133,5 +141,6 @@ Main features:
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
+.. _django-categories-i18n: https://github.com/edoburu/django-categories-i18n
 .. _django-parler: https://github.com/edoburu/django-parler
 .. _django-taggit-autosuggest: https://bitbucket.org/fabian/django-taggit-autosuggest

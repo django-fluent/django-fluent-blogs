@@ -1,4 +1,3 @@
-from django.contrib.sites.models import get_current_site
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.template import TemplateDoesNotExist
@@ -9,7 +8,7 @@ from django.views.generic import View
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model, get_category_model
 from fluent_blogs.urlresolvers import blog_reverse
-from fluent_utils.django_compat import get_user_model
+from fluent_utils.django_compat import get_user_model, get_current_site
 
 _FEED_FORMATS = {
     'atom1': feedgenerator.Atom1Feed,

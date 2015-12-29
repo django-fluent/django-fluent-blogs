@@ -2,8 +2,8 @@ import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.db.models import get_model
 from django.utils.translation import ugettext_lazy as _
+from fluent_utils.django_compat import get_model
 from fluent_blogs.base_models import CommentsEntryMixin, AbstractTranslatableEntry, AbstractTranslatedFieldsEntry
 from fluent_blogs import appsettings
 

@@ -40,13 +40,13 @@ setup(
 
     install_requires=[
         'django-fluent-contents>=1.0',
-        'django-fluent-utils>=1.1.4',      # DRY utility code
+        'django-fluent-utils>=1.2.3',      # DRY utility code
         'django-categories-i18n>=1.0',
-        'django-parler>=1.4',              # Ensure Django 1.8 compatibility
+        'django-parler>=1.6',              # Ensure Django 1.9 compatibility
         'django-tag-parser>=2.1',          # Ensure Django 1.8 compatibility
     ],
     requires=[
-        'Django (>=1.4)',
+        'Django (>=1.5)',
     ],
     extras_require = {
         'blogpage': ['django-fluent-pages>=0.9b4'],
