@@ -1,5 +1,6 @@
 import django
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models import get_model
 from django.utils.translation import ugettext_lazy as _
@@ -89,4 +90,9 @@ def get_category_model():
     This function reads the :ref:`FLUENT_BLOGS_CATEGORY_MODEL` setting to find the model.
     """
     app_label, model_name = appsettings.FLUENT_BLOGS_CATEGORY_MODEL.rsplit('.', 1)
-    return get_model(app_label, model_name)
+    try:
+        return get_model(app_label, model_name)
+    except Exception as e:  # ImportError/LookupError
+        raise ImproperlyConfigured("Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{0}': {1}".format(
+            appsettings.FLUENT_BLOGS_CATEGORY_MODEL, str(e)
+        ))

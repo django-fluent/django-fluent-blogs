@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
+import fluent_blogs.appsettings
 import fluent_blogs.base_models
 
 
@@ -25,7 +26,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('sites', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('categories', '__first__'),
+        migrations.swappable_dependency(fluent_blogs.appsettings.FLUENT_BLOGS_CATEGORY_MODEL),
     ]
 
     operations = [
@@ -41,7 +42,7 @@ class Migration(migrations.Migration):
                 ('creation_date', models.DateTimeField(auto_now_add=True, verbose_name='creation date')),
                 ('modification_date', models.DateTimeField(auto_now=True, verbose_name='last modification')),
                 ('author', models.ForeignKey(verbose_name='author', to=settings.AUTH_USER_MODEL)),
-                ('categories', models.ManyToManyField(to='categories.Category', verbose_name='Categories', blank=True)),
+                ('categories', models.ManyToManyField(to=fluent_blogs.appsettings.FLUENT_BLOGS_CATEGORY_MODEL, verbose_name='Categories', blank=True)),
                 ('parent_site', models.ForeignKey(default=fluent_blogs.base_models._get_current_site, editable=False, to='sites.Site')),
             ],
             options={

@@ -93,33 +93,33 @@ def query_entries(queryset=None,
     # The main category/tag/author filters
     if category:
         if isinstance(category, basestring):
-            queryset = queryset.filter(categories__slug=category)
+            queryset = queryset.categories(category)
         elif isinstance(category, (int, long)):
             queryset = queryset.filter(categories=category)
         else:
             raise ValueError("Expected slug or ID for the 'category' parameter")
     if category_slug:
-        queryset = queryset.filter(categories__slug=category)
+        queryset = queryset.categories(category)
 
     if tag:
         if isinstance(tag, basestring):
-            queryset = queryset.filter(tags__slug=tag)
+            queryset = queryset.tagged(tag)
         elif isinstance(tag, (int, long)):
             queryset = queryset.filter(tags=tag)
         else:
             raise ValueError("Expected slug or ID for 'tag' parameter.")
     if tag_slug:
-        queryset = queryset.filter(tags__slug=tag)
+        queryset = queryset.tagged(tag)
 
     if author:
         if isinstance(author, basestring):
-            queryset = queryset.filter(author__username=author)
+            queryset = queryset.authors(author)
         elif isinstance(author, (int, long)):
             queryset = queryset.filter(author=author)
         else:
             raise ValueError("Expected slug or ID for 'author' parameter.")
     if author_slug:
-        queryset = queryset.filter(author__username=author_slug)
+        queryset = queryset.authors(author_slug)
 
     # Ordering
     if orderby:

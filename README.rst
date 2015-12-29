@@ -11,7 +11,7 @@ This is a basic blogging engine, with the following features:
 
 Used applications:
 
-* Categories based on django-categories_
+* Categories based on django-categories-i18n_ (or django-categories_).
 * *Optional* comments based on django.contrib.comments_
 * *Optional* multilingual support based on django-parler_.
 * *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
@@ -54,8 +54,7 @@ Add the applications to ``settings.py``::
         'fluent_contents.plugins.text',
 
         # Support libs
-        'categories',
-        'categories.editor',
+        'categories_i18n',
         'django_wysiwyg',
 
         # Optional commenting support
@@ -308,6 +307,7 @@ Pull requests are welcome too. :-)
 .. _django.contrib.comments: https://docs.djangoproject.com/en/dev/ref/contrib/comments/
 .. _django.contrib.sitemaps: https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
 .. _django-categories: https://github.com/callowayproject/django-categories
+.. _django-categories-i18n: https://github.com/edoburu/django-categories-i18n
 .. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
 .. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages

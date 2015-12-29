@@ -3,6 +3,15 @@ from django.core.exceptions import ImproperlyConfigured
 from parler import appsettings as parler_appsettings
 from parler.utils import normalize_language_code, is_supported_django_language
 
+if 'categories' in settings.INSTALLED_APPS:
+    # old django-categories style. Keep first for backwards compatibility
+    _default_category_model = 'categories.Category'
+elif 'categories_i18n' in settings.INSTALLED_APPS:
+    _default_category_model = 'categories_i18n.Category'
+else:
+    # Default to new.
+    _default_category_model = 'categories_i18n.Category'
+
 
 # Configurable permalink style, yeah!
 FLUENT_BLOGS_ENTRY_LINK_STYLE = getattr(settings, "FLUENT_BLOGS_ENTRY_LINK_STYLE", '/{year}/{month}/{slug}/')
@@ -10,7 +19,7 @@ FLUENT_BLOGS_ENTRY_LINK_STYLE = getattr(settings, "FLUENT_BLOGS_ENTRY_LINK_STYLE
 # Advanced settings
 FLUENT_BLOGS_FILTER_SITE_ID = getattr(settings, 'FLUENT_BLOGS_FILTER_SITE_ID', True)
 FLUENT_BLOGS_BASE_TEMPLATE = getattr(settings, "FLUENT_BLOGS_BASE_TEMPLATE", 'fluent_blogs/base.html')
-FLUENT_BLOGS_CATEGORY_MODEL = getattr(settings, "FLUENT_BLOGS_CATEGORY_MODEL", 'categories.Category')
+FLUENT_BLOGS_CATEGORY_MODEL = getattr(settings, "FLUENT_BLOGS_CATEGORY_MODEL", _default_category_model)
 FLUENT_BLOGS_ENTRY_MODEL = getattr(settings, "FLUENT_BLOGS_ENTRY_MODEL", 'fluent_blogs.Entry')
 
 # RSS feeds

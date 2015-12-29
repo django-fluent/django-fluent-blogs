@@ -1,14 +1,16 @@
 """
 The manager class for the CMS models
 """
-import django
 from django.conf import settings
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from django.utils.timezone import now
+from django.utils.translation import get_language
+
 from fluent_blogs import appsettings
 from parler.managers import TranslatableManager, TranslatableQuerySet
+from parler.models import TranslatableModel
 
 
 class EntryQuerySet(QuerySet):
@@ -41,6 +43,43 @@ class EntryQuerySet(QuerySet):
                 Q(publication_end_date__gte=now())
             )
 
+    def authors(self, *usernames):
+        """
+        Return the entries written by the given usernames
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        if len(usernames) == 1:
+            return self.filter(author__username=usernames[0])
+        else:
+            return self.filter(author__username__in=usernames)
+
+    def categories(self, *category_slugs):
+        """
+        Return the entries with the given category slugs.
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        categories_field = getattr(self.model, 'categories', None)
+        if categories_field is None:
+            raise AttributeError("The {0} does not include CategoriesEntryMixin".format(self.model.__name__))
+
+        if issubclass(categories_field.rel.model, TranslatableModel):
+            # Needs a different field, assume slug is translated (e.g django-categories-i18n)
+            filters = {
+                'categories__translations__slug__in': category_slugs,
+            }
+
+            # TODO: should the current language also be used as filter somehow?
+            languages = self._get_active_rel_languages()
+            if languages:
+                if len(languages) == 1:
+                    filters['categories__translations__language_code'] = languages[0]
+                else:
+                    filters['categories__translations__language_code__in'] = languages
+
+            return self.filter(**filters).distinct()
+        else:
+            return self.filter(categories__slug=category_slugs)
+
     def tagged(self, *tag_slugs):
         """
         Return the items which are tagged with a specific tag.
@@ -49,19 +88,37 @@ class EntryQuerySet(QuerySet):
         if getattr(self.model, 'tags', None) is None:
             raise AttributeError("The {0} does not include TagsEntryMixin".format(self.model.__name__))
 
-        qs = self.filter(tags__slug__in=tag_slugs)
-        if len(tag_slugs) > 1:
-            qs = qs.distinct()
+        if len(tag_slugs) == 1:
+            return self.filter(tags__slug=tag_slugs[0])
+        else:
+            return self.filter(tags__slug__in=tag_slugs).distinct()
 
-        return qs
+    def _get_active_rel_languages(self):
+        return ()
 
 
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
+
+    def __init__(self, *args, **kwargs):
+        super(TranslatableEntryQuerySet, self).__init__(*args, **kwargs)
+        self._rel_language_codes = None
+
+    def _clone(self, klass=None, setup=False, **kw):
+        c = super(TranslatableQuerySet, self)._clone(**kw)
+        c._rel_language_codes = self._rel_language_codes
+        return c
 
     def active_translations(self, language_code=None, **translated_fields):
         # overwritten to honor our settings instead of the django-parler defaults
         language_codes = appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices(language_code)
         return self.translated(*language_codes, **translated_fields)
+
+    def translated(self, *language_codes, **translated_fields):
+        self._rel_language_codes = language_codes
+        return super(TranslatableEntryQuerySet, self).translated(*language_codes, **translated_fields)
+
+    def _get_active_rel_languages(self):
+        return self._rel_language_codes
 
 
 class EntryManager(models.Manager):
@@ -87,6 +144,20 @@ class EntryManager(models.Manager):
         Return only published entries for the current site.
         """
         return self.all().published()
+
+    def authors(self, *usernames):
+        """
+        Return the entries written by the given usernames
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        return self.all().authors(*usernames)
+
+    def categories(self, *category_slugs):
+        """
+        Return the entries with the given category slugs.
+        When multiple tags are provided, they operate as "OR" query.
+        """
+        return self.all().categories(*category_slugs)
 
     def tagged(self, *tag_slugs):
         """

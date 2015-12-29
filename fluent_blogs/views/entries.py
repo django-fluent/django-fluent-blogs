@@ -166,9 +166,23 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     template_name_suffix = '_archive_category'
     context_object_name = 'category'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.category = self.get_category(slug=self.kwargs['slug'])
+        return super(EntryCategoryArchive, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        self.category = get_object_or_404(get_category_model(), slug=self.kwargs['slug'])
         return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
+
+    def get_category(self, slug):
+        """
+        Get the category object
+        """
+        Category = get_category_model()
+        if issubclass(Category, TranslatableModel):
+            qs = Category.objects.translated(slug=slug)
+            return get_object_or_404(qs)
+        else:
+            return get_object_or_404(Category, slug=slug)
 
 
 class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
@@ -180,9 +194,16 @@ class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
     template_name_suffix = '_archive_author'
     context_object_name = 'author'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.author = self.get_user(slug=self.kwargs['slug'])
+        return super(EntryAuthorArchive, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        self.author = get_object_or_404(get_user_model(), username=self.kwargs['slug'])
         return super(EntryAuthorArchive, self).get_queryset().filter(author=self.author)
+
+    def get_user(self, slug):
+        User = get_user_model()
+        return get_object_or_404(User, username=slug)
 
 
 class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
@@ -194,7 +215,13 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     template_name_suffix = '_archive_tag'
     context_object_name = 'tag'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.tag = self.get_tag(slug=self.kwargs['slug'])
+        return super(EntryTagArchive, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        from taggit.models import Tag  # django-taggit is optional, hence imported here.
-        self.tag = get_object_or_404(Tag, slug=self.kwargs['slug'])
         return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)
+
+    def get_tag(self, slug):
+        from taggit.models import Tag  # django-taggit is optional, hence imported here.
+        return get_object_or_404(Tag, slug=slug)
