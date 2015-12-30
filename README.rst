@@ -56,6 +56,7 @@ Add the applications to ``settings.py``::
         # Support libs
         'categories_i18n',
         'django_wysiwyg',
+        'slug_preview',
 
         # Optional commenting support
         'django.contrib.comments',

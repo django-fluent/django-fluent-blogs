@@ -43,6 +43,7 @@ setup(
         'django-fluent-utils>=1.2.3',      # DRY utility code
         'django-categories-i18n>=1.0',
         'django-parler>=1.6',              # Ensure Django 1.9 compatibility
+        'django-slug-preview>=0.9',
         'django-tag-parser>=2.1',          # Ensure Django 1.8 compatibility
     ],
     requires=[

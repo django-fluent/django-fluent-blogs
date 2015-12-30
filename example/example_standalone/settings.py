@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     #'disqus',                       # for 'disqus' plugin
     #'form_designer',                # for 'formdesignerlink' plugin
     'parler',                        # provides the multilingual support.
+    'slug_preview',                  # nicer slugs in the admin.
     'taggit',                        # optional tagging support.
     'taggit_autosuggest',            # optional autocompletion support for tags
     'tinymce',                       # Used by 'text' plugin, see DJANGO_WYSIWYG_FLAVOR
