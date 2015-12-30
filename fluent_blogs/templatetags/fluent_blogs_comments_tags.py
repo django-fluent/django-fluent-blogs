@@ -7,6 +7,8 @@ This way, project authors can easily use an online commenting system
 (such as DISQUS or Facebook comments) instead.
 """
 import warnings
+
+from django.conf import settings
 from django.template import Library
 from django.utils.safestring import mark_safe
 from fluent_utils.django_compat import is_installed
@@ -16,7 +18,9 @@ from fluent_utils.django_compat import is_installed
 # Currently, the real tags are exposed as the template already checks for `object.comments_are_open`.
 # When a custom template is used, authors likely choose the desired commenting library instead.
 
-if is_installed('django.contrib.comments'):
+if is_installed('threadedcomments') and getattr(settings, 'COMMENTS_APP', None):
+    from threadedcomments.templatetags.threadedcomments_tags import register
+elif is_installed('django.contrib.comments'):
     from django.contrib.comments.templatetags.comments import register
 elif is_installed('django_comments'):
     from django_comments.templatetags.comments import register

@@ -4,6 +4,7 @@ Version 1.1 (2015-12-29)
 * Added Django 1.9 support.
 * Added django-slug-preview_ for nicer slug appearance in the admin.
 * Support translatable category names.
+* Improved support for django-threadedcomments_.
 * Using  django-categories-i18n_ as new default for the category model.
 
 
@@ -146,3 +147,4 @@ Main features:
 .. _django-parler: https://github.com/edoburu/django-parler
 .. _django-slug-preview: https://github.com/edoburu/django-slug-preview
 .. _django-taggit-autosuggest: https://bitbucket.org/fabian/django-taggit-autosuggest
+.. _django-threadedcomments: https://github.com/HonzaKral/django-threadedcomments.git
