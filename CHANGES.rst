@@ -1,4 +1,4 @@
-Version 1.1 (2015-12-29)
+Version 1.1 (2015-12-30)
 ------------------------
 
 * Added Django 1.9 support.
