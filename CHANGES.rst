@@ -6,6 +6,7 @@ Version 1.1 (2015-12-30)
 * Support translatable category names.
 * Improved support for django-threadedcomments_.
 * Using  django-categories-i18n_ as new default for the category model.
+* Dropped Django 1.4 support.
 
 
 Version 1.0.2 (2015-11-17)
