@@ -103,8 +103,8 @@ class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
         super(TranslatableEntryQuerySet, self).__init__(*args, **kwargs)
         self._rel_language_codes = None
 
-    def _clone(self, klass=None, setup=False, **kw):
-        c = super(TranslatableQuerySet, self)._clone(**kw)
+    def _clone(self, *args, **kw):
+        c = super(TranslatableQuerySet, self)._clone(*args, **kw)
         c._rel_language_codes = self._rel_language_codes
         return c
 
