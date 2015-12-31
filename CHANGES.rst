@@ -1,3 +1,10 @@
+Version 1.1.1 (2015-12-31)
+--------------------------
+
+* Fixed admin list view for blog entries.
+* Added ``migrate_blog_categories`` command to replace the Blog category model, and update foreign keys.
+
+
 Version 1.1 (2015-12-30)
 ------------------------
 
