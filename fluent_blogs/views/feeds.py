@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.utils import feedgenerator
+from django.utils.encoding import force_text
 from django.utils.translation import gettext
 from django.views.generic import View
 from fluent_blogs import appsettings
@@ -116,7 +117,7 @@ class EntryFeedBase(FeedView):
         return self.reverse('entry_archive_author', kwargs={'slug': entry.author.username}) if entry.author else None
 
     def item_categories(self, entry):
-        return [category.name for category in entry.categories.all()]
+        return [force_text(category) for category in entry.categories.all()]
 
 
 class LatestEntriesFeed(EntryFeedBase):
