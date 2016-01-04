@@ -50,7 +50,7 @@ setup(
         'Django (>=1.5)',
     ],
     extras_require = {
-        'blogpage': ['django-fluent-pages>=0.9b4'],
+        'blogpage': ['django-fluent-pages>=0.9'],
         'taggit': ['taggit', 'taggit-autosuggest'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',

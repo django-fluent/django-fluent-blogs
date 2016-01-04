@@ -1,3 +1,9 @@
+Version 1.1.2 (2016-01-04)
+--------------------------
+
+* Fixed RSS feeds when using django-categories-i18n
+
+
 Version 1.1.1 (2015-12-31)
 --------------------------
 
