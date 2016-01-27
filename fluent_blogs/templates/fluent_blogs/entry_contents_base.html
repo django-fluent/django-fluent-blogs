@@ -40,7 +40,7 @@
 
   {% block entry-body %}
   <div class="entry-body">
-    {% block entry-body-contents %}{% render_placeholder object.contents %}{% endblock %}
+    {% block entry-body-contents %}{% render_placeholder object.contents fallback=True %}{% endblock %}
   </div>
   {% endblock %}
 
