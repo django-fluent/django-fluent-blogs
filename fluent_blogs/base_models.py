@@ -332,6 +332,8 @@ class AbstractTranslatedFieldsEntryBase(
 
     class Meta:
         abstract = True
+        verbose_name = _("Blog entry translation")
+        verbose_name_plural = _("Blog entry translations")
 
 
 # For compatibility with old untranslated models.
