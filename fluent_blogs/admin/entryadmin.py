@@ -48,6 +48,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         fieldsets = None
 
     list_filter = ['status']  # reset, is rebuilt below.
+    html_fields = []  # auto filled with excerpt_text
     formfield_overrides = {}
     formfield_overrides.update(SeoEntryAdminMixin.formfield_overrides)
     formfield_overrides.update({
@@ -56,9 +57,20 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         },
     })
 
+    def add_view(self, request, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['html_fields'] = self.html_fields
+        return super(EntryAdmin, self).add_view(request, form_url=form_url, extra_context=extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['html_fields'] = self.html_fields
+        return super(EntryAdmin, self).change_view(request, object_id, form_url=form_url, extra_context=extra_context)
+
+
 
 # Add all optional mixin fields
-for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
+for _f in ('intro', 'excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'enable_comments'):
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
 
@@ -66,6 +78,8 @@ for _f in ('intro', 'contents', 'categories', 'tags', 'enable_comments'):
 # Note, not adding 'tags' yet. It should only display tags that are in use, sorted by count.
 if 'categories' in _model_fields:
     EntryAdmin.list_filter.append('categories')
+if 'excerpt_text' in _model_fields:
+    EntryAdmin.html_fields.append('excerpt_text')
 if _is_translated and getattr(settings, 'PARLER_LANGUAGES', None):
     EntryAdmin.list_filter.append('translations__language_code')
 if 'enable_comments' in _model_fields:

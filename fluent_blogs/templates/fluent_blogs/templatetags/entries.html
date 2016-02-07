@@ -3,7 +3,7 @@
 {% if entries %}
   <ul>
     {% for entry in entries %}
-      <li><a href="{% get_entry_url entry %}" title="{{ entry.intro|default:entry.title }}">{{ entry.title }}</a></li>
+      <li><a href="{% get_entry_url entry %}"{% if entry.intro %} title="{{ entry.intro }}"{% endif %}>{{ entry.title }}</a></li>
     {% endfor %}
   </ul>
 {% else %}

@@ -2,6 +2,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from parler.utils.context import switch_language
@@ -9,6 +10,7 @@ from slug_preview.models import SlugPreviewField
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_blogs.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
+from fluent_contents.extensions import PluginHtmlField, PluginImageField
 from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
 from fluent_utils.django_compat import AUTH_USER_MODEL
 from fluent_utils.softdeps.comments import CommentsMixin
@@ -21,7 +23,10 @@ __all__ = (
     # Mixins
     'AbstractSharedEntryBaseMixin',
     'AbstractTranslatedFieldsEntryBaseMixin',
-    'ExcerptEntryMixin',
+    'IntroEntryMixin',
+    'ExcerptEntryMixin',  # deprecated
+    'ExcerptTextEntryMixin',
+    'ExcerptImageEntryMixin',
     'ContentsEntryMixin',
     'CommentsEntryMixin',
     'CategoriesEntryMixin',
@@ -46,7 +51,8 @@ def _get_current_site():
 
 class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
     """
-    The base translated fields.
+    The base translated fields,
+    which are inserted into both the translated and old untranslated base model.
     """
     title = models.CharField(_("Title"), max_length=200)
     slug = SlugPreviewField(_("Slug"))
@@ -187,11 +193,37 @@ class AbstractSharedEntryBaseMixin(models.Model):
         return entries[0] if entries else None
 
 
-class ExcerptEntryMixin(models.Model):
+class IntroEntryMixin(models.Model):
     """
-    Mixin for adding the excerpt text to a blog entry.
+    Old deprecated Mixin for adding a non-HTML excerpt text to a blog entry.
     """
     intro = models.TextField(_("Introtext"))
+
+    class Meta:
+        abstract = True
+
+# Support old names.
+ExcerptEntryMixin = IntroEntryMixin
+
+
+class ExcerptTextEntryMixin(models.Model):
+    """
+    Optional Mixin for adding excerpt text to a blog entry.
+    """
+    # While this field is designated as HTML field, it's not officially part of a plugin.
+    # Hence it will not be converted into a WYSIWYG field by default.
+    # Instead, the 'html_fields' in the base 'admin/fluent_blogs/entry/change_form.html' take care of that.
+    excerpt_text = PluginHtmlField(_("Excerpt text"), help_text=_("This is the summary in the list of articles."))
+
+    class Meta:
+        abstract = True
+
+
+class ExcerptImageEntryMixin(models.Model):
+    """
+    Optional Mixin for adding an excerpt image to a blog entry.
+    """
+    excerpt_image = PluginImageField(_("Intro image"))
 
     class Meta:
         abstract = True

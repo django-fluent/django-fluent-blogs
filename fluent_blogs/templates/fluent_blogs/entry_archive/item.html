@@ -1,13 +1,38 @@
 {% extends "fluent_blogs/entry_contents_base.html" %}
-{% load i18n fluent_blogs_tags %}
+{% load i18n fluent_blogs_tags %}{% comment %}
 
-{% block entry-body-contents %}
+  This is a base template for an item in the archive.
+  It extends from a shared template so it can display the same content
+  in both the archive and detail pages. However, this is not required.
+  You can completely replace this template and leave the extends out.
+
+  To shorten the contents in the archive, use:
+  {% block entry-body-contents %}{{ object.html_content|truncatewords_html:100|safe }}{% endblock %}
+  or provide an excerpt_text field in the model (e.g. via ExcerptTextEntryMixin).
+
+{% endcomment %}
+
+{% block entry-body %}
+  {% if object.excerpt_text %}
+      {% comment %}
+        This code only exists to show something reasonable out of the box
+        when you included the ExcerptTextEntryMixin or ExcerptImageEntryMixin.
+        Feel free to completely redefine this template in your site
+      {% endcomment %}
+      <div class="entry-excerpt">
+          {% if object.excerpt_image %}
+              <div class="entry-excerpt-image">
+                  <img src="{{ object.excerpt_image.url }}" />
+              </div>
+          {% endif %}
+          <div class="entry-excerpt-text">
+            {{ object.excerpt_text|safe }}
+          </div>
+          <a class="more" href="{{ entry_url }}">{% trans "Read More" %} &gt;</a>
+      </div>
+  {% else %}
     {{ block.super }}
-
-    {% comment %}
-      To shorten the contents in the archive, use:
-      {% with object.html_content|truncatewords_html:100|safe as object_content %} #}
-    {% endcomment %}
+  {% endif %}
 {% endblock %}
 
 {% block entry-footer-contents %}

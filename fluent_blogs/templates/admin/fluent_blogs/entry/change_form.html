@@ -1,4 +1,4 @@
-{% extends "admin/change_form.html" %}{% load i18n %}
+{% extends "admin/change_form.html" %}{% load i18n wysiwyg %}
 
 {% block object-tools-items %}
 <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
@@ -9,4 +9,10 @@
 {% block content %}
   {{ block.super }}
   {% include "admin/fluent_blogs/entry/change_form_navigation.html" %}
+
+  {% block wysiwyg_editor %}
+    {% for field_name in html_fields %}
+      {% wysiwyg_editor field_name %}
+    {% endfor %}
+  {% endblock %}
 {% endblock %}
