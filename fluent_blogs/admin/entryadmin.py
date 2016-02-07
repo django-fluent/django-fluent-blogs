@@ -29,7 +29,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     """
     # Redefine the fieldset, because it will be extended with auto-detected fields.
     FIELDSET_GENERAL = (None, {
-        'fields': ('title', 'slug', 'status',),  # is filled with ('intro', 'contents', 'categories', 'tags', 'enable_comments') below
+        'fields': ('title', 'slug', 'status',),  # is filled with ('contents', 'categories', 'tags', 'enable_comments') below
     })
 
     fieldsets = [
@@ -70,7 +70,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
 
 
 # Add all optional mixin fields
-for _f in ('intro', 'excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'enable_comments'):
+for _f in ('excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'enable_comments'):
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
 

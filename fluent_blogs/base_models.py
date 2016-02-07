@@ -197,7 +197,7 @@ class IntroEntryMixin(models.Model):
     """
     Old deprecated Mixin for adding a non-HTML excerpt text to a blog entry.
     """
-    intro = models.TextField(_("Introtext"))
+    intro = models.TextField(_("Introtext"), null=True)
 
     class Meta:
         abstract = True
@@ -352,7 +352,7 @@ class AbstractEntryBase(
 
 class AbstractEntry(
         AbstractEntryBase,
-        ExcerptEntryMixin,
+        IntroEntryMixin,  # Kept to prevent data-loss, but not actively used anymore.
         ContentsEntryMixin,
         CommentsEntryMixin,
         CategoriesEntryMixin,
@@ -380,7 +380,7 @@ class AbstractTranslatableEntry(
 
 class AbstractTranslatedFieldsEntry(
         AbstractTranslatedFieldsEntryBase,
-        ExcerptEntryMixin,
+        IntroEntryMixin,  # Kept to prevent data-loss, but not actively used anymore.
         SeoEntryMixin):
     """
     The default translated fields model for blog posts, as abstract model.
