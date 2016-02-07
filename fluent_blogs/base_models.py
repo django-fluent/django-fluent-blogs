@@ -7,7 +7,7 @@ from parler.models import TranslatableModel, TranslatedFieldsModel
 from parler.utils.context import switch_language
 from slug_preview.models import SlugPreviewField
 from fluent_blogs.urlresolvers import blog_reverse
-from fluent_blogs.models.managers import EntryManager, TranslatableEntryManager
+from fluent_blogs.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
 from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
 from fluent_utils.django_compat import AUTH_USER_MODEL

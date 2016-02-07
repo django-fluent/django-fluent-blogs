@@ -1,6 +1,6 @@
-from .db import Entry, Entry_Translation, get_entry_model, get_category_model
-from .managers import EntryManager, TranslatableEntryManager
 from ..base_models import AbstractEntry, AbstractTranslatableEntry, AbstractTranslatedFieldsEntry
+from .db import Entry, Entry_Translation, get_entry_model, get_category_model
+from ..managers import EntryManager, TranslatableEntryManager  # noqa, old import paths
 
 
 __all__ = (
@@ -12,10 +12,6 @@ __all__ = (
     'AbstractEntry',
     'AbstractTranslatableEntry',
     'AbstractTranslatedFieldsEntry',
-
-    # Managers
-    'EntryManager',
-    'TranslatableEntryManager',
 
     # Utils for custom models.
     'get_entry_model',
