@@ -1,10 +1,10 @@
 from django.utils.translation import ugettext_lazy as _
+from fluent_pages.integration.fluent_contents import FluentContentsPage
 from fluent_blogs.models import get_entry_model
-from fluent_pages.models import HtmlPage
 from parler.models import TranslatableModel
 
 
-class BlogPage(HtmlPage):
+class BlogPage(FluentContentsPage):
 
     class Meta:
         verbose_name = _("Blog module")

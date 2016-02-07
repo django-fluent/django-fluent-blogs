@@ -16,7 +16,7 @@
     </style>
 {% endblock %}
 
-{% block after_first_fieldset %}
+{% block after_first_fieldset %}{{ block.super }}
   {% get_static_prefix as STATIC_URL %}{# Can't expect Django project to use context processors #}
 
   {% if change %}

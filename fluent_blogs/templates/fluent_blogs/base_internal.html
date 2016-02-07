@@ -1,4 +1,4 @@
-{% extends FLUENT_BLOGS_BASE_TEMPLATE %}{% load i18n fluent_blogs_tags %}
+{% extends FLUENT_BLOGS_BASE_TEMPLATE|default:'fluent_blogs/base.html' %}{% load i18n fluent_blogs_tags %}
 {# The base template is 'fluent_blogs/base.html' by default. #}
 
 {% block og-type %}blog{% endblock %}
