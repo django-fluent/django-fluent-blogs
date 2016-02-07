@@ -1,3 +1,25 @@
+Version 1.2 (2016-02-07)
+------------------------
+
+* Added support for ``{% page_placeholder %}`` in the blog archive templates.
+  This allows defining a sidebar of 'intro' area in a blog page using placeholders.
+  Previously, this was only possible by adding a ``{% shared_content "blog_sidebar" %}`` tag in the template.
+* Added ``fluent_blogs.base_models.ExcerptTextEntryMixin`` and ``fluent_blogs.base_models.ExcerptImageEntryMixin`` for easy excerpt support.
+* **BACKWARDS INCOMPATIBLE:** Deprecated the old 'intro' field, it's hidden from the admin now.
+  Consider creating a custom model/admin with the excerpt mixins instead.
+  The field is kept in the model to avoid data-loss. If you want to restore it in the admin,
+  add the following to your settings file::
+
+      FLUENT_BLOGS_EXTRA_ADMIN_FIELDS = ('intro',)
+
+  or override the blog model and admin.
+
+* Moved ``fluent_blogs.models.manages`` to ``fluent_blogs.managers`` to avoid circular import errors when working with custom models.
+  The old import location still works, but will raise a ``DeprecationWarning``.
+* Fixed appearance of list icons in Django 1.9.
+* Fixed rendering empty pages instead of using the fallback language.
+
+
 Version 1.1.2 (2016-01-04)
 --------------------------
 
