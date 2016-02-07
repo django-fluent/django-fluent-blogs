@@ -5,6 +5,7 @@ from django.db import models, migrations
 from django.conf import settings
 import fluent_blogs.appsettings
 import fluent_blogs.base_models
+import slug_preview.models
 
 
 def make_site(apps, schema_editor):
@@ -58,7 +59,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
                 ('title', models.CharField(max_length=200, verbose_name='Title')),
-                ('slug', models.SlugField(verbose_name='Slug')),
+                ('slug', slug_preview.models.SlugPreviewField(verbose_name='Slug')),
                 ('intro', models.TextField(verbose_name='Introtext')),
                 ('meta_keywords', models.CharField(default=b'', help_text='When this field is not filled in, the the tags will be used.', max_length=255, verbose_name='keywords', blank=True)),
                 ('meta_description', models.CharField(default=b'', help_text='When this field is not filled in, the contents or intro text will be used.', max_length=255, verbose_name='description', blank=True)),
