@@ -338,8 +338,8 @@ class AbstractTranslatedFieldsEntryBase(
 
 # For compatibility with old untranslated models.
 class AbstractEntryBase(
-    AbstractSharedEntryBaseMixin,
-    AbstractTranslatedFieldsEntryBaseMixin):
+        AbstractSharedEntryBaseMixin,
+        AbstractTranslatedFieldsEntryBaseMixin):
     """
     The classic abstract entry base model.
     """
@@ -359,29 +359,29 @@ class AbstractEntry(
         TagsEntryMixin,
         SeoEntryMixin):
     """
-    The classic entry model, as abstract model.
+    The classic entry model that has NO translation support, as abstract model.
     """
     class Meta:
         abstract = True
 
 
 class AbstractTranslatableEntry(
-    AbstractTranslatableEntryBase,
-    ContentsEntryMixin,
-    CommentsEntryMixin,
-    CategoriesEntryMixin,
-    TagsEntryMixin):
+        AbstractTranslatableEntryBase,
+        ContentsEntryMixin,
+        CommentsEntryMixin,
+        CategoriesEntryMixin,
+        TagsEntryMixin):
     """
-    The default entry model for translated blog posts, as abstract model.
+    The default model for translated blog posts, as abstract model.
     """
     class Meta:
         abstract = True
 
 
 class AbstractTranslatedFieldsEntry(
-    AbstractTranslatedFieldsEntryBase,
-    ExcerptEntryMixin,
-    SeoEntryMixin):
+        AbstractTranslatedFieldsEntryBase,
+        ExcerptEntryMixin,
+        SeoEntryMixin):
     """
     The default translated fields model for blog posts, as abstract model.
     """
