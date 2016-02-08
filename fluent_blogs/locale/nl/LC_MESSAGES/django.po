@@ -31,7 +31,7 @@ msgstr "Titel"
 
 #: base_models.py:61
 msgid "Slug"
-msgstr "Naam"
+msgstr "Slug"
 
 #: base_models.py:64
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:34
