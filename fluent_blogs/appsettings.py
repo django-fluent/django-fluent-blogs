@@ -16,6 +16,11 @@ else:
 # Configurable permalink style, yeah!
 FLUENT_BLOGS_ENTRY_LINK_STYLE = getattr(settings, "FLUENT_BLOGS_ENTRY_LINK_STYLE", '/{year}/{month}/{slug}/')
 
+# Configurable admin fields
+# By default, all optional mixin fields are detected.
+FLUENT_BLOGS_EXTRA_ADMIN_FIELDS = getattr(settings, 'FLUENT_BLOGS_EXTRA_ADMIN_FIELDS', ())
+FLUENT_BLOGS_ADMIN_FIELDS = getattr(settings, 'FLUENT_BLOGS_ADMIN_FIELDS', tuple(FLUENT_BLOGS_EXTRA_ADMIN_FIELDS) + ('excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'enable_comments'))
+
 # Advanced settings
 FLUENT_BLOGS_FILTER_SITE_ID = getattr(settings, 'FLUENT_BLOGS_FILTER_SITE_ID', True)
 FLUENT_BLOGS_BASE_TEMPLATE = getattr(settings, "FLUENT_BLOGS_BASE_TEMPLATE", 'fluent_blogs/base.html')

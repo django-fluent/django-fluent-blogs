@@ -1,6 +1,8 @@
 import django
 from django.conf import settings
 from django.contrib.admin import widgets
+
+from fluent_blogs import appsettings
 from fluent_blogs.admin.abstractbase import AbstractEntryBaseAdmin, AbstractTranslatableEntryBaseAdmin, SeoEntryAdminMixin
 from fluent_blogs.models import get_entry_model
 from parler.models import TranslatableModel
@@ -70,7 +72,7 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
 
 
 # Add all optional mixin fields
-for _f in ('excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'enable_comments'):
+for _f in appsettings.FLUENT_BLOGS_ADMIN_FIELDS:
     if _f in _model_fields:
         EntryAdmin.FIELDSET_GENERAL[1]['fields'] += (_f,)
 
@@ -78,9 +80,11 @@ for _f in ('excerpt_image', 'excerpt_text', 'contents', 'categories', 'tags', 'e
 # Note, not adding 'tags' yet. It should only display tags that are in use, sorted by count.
 if 'categories' in _model_fields:
     EntryAdmin.list_filter.append('categories')
-if 'excerpt_text' in _model_fields:
-    EntryAdmin.html_fields.append('excerpt_text')
 if _is_translated and getattr(settings, 'PARLER_LANGUAGES', None):
     EntryAdmin.list_filter.append('translations__language_code')
 if 'enable_comments' in _model_fields:
     EntryAdmin.list_filter.append('enable_comments')
+
+# Autodetect HTML fields of known built-in mixins
+if 'excerpt_text' in _model_fields:
+    EntryAdmin.html_fields.append('excerpt_text')
