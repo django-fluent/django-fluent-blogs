@@ -115,10 +115,16 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
 
     # ---- List code ----
 
-    STATUS_ICONS = (
-        (AbstractEntryBase.PUBLISHED, 'icon-yes.gif'),
-        (AbstractEntryBase.DRAFT,     'icon-unknown.gif'),
-    )
+    if django.VERSION >= (1, 9):
+        STATUS_ICONS = (
+            (AbstractEntryBase.PUBLISHED, 'admin/img/icon-yes.svg'),
+            (AbstractEntryBase.DRAFT,     'admin/img/icon-unknown.svg'),
+        )
+    else:
+        STATUS_ICONS = (
+            (AbstractEntryBase.PUBLISHED, 'admin/img/icon-yes.gif'),
+            (AbstractEntryBase.DRAFT,     'admin/img/icon-unknown.gif'),
+        )
 
     @classmethod
     def get_status_column(cls, entry):
@@ -126,11 +132,8 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         status = entry.status
         title = next(rec[1] for rec in AbstractEntryBase.STATUSES if rec[0] == status)
         icon  = next(rec[1] for rec in cls.STATUS_ICONS if rec[0] == status)
-        if django.VERSION >= (1, 4):
-            admin = settings.STATIC_URL + 'admin/img/'
-        else:
-            admin = settings.ADMIN_MEDIA_PREFIX + 'img/admin/'
-        return u'<img src="{admin}{icon}" width="10" height="10" alt="{title}" title="{title}" />'.format(admin=admin, icon=icon, title=title)
+        return u'<img src="{static_url}{icon}" alt="{title}" title="{title}" />'.format(
+            static_url=settings.STATIC_URL, icon=icon, title=title)
 
     def status_column(self, entry):
         # Method is needed because can't assign attributes to a class method
