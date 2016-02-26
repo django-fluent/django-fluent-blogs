@@ -13,12 +13,6 @@ from parler.models import TranslatableModel
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 
-try:
-    from django.apps import apps
-except ImportError:
-    # Don't bother migrating old south tables, first migrate to Django 1.7 please.
-    raise CommandError("This is a Django 1.7+ command only")
-
 
 class Command(NoArgsCommand):
     """
@@ -42,6 +36,12 @@ class Command(NoArgsCommand):
     )
 
     def handle_noargs(self, **options):
+        try:
+            from django.apps import apps
+        except ImportError:
+            # Don't bother migrating old south tables, first migrate to Django 1.7 please.
+            raise CommandError("This is a Django 1.7+ command only")
+
         Entry = get_entry_model()
         CategoryM2M = Entry.categories.through
         old_fk = CategoryM2M._meta.get_field('category')
