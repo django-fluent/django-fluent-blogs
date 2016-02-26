@@ -10,7 +10,13 @@ from parler.models import TranslatableModel
 
 EntryModel = get_entry_model()
 
-_model_fields = EntryModel._meta.get_all_field_names()
+if django.VERSION >= (1, 8):
+    # get_all_field_names() was deprecated
+    _model_fields = [f.name for f in EntryModel._meta.get_fields()]
+else:
+    # This also returns any _id fields, but that's not an issue for us here.
+    _model_fields = EntryModel._meta.get_all_field_names()
+
 if issubclass(EntryModel, TranslatableModel):
     _entry_admin_base = AbstractTranslatableEntryBaseAdmin
     # Some of the mixin fields could appear in the translated model instead of the regular shared model.

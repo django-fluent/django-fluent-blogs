@@ -1,5 +1,6 @@
 from optparse import make_option
 
+import django
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import NoArgsCommand, CommandError
@@ -205,7 +206,11 @@ class DummyCategoryBase(MPTTModel):
 
 
 def _detect_title_field(Model):
-    field_names = Model._meta.get_all_field_names()
+    if django.VERSION <(1, 8):
+        field_names = Model._meta.get_all_field_names()
+    else:
+        field_names = [f.name for f in Model._meta.get_fields()]
+
     if 'name' in field_names:
         return 'name'
     elif 'title' in field_names:
