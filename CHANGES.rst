@@ -18,6 +18,8 @@ Version 1.2 (2016-02-07)
   The old import location still works, but will raise a ``DeprecationWarning``.
 * Fixed appearance of list icons in Django 1.9.
 * Fixed rendering empty pages instead of using the fallback language.
+* **NOTE:** If you manually included ``{% wysiwyg_editor "excerpt_text" %}`` in the admin ``change_form.html`` page,
+  please remove it. It will be initialized automatically with a WYSIWYG editor now.
 
 
 Version 1.1.2 (2016-01-04)
