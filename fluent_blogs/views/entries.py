@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils import translation
+from django.utils import translation, six
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -57,8 +57,18 @@ class BaseArchiveMixin(BaseBlogMixin):
     paginate_by = 10
 
     def get_queryset(self):
-        qs = super(BaseArchiveMixin, self).get_queryset()
-        return qs.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
+        queryset = super(BaseArchiveMixin, self).get_queryset()
+        queryset = queryset.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
+
+        # Reapply ordering of MultipleObjectMixin that was skipped;
+        # The BaseDateListView.get_ordering() turns this into a default DESC on the date field.
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, six.string_types):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset
+
 
     def get_template_names(self):
         names = super(BaseArchiveMixin, self).get_template_names()
