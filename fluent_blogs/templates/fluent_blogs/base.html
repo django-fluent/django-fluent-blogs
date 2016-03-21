@@ -7,6 +7,7 @@
     <title>{% block meta-title %}{% block title %}{% endblock %} - No base template{% endblock %}</title>
 
     <meta property="og:type" content="{% block og-type %}website{% endblock %}" />
+    <meta property="og:image" content="http://{{ request.get_host }}{% block og-image %}{{ STATIC_URL }}logo.jpg{% endblock %}" />
     <meta property="og:description" content="{% block og-description %}{% endblock %}" />
 
     {% block link %}{% endblock %}

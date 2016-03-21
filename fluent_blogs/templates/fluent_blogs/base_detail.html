@@ -12,6 +12,7 @@
 {% block meta-title %}{% if object.meta_title %}{{ object.meta_title }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block meta-keywords %}{% if object.meta_keywords %}{{ object.meta_keywords }}{% elif object.tags %}{{ object.tags.all|join:', ' }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block meta-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.excerpt_text %}{{ object.excerpt_text|striptags|truncatewords:100 }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
+{% block og-image %}{% if object.excerpt_image %}{{ object.excerpt_image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block og-description %}{% if object.meta_description %}{{ object.meta_description }}{% elif object.excerpt_text %}{{ object.excerpt_text|striptags|truncatewords:100 }}{% elif object.intro %}{{ object.intro }}{% else %}{{ object.content|striptags|truncatewords:100 }}{% endif %}{% endblock %}
 
 {% block link %}{{ block.super }}{% with next=object.next_entry previous=object.previous_entry %}
