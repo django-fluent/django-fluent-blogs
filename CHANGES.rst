@@ -1,3 +1,12 @@
+Version 1.2.1 (2016-03-21)
+--------------------------
+
+* Fixed default ordering of entries in the archive listings.
+* Fixed Django 1.9 warnings for ``get_all_field_names()``
+* Fixed ``manage.py migrate_blog_categories`` usage warning for older Django versions.
+* Added ``{% block og-image %}`` block to the default templates.
+
+
 Version 1.2 (2016-02-07)
 ------------------------
 
