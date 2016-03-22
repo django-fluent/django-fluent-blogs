@@ -8,7 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
 from django.utils.timezone import utc
 from fluent_blogs import appsettings
-from fluent_blogs.models.db import get_entry_model
+from fluent_blogs.models.db import get_entry_model, get_category_model
+from parler.models import TranslatableModel
 
 __all__ = (
     'query_entries',
@@ -175,6 +176,17 @@ def query_tags(order=None, orderby=None, limit=None):
         queryset = queryset[:limit]
 
     return queryset
+
+
+def get_category_for_slug(slug, language_code=None):
+    """
+    Find the category for a given slug
+    """
+    Category = get_category_model()
+    if issubclass(Category, TranslatableModel):
+        return Category.objects.active_translations(language_code, slug=slug).get()
+    else:
+        return Category.objects.get(slug=slug)
 
 
 def get_date_range(year=None, month=None, day=None):

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import translation, six
@@ -6,8 +7,8 @@ from django.views.generic.base import RedirectView
 from django.views.generic.dates import DayArchiveView, MonthArchiveView, YearArchiveView, ArchiveIndexView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_blogs import appsettings
-from fluent_blogs.models import get_entry_model, get_category_model
-from fluent_blogs.models.query import get_date_range
+from fluent_blogs.models import get_entry_model
+from fluent_blogs.models.query import get_date_range, get_category_for_slug
 from fluent_utils.django_compat import get_user_model
 from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
@@ -187,12 +188,10 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
         """
         Get the category object
         """
-        Category = get_category_model()
-        if issubclass(Category, TranslatableModel):
-            qs = Category.objects.translated(slug=slug)
-            return get_object_or_404(qs)
-        else:
-            return get_object_or_404(Category, slug=slug)
+        try:
+            return get_category_for_slug(slug)
+        except ObjectDoesNotExist as e:
+            raise Http404(str(e))
 
 
 class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):

@@ -7,7 +7,8 @@ from django.utils.encoding import force_text
 from django.utils.translation import gettext
 from django.views.generic import View
 from fluent_blogs import appsettings
-from fluent_blogs.models import get_entry_model, get_category_model
+from fluent_blogs.models import get_entry_model
+from fluent_blogs.models.query import get_category_for_slug
 from fluent_blogs.urlresolvers import blog_reverse
 from fluent_utils.django_compat import get_user_model, get_current_site
 
@@ -147,20 +148,22 @@ class LatestCategoryEntriesFeed(EntryFeedBase):
     """
 
     def get_object(self, request, slug):
-        Category = get_category_model()
-        return get_object_or_404(Category, slug=slug)
+        return get_category_for_slug(slug)
 
     def items(self, category):
         return get_entry_queryset().filter(categories=category)[:_max_items]
 
     def title(self, category):
-        return gettext(u"Entries in the category {category_name}").format(category_name=category.name)
+        # django-categories uses 'name', django-categories-i18n uses 'title'
+        category_name = force_text(category)
+        return gettext(u"Entries in the category {category_name}").format(category_name=category_name)
 
     def subtitle(self, category):
         return self.description(category)  # For Atom1 feeds
 
     def description(self, category):
-        return gettext(u"The latest entries in the category {category_name}").format(category_name=category.name)
+        category_name = force_text(category)
+        return gettext(u"The latest entries in the category {category_name}").format(category_name=category_name)
 
     def link(self, category):
         return self.reverse('entry_archive_category', kwargs={'slug': category.slug})
