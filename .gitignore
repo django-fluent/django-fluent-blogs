@@ -8,6 +8,8 @@
 .pydevproject
 .idea/workspace.xml
 .DS_Store
+.coverage
+.tox/
 build/
 dist/
 docs/_build/
