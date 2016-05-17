@@ -86,7 +86,12 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
     prefetch_translations = appsettings.FLUENT_BLOGS_PREFETCH_TRANSLATIONS
 
     def get_queryset(self):
-        qs = super(BaseDetailMixin, self).get_queryset()
+        # The DetailView redefines get_queryset() to show detail pages for staff members.
+        # All other overviews won't show the draft pages yet.
+        qs = get_entry_model().objects.published(for_user=self.request.user)
+        if self.prefetch_translations:
+            qs = qs.prefetch_related('translations')
+        return qs
 
         # Allow same slug in different dates
         # The available arguments depend on the FLUENT_BLOGS_ENTRY_LINK_STYLE setting.

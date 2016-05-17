@@ -23,7 +23,7 @@ class EntryQuerySet(QuerySet):
         """
         return self.filter(parent_site=site)
 
-    def published(self):
+    def published(self, for_user=None):
         """
         Return only published entries for the current site.
         """
@@ -31,6 +31,9 @@ class EntryQuerySet(QuerySet):
             qs = self.parent_site(settings.SITE_ID)
         else:
             qs = self
+
+        if for_user is not None and for_user.is_staff:
+            return qs
 
         return qs \
             .filter(status=self.model.PUBLISHED) \
@@ -138,11 +141,11 @@ class EntryManager(models.Manager):
         # This avoids all issues with Django 1.5/1.6/1.7 compatibility.
         return self.all().parent_site(site)
 
-    def published(self):
+    def published(self, for_user=None):
         """
         Return only published entries for the current site.
         """
-        return self.all().published()
+        return self.all().published(for_user=for_user)
 
     def authors(self, *usernames):
         """
