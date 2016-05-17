@@ -5,6 +5,15 @@
 {% if has_absolute_url %}<li><a {% if preview_error %}onclick="alert('{{ preview_error|escapejs }}'); return false;" href="#"{% else %}href="{{ original.url }}"{% endif %} class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
 {% endblock %}
 
+{% comment %}
+  The django-parler `change_form_template` trick is disabled, so explicitly enable the language tabs here.
+  This makes life much easier for developers that extend the admin,
+  as they can just redefine `change_form_template` and enjoy language tabs nonetheless.
+{% endcomment %}
+{% block field_sets %}
+{% if language_tabs %}{% include "admin/parler/language_tabs.html" %}{% endif %}
+{{ block.super }}
+{% endblock %}
 
 {% block content %}
   {{ block.super }}

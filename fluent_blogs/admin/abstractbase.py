@@ -201,6 +201,7 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
         list_filter.append('translations__language_code')
     search_fields = ('translations__slug', 'translations__title')
     prepopulated_fields = {}  # Not supported by django-parler 0.9.2, using get_prepopulated_fields() as workaround.
+    change_form_template = None  # Avoid the django-parler template override trick, we do this ourselves.
 
     def get_prepopulated_fields(self, request, obj=None):
         # Still allow to override self.prepopulated_fields in other custom classes,
