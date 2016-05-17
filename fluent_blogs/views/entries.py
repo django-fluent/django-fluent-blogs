@@ -91,7 +91,6 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
         qs = get_entry_model().objects.published(for_user=self.request.user)
         if self.prefetch_translations:
             qs = qs.prefetch_related('translations')
-        return qs
 
         # Allow same slug in different dates
         # The available arguments depend on the FLUENT_BLOGS_ENTRY_LINK_STYLE setting.
