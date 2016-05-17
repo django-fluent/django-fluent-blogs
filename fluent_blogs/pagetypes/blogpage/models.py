@@ -1,4 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
+from parler.utils.context import switch_language
+
 from fluent_pages.integration.fluent_contents import FluentContentsPage
 from fluent_blogs.models import get_entry_model
 from parler.models import TranslatableModel
@@ -30,4 +32,10 @@ class BlogPage(FluentContentsPage):
         """
         Return the URL of a blog entry, relative to this page.
         """
-        return self.get_absolute_url() + entry.get_relative_url()
+        # It could be possible this page is fetched as fallback, while the 'entry' does have a translation.
+        # - Currently django-fluent-pages 1.0b3 `Page.objects.get_for_path()` assigns the language of retrieval
+        #   as current object language. The page is not assigned a fallback language instead.
+        # - With i18n_patterns() that would make strange URLs, such as '/en/blog/2016/05/dutch-entry-title/'
+        # Hence, respect the entry language as starting point to make the language consistent.
+        with switch_language(self, entry.get_current_language()):
+            return self.get_absolute_url() + entry.get_relative_url()
