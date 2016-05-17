@@ -1,3 +1,12 @@
+Version 1.2.2 (2016-05-17)
+--------------------------
+
+* Fixed previewing blog enties for staff members.
+* Fixed the category RSS feeds when using django-categories-i18n_.
+* Enhanced the template inheritance, to make sure language tabs are always shown.
+  Custom blog admin classes can now redefine ``change_form_template`` without getting issues.
+
+
 Version 1.2.1 (2016-03-21)
 --------------------------
 
