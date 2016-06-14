@@ -1,14 +1,15 @@
-import django
-
 from datetime import datetime
 from django.conf import settings
+from django.contrib.admin import AdminSite
+from django.contrib.admin.templatetags.admin_urls import admin_urlname
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.core.urlresolvers import set_urlconf, get_urlconf
-from django.test import TestCase
+from django.core.urlresolvers import set_urlconf, get_urlconf, reverse
+from django.test import TestCase, RequestFactory
 from django.utils import translation
 
+from fluent_blogs.admin import EntryAdmin
 from fluent_blogs.models import Entry
 from fluent_blogs.pagetypes.blogpage.models import BlogPage
 from fluent_pages.urlresolvers import PageTypeNotMounted
@@ -68,3 +69,21 @@ class BlogPageTests(TestCase):
             # Create new language
             entry.create_translation('nl', slug='hello-nl')
             self.assertEqual(entry.default_url, '/nl/blogpage/2016/05/hello-nl/')
+
+    def test_no_blogpage_admin(self):
+        """
+        When there is no page type mounted, the admin page should still be accessable.
+        """
+        date = datetime(year=2016, month=5, day=1)
+        entry = Entry.objects.language('en-us').create(author=self.user, slug='hello-fr', publication_date=date)
+        url = reverse(admin_urlname(entry._meta, 'change'), args=(entry.pk,))
+
+        # Make an admin site, avoid dependency on URLs
+        admin = AdminSite()
+        admin.register(Entry, EntryAdmin)
+        model_admin = admin._registry[Entry]
+        request = RequestFactory().get(url)
+        request.user = self.user
+
+        response = model_admin.change_view(request, str(entry.pk))
+        self.assertContains(response, 'page needs to be created first')
