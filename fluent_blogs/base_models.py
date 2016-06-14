@@ -1,4 +1,5 @@
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import NoReverseMatch
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -104,7 +105,12 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
     def get_absolute_url_format(self):
         # For django-slug-preview
-        root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
+        try:
+            root = blog_reverse('entry_archive_index', ignore_multiple=True, language_code=self.get_current_language())
+        except NoReverseMatch:
+            # e.g. PageTypeNotMounted
+            root = '/.../'
+
         publication_date = self.publication_date or now()
         relative_url = appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
             year = publication_date.strftime('%Y'),
