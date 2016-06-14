@@ -41,9 +41,13 @@ class BlogPageTests(TestCase):
         cache.clear()  # BlogPage URLs are stored in cache
 
     def test_no_blogpage(self):
+        """
+        When there is no blog page, the system should detect this.
+        """
         date = datetime(year=2016, month=5, day=1)
         entry = Entry.objects.language('en').create(author=self.user, slug='foo', publication_date=date)
         self.assertRaises(PageTypeNotMounted, lambda: entry.default_url)
+        self.assertEqual(entry.get_absolute_url_format(), '/.../2016/05/{slug}/')  # slug preview should not crash.
 
     def test_blogpage_fallback_url(self):
         """
