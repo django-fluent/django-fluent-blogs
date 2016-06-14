@@ -53,18 +53,18 @@ class BlogPageTests(TestCase):
         """
         Testing how translated entries appear on a ``BlogPage`` that has no translation except for the default/fallback.
         """
-        page = BlogPage.objects.language('en').create(author=self.user, status=BlogPage.PUBLISHED, slug='blog')
-        self.assertEqual(page.default_url, '/en/blog/')
+        page = BlogPage.objects.language('en').create(author=self.user, status=BlogPage.PUBLISHED, slug='blogpage')
+        self.assertEqual(page.default_url, '/en/blogpage/')
 
         date = datetime(year=2016, month=5, day=1)
         entry = Entry.objects.language('en').create(author=self.user, slug='hello-en', publication_date=date)
-        self.assertEqual(entry.default_url, '/en/blog/2016/05/hello-en/')
+        self.assertEqual(entry.default_url, '/en/blogpage/2016/05/hello-en/')
 
         # Simulate fetched entry in new language
         with translation.override('nl'):
             entry.set_current_language('nl')
-            self.assertEqual(entry.default_url, '/nl/blog/2016/05/hello-en/')
+            self.assertEqual(entry.default_url, '/nl/blogpage/2016/05/hello-en/')
 
             # Create new language
             entry.create_translation('nl', slug='hello-nl')
-            self.assertEqual(entry.default_url, '/nl/blog/2016/05/hello-nl/')
+            self.assertEqual(entry.default_url, '/nl/blogpage/2016/05/hello-nl/')
