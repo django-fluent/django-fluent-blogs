@@ -1,6 +1,6 @@
 language: python
-sudo: false
-cache: pip
+#sudo: false
+#cache: pip
 python:
 - '3.4'
 - '3.3'
