@@ -41,7 +41,7 @@ class BlogPageTests(TestCase):
         super(BlogPageTests, self).setUp()
 
         if django.VERSION >= (1, 8):
-            self.overrider = override_settings(ROOT_URLCONF=self.urls)
+            self.overrider = override_settings(ROOT_URLCONF='fluent_blogs.pagetypes.blogpage.tests.urls')
             self.overrider.enable()
 
     def tearDown(self):
