@@ -65,6 +65,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
 
+    test_suite = 'runtests',
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -76,6 +77,15 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Framework :: Django',
+        'Framework :: Django :: 1.4',
+        'Framework :: Django :: 1.5',
+        'Framework :: Django :: 1.6',
+        'Framework :: Django :: 1.7',
+        'Framework :: Django :: 1.8',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
