@@ -1,3 +1,14 @@
+.. image:: https://img.shields.io/travis/edoburu/django-fluent-blogs/master.svg?branch=master
+    :target: http://travis-ci.org/edoburu/django-fluent-blogs
+.. image:: https://img.shields.io/pypi/v/django-fluent-blogs.svg
+    :target: https://pypi.python.org/pypi/django-fluent-blogs/
+.. image:: https://img.shields.io/badge/wheel-yes-green.svg
+    :target: https://pypi.python.org/pypi/django-fluent-blogs/
+.. image:: https://img.shields.io/pypi/l/django-fluent-blogs.svg
+    :target: https://pypi.python.org/pypi/django-fluent-blogs/
+.. image:: https://img.shields.io/codecov/c/github/edoburu/django-fluent-blogs/master.svg
+    :target: https://codecov.io/github/edoburu/django-fluent-blogs?branch=master
+
 django-fluent-blogs
 ===================
 
