@@ -46,7 +46,7 @@ class FeedView(View, Feed):
             self.feed_type = _FEED_FORMATS[format]
         except KeyError:
             raise ValueError("Unsupported feed format: {0}. Supported are: {1}".format(
-                self.format, ', '.join(sorted(_FEED_FORMATS.iterkeys()))
+                self.format, ', '.join(sorted(_FEED_FORMATS.keys()))
             ))
 
     def get(self, request, *args, **kwargs):
