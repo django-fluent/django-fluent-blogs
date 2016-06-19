@@ -1,3 +1,13 @@
+Version 1.2.3 (2016-06-19)
+--------------------------
+
+* Fixed possible ``PageTypeNotMounted`` error on slug preview URL field.
+* Fixed Django version testing in ``get_entry_model()``.
+* Fixed translated page URLs when the ``BlogPage`` root does not have a fallback yet.
+* Fixed date checking for detail page URL.
+* Fixed Django 1.9 issue with ``{% blogurl .. %}`` tag.
+
+
 Version 1.2.2 (2016-05-17)
 --------------------------
 
