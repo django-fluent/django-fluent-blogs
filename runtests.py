@@ -97,6 +97,9 @@ if not settings.configured:
         **template_settings
     )
 
+    # workaround import error in tests in Travis
+    from django.utils.six import python_2_unicode_compatible
+
 DEFAULT_TEST_APPS = [
     'fluent_blogs',
 ]
