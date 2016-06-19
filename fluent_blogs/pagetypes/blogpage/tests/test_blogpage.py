@@ -1,11 +1,13 @@
 from datetime import datetime
+
+import django
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.core.urlresolvers import set_urlconf, get_urlconf, reverse
+from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 from django.utils import translation
 
@@ -14,29 +16,39 @@ from fluent_blogs.models import Entry
 from fluent_blogs.pagetypes.blogpage.models import BlogPage
 from fluent_pages.urlresolvers import PageTypeNotMounted
 
+try:
+    from django.test.utils import override_settings
+except ImportError:
+    override_settings = None
+
 
 class BlogPageTests(TestCase):
     """
     Testing integration between django-fluent-pages and django-fluent-blogs
     """
+    if django.VERSION < (1, 8):
+        urls = 'fluent_blogs.pagetypes.blogpage.tests.urls'  # Older Django
 
     @classmethod
     def setUpClass(cls):
         super(BlogPageTests, cls).setUpClass()
-
         User = get_user_model()
 
         Site.objects.get_or_create(id=settings.SITE_ID, defaults=dict(domain='django.localhost', name='django at localhost'))
         cls.user = User.objects.create_superuser("fluent-blogs-admin", 'admin@example.org', 'admin')
 
-        # Testing with other URLconf, this works for every Django version
-        cls._old_urlconf = get_urlconf()
-        set_urlconf('fluent_blogs.pagetypes.blogpage.tests.urls')
+    def setUp(self):
+        super(BlogPageTests, self).setUp()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(BlogPageTests, cls).tearDownClass()
-        set_urlconf(cls._old_urlconf)
+        if django.VERSION >= (1, 8):
+            self.overrider = override_settings(ROOT_URLCONF=self.urls)
+            self.overrider.enable()
+
+    def tearDown(self):
+        if django.VERSION > (1, 8):
+            self.overrider.disable()
+
+        super(BlogPageTests, self).tearDownClass()
 
     def tearDown(self):
         cache.clear()  # BlogPage URLs are stored in cache
