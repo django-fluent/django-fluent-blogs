@@ -110,9 +110,8 @@ INSTALLED_APPS = (
     #'fluent_contents.plugins.twitterfeed',
 
     # Other (optional) dependencies
-    'categories',                    # default 'categories' app, can be changed.
-    'categories.editor',
-    'django.contrib.comments',       # should be below theme1
+    'categories_i18n',               # default 'categories' app, can be changed.
+    'django_comments',               # should be below theme1
     'django_wysiwyg',                # for 'text' plugin
     #'disqus',                       # for 'disqus' plugin
     #'form_designer',                # for 'formdesignerlink' plugin

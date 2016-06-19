@@ -3,10 +3,6 @@ from example_standalone.settings import *
 
 PARLER_DEFAULT_LANGUAGE_CODE = 'en'  # defaults to LANGUAGE_CODE
 
-INSTALLED_APPS += (
-    'debugtools',
-)
-
 TEMPLATE_CONTEXT_PROCESSORS += (
     'example_multilingual.context_processors.multilingual',
 )

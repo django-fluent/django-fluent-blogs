@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^admin/apps/tags/', include('taggit_autosuggest.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^comments/', include('django_comments.urls')),
     #url(r'^forms/', include('form_designer.urls')),
 
     url(r'', include('fluent_blogs.urls')),

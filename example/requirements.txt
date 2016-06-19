@@ -3,33 +3,32 @@
 # Instead, this requirements file contains all required elements for the demo:
 
 # Base apps
-Django==1.6.8
-Pillow>=2.1.0
-South>=1.0.1
-pytz>=2014.9
+Django == 1.9.7
+Pillow == 3.2.0
+pytz == 2016.4
 
 # Requirements for fluent-blogs
-django-fluent-contents[text,code,markup,oembeditem,picture]>=1.0
-django-fluent-utils>=1.1
-django-parler>=1.2.1
-django-slug-preview>=0.9
-django-tag-parser>=1.1
+django-fluent-contents[text,code,markup,oembeditem,picture] == 1.1.4
+django-fluent-utils == 1.2.3
+django-parler == 1.6.4
+django-slug-preview == 1.0.1
+django-tag-parser == 2.1
 
 # Optional requirements
-django-categories>=1.2.2
-django-taggit>=0.10
-django-taggit-autosuggest>=0.2.4
-django-tinymce>=1.5.3
+django-categories-i18n == 1.0
+django-taggit == 0.19.1
+django-taggit-autosuggest == 0.3.0
+django-tinymce == 2.3.0
 
 # For other examples:
-django-mptt>=0.5.5
-django-fluent-comments>=1.0b1
-django-fluent-pages>=0.9b3
+django-mptt == 0.8.4
+django-fluent-comments == 1.2.1
+django-fluent-pages == 1.0b3
 
 
 # These dependencies are all implied by the [text,code,markup,oembeditem,formdesignerlink,picture] construct:
 ## For code plugin
-#Pygments>=1.4
+#Pygments == 2.1.3
 
 ## For disquswidgets plugin
 #django-disqus>=0.4.1
@@ -38,15 +37,12 @@ django-fluent-pages>=0.9b3
 #-e git+https://github.com/philomat/django-form-designer.git#egg=django_form_designer-dev
 
 ## For markup plugin
-#docutils>=0.8.1
-#Markdown>=2.1.0
-#textile>=2.1.5
+#docutils == 0.12
+#Markdown == 2.6.6
+#textile == 2.3.2
 
 ## For oembeditem plugin
-#micawber>=0.3.0
+#micawber == 0.3.3
 
 ## For text plugin
-#django-wysiwyg>=0.5.1
-
-## For twitter plugin
-#twitter-text-py>=1.0.3
+#django-wysiwyg == 0.7.1
