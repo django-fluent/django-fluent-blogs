@@ -1,4 +1,6 @@
 from datetime import date, datetime
+
+import django
 from django.conf import settings
 from django.template import Library
 from fluent_blogs.models import get_entry_model
@@ -31,7 +33,10 @@ def blogurl(parser, token):
         return appurl(parser, token)
     else:
         # Using url from future, so the syntax is the same modern style.
-        from django.templatetags.future import url
+        if django.VERSION < (1, 8):
+            from django.templatetags.future import url
+        else:
+            from django.template.defaulttags import url
         return url(parser, token)
 
 
