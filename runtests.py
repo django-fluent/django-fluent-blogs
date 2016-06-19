@@ -16,23 +16,48 @@ sys.stderr.write('Using Django version {0} from {1}\n'.format(
 if not settings.configured:
     import fluent_pages
     pages_root = path.dirname(path.abspath(fluent_pages.__file__))
-    module_root = path.dirname(path.realpath(__file__))
+
+    if django.VERSION >= (1, 8):
+        template_settings = dict(
+            TEMPLATES = [
+                {
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'DIRS': (),
+                    'OPTIONS': {
+                        'loaders': (
+                            'django.template.loaders.filesystem.Loader',
+                            'django.template.loaders.app_directories.Loader',
+                        ),
+                        'context_processors': (
+                            'django.template.context_processors.debug',
+                            'django.template.context_processors.i18n',
+                            'django.template.context_processors.media',
+                            'django.template.context_processors.request',
+                            'django.template.context_processors.static',
+                            'django.contrib.auth.context_processors.auth',
+                        ),
+                    },
+                },
+            ]
+        )
+    else:
+        template_settings = dict(
+            TEMPLATE_LOADERS = (
+                'django.template.loaders.app_directories.Loader',
+                'django.template.loaders.filesystem.Loader',
+            ),
+            TEMPLATE_CONTEXT_PROCESSORS = list(default_settings.TEMPLATE_CONTEXT_PROCESSORS) + [
+                'django.core.context_processors.request',
+            ],
+        )
 
     settings.configure(
-        DEBUG = False,  # will be False anyway by DjangoTestRunner.
-        TEMPLATE_DEBUG = True,
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
                 'NAME': ':memory:'
             }
         },
-        TEMPLATE_LOADERS = (
-            'django.template.loaders.app_directories.Loader',
-        ),
-        TEMPLATE_CONTEXT_PROCESSORS = tuple(default_settings.TEMPLATE_CONTEXT_PROCESSORS) + (
-            'django.core.context_processors.request',
-        ),
         INSTALLED_APPS = (
             'django.contrib.auth',
             'django.contrib.contenttypes',
@@ -56,6 +81,7 @@ if not settings.configured:
             'django.middleware.csrf.CsrfViewMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
         ),
+        ROOT_URLCONF = 'fluent_blogs.tests.testapp.urls',
         TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner' if django.VERSION < (1, 6) else 'django.test.runner.DiscoverRunner',
         SITE_ID = 4,
         PARLER_LANGUAGES = {
@@ -65,10 +91,10 @@ if not settings.configured:
             ),
         },
         PARLER_DEFAULT_LANGUAGE_CODE = 'en',  # Having a good fallback causes more code to run, more error checking.
-        ROOT_URLCONF = 'fluent_blogs.tests.testapp.urls',
         FLUENT_PAGES_TEMPLATE_DIR = path.join(pages_root, 'tests', 'testapp', 'templates'),
 
         FLUENT_BLOGS_ENTRY_MODEL = 'fluent_blogs.Entry',  # for explicit testing
+        **template_settings
     )
 
 DEFAULT_TEST_APPS = [
