@@ -45,13 +45,11 @@ class BlogPageTests(TestCase):
             self.overrider.enable()
 
     def tearDown(self):
-        if django.VERSION > (1, 8):
+        if django.VERSION >= (1, 8):
             self.overrider.disable()
 
-        super(BlogPageTests, self).tearDownClass()
-
-    def tearDown(self):
         cache.clear()  # BlogPage URLs are stored in cache
+        super(BlogPageTests, self).tearDown()
 
     def test_no_blogpage(self):
         """
