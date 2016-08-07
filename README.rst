@@ -1,13 +1,11 @@
-.. image:: https://img.shields.io/travis/edoburu/django-fluent-blogs/master.svg?branch=master
-    :target: http://travis-ci.org/edoburu/django-fluent-blogs
+.. image:: https://img.shields.io/travis/django-fluent/django-fluent-blogs/master.svg?branch=master
+    :target: http://travis-ci.org/django-fluent/django-fluent-blogs
 .. image:: https://img.shields.io/pypi/v/django-fluent-blogs.svg
-    :target: https://pypi.python.org/pypi/django-fluent-blogs/
-.. image:: https://img.shields.io/badge/wheel-yes-green.svg
     :target: https://pypi.python.org/pypi/django-fluent-blogs/
 .. image:: https://img.shields.io/pypi/l/django-fluent-blogs.svg
     :target: https://pypi.python.org/pypi/django-fluent-blogs/
-.. image:: https://img.shields.io/codecov/c/github/edoburu/django-fluent-blogs/master.svg
-    :target: https://codecov.io/github/edoburu/django-fluent-blogs?branch=master
+.. image:: https://img.shields.io/codecov/c/github/django-fluent/django-fluent-blogs/master.svg
+    :target: https://codecov.io/github/django-fluent/django-fluent-blogs?branch=master
 
 django-fluent-blogs
 ===================
@@ -38,11 +36,11 @@ TODO:
 Installation
 ============
 
-First install the module, preferably in a virtual environment::
+First install the module, preferably in a virtual environment:
 
-    git clone https://github.com/edoburu/django-fluent-blogs.git
-    cd django-fluent-blogs
-    pip install .
+.. code-block:: bash
+
+    pip install django-fluent-blogs
 
     # Install the plugins of fluent-contents that you use:
     pip install django-fluent-contents[text]
@@ -54,7 +52,9 @@ First install the module, preferably in a virtual environment::
 Configuration
 -------------
 
-Add the applications to ``settings.py``::
+Add the applications to ``settings.py``:
+
+.. code-block:: python
 
     INSTALLED_APPS += (
         # Blog engine
@@ -82,7 +82,9 @@ Add the applications to ``settings.py``::
 Note that not all applications are required;
 tagging is optional, and so are the various ``fluent_contents.plugin.*`` packages.
 
-Include the apps in ``urls.py``::
+Include the apps in ``urls.py``:
+
+.. code-block:: python
 
     urlpatterns += patterns('',
         url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
@@ -92,7 +94,7 @@ Include the apps in ``urls.py``::
 
 The database can be created afterwards::
 
-    ./manage.py syncdb
+    ./manage.py migrate
 
 In case additional plugins of django-fluent-contents_ are used, follow their
 `installation instructions <http://django-fluent-contents.readthedocs.org/en/latest/plugins/index.html>`_ as well.
@@ -121,7 +123,9 @@ The base template needs to have the blocks:
 * ``og-description`` the OpenGraph description for Facebook (optional)
 
 The ``fluent_blogs/base.html`` template could simply remap the block names to the site's ``base.html`` template.
-For example::
+For example:
+
+.. code-block:: html+django
 
     {% extends "base.html" %}
 
@@ -154,7 +158,9 @@ Adding pages to the sitemap
 ---------------------------
 
 Optionally, the blog pages can be included in the sitemap.
-Add the following in ``urls.py``::
+Add the following in ``urls.py``:
+
+.. code-block:: python
 
     from fluent_blogs.sitemaps import EntrySitemap, CategoryArchiveSitemap, AuthorArchiveSitemap, TagArchiveSitemap
 
@@ -173,14 +179,18 @@ Add the following in ``urls.py``::
 Integration with django-fluent-pages:
 -------------------------------------
 
-To integrate with the page types of django-fluent-pages_, don't include ``fluent_blogs.urls`` in the URLconf::
+To integrate with the page types of django-fluent-pages_, don't include ``fluent_blogs.urls`` in the URLconf:
+
+.. code-block:: python
 
     urlpatterns += patterns('',
         url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
         url(r'^blog/comments/', include('django.contrib.comments.urls')),   # or fluent_comments.urls
     )
 
-Instead, add a page type instead::
+Instead, add a page type instead:
+
+.. code-block:: python
 
     INSTALLED_APPS += (
         'fluent_pages',
@@ -194,7 +204,9 @@ at the desired URL path.
 Integration with django-fluent-comments:
 ----------------------------------------
 
-To use Ajax-based commenting features of django-fluent-comments_, include it in ``settings.py``::
+To use Ajax-based commenting features of django-fluent-comments_, include it in ``settings.py``:
+
+.. code-block:: python
 
     INSTALLED_APPS += (
         'fluent_blogs',
@@ -204,7 +216,9 @@ To use Ajax-based commenting features of django-fluent-comments_, include it in 
         ...
     )
 
-Include the proper module in ``urls.py``::
+Include the proper module in ``urls.py``:
+
+.. code-block:: python
 
     urlpatterns += patterns('',
         url(r'^blog/comments/', include('fluent_comments.urls')),
@@ -270,7 +284,9 @@ Custom entry models
 -------------------
 
 This applications supports the use of custom models for the blog entries.
-Include the following setting in your project::
+Include the following setting in your project:
+
+.. code-block:: python
 
     FLUENT_BLOGS_ENTRY_MODEL = 'myapp.ModelName'
 
@@ -319,11 +335,11 @@ Pull requests are welcome too. :-)
 .. _django.contrib.comments: https://docs.djangoproject.com/en/dev/ref/contrib/comments/
 .. _django.contrib.sitemaps: https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
 .. _django-categories: https://github.com/callowayproject/django-categories
-.. _django-categories-i18n: https://github.com/edoburu/django-categories-i18n
-.. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
-.. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
-.. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
-.. _django-parler: https://github.com/edoburu/django-parler
+.. _django-categories-i18n: https://github.com/django-parler/django-categories-i18n
+.. _django-fluent-comments: https://github.com/django-fluent/django-fluent-comments
+.. _django-fluent-contents: https://github.com/django-fluent/django-fluent-contents
+.. _django-fluent-pages: https://github.com/django-fluent/django-fluent-pages
+.. _django-parler: https://github.com/django-parler/django-parler
 .. _django-polymorphic: https://github.com/bconstantin/django_polymorphic
 .. _django-taggit: https://github.com/alex/django-taggit
 .. _django-taggit-autocomplete-modified: http://packages.python.org/django-taggit-autocomplete-modified/
