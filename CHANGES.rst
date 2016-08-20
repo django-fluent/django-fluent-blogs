@@ -1,3 +1,11 @@
+Changes in git
+--------------
+
+* Added ``tags`` and ``categories`` blocks to the ``fluent_blogs/entry_contents_base.html`` template
+* Fixed duplicate query count for categories and tags.
+* Fix minor Python 3 issue with error handling of ``FeedView``
+
+
 Version 1.2.3 (2016-06-19)
 --------------------------
 

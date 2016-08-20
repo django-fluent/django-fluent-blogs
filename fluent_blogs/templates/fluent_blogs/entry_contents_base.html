@@ -24,14 +24,16 @@
         {% block entry-header-info %}
           <abbr class="published" title="{{ object.publication_date }}">{{ object.publication_date|date:"DATE_FORMAT" }}</abbr>
 
-          {% if object.categories.all %}
-            <span class="categories">
-              {% trans "in" %}
-              {% for category in object.categories.all %}
-                <a href="{% blogurl 'entry_archive_category' category.slug %}" rel="category">{{ category }}</a>{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </span>
-          {% endif %}
+          {% block categories %}
+            {% with categories=object.categories.all %}{% if categories %}
+              <span class="categories">
+                {% trans "in" %}
+                {% for category in categories %}
+                  <a href="{% blogurl 'entry_archive_category' category.slug %}" rel="category">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </span>
+            {% endif %}{% endwith %}
+          {% endblock %}
         {% endblock %}
       </p>
       {% endblock %}
@@ -47,14 +49,16 @@
   {% block entry-footer %}
     <footer class="entry-footer clearfix">
       {% block entry-footer-contents %}
-        {% with tags=object.tags.all %}{% if tags %}
-        <p class="entry-tags">
-          <strong>{% trans "Tags" %}</strong>:
-          {% for tag in object.tags.all %}
-            <a href="{% blogurl 'entry_archive_tag' tag.slug %}" title="Tag {{ tag }}" rel="tag">{{ tag }}</a>
-          {% endfor %}
-        </p>
-        {% endif %}{% endwith %}
+        {% block tags %}
+          {% with tags=object.tags.all %}{% if tags %}
+            <p class="entry-tags">
+              <strong>{% trans "Tags" %}</strong>:
+              {% for tag in tags %}
+                <a href="{% blogurl 'entry_archive_tag' tag.slug %}" title="Tag {{ tag }}" rel="tag">{{ tag }}</a>
+              {% endfor %}
+            </p>
+          {% endif %}{% endwith %}
+        {% endblock %}
       {% endblock %}
     </footer>
   {% endblock %}
