@@ -44,7 +44,7 @@ setup(
         'django-categories-i18n>=1.0',
         'django-parler>=1.6',              # Ensure Django 1.9 compatibility
         'django-slug-preview>=1.0.1',
-        'django-tag-parser>=2.1',          # Ensure Django 1.8 compatibility
+        'django-tag-parser>=3.0',          # Ensure Django 1.8 compatibility
     ],
     requires=[
         'Django (>=1.5)',

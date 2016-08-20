@@ -5,7 +5,6 @@ from django.conf import settings
 from django.template import Library
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import query_entries, query_tags
-from tag_parser import template_tag
 from tag_parser.basetags import BaseAssignmentOrInclusionNode, BaseAssignmentOrOutputNode
 
 BlogPage = None
@@ -40,7 +39,7 @@ def blogurl(parser, token):
         return url(parser, token)
 
 
-@template_tag(register, 'get_entry_url')
+@register.tag('get_entry_url')
 class GetEntryUrl(BaseAssignmentOrOutputNode):
     """
     Get the URL of a blog entry.
@@ -106,7 +105,7 @@ class BlogAssignmentOrInclusionNode(BaseAssignmentOrInclusionNode):
         return context
 
 
-@template_tag(register, 'get_entries')
+@register.tag('get_entries')
 class GetEntriesNode(BlogAssignmentOrInclusionNode):
     """
     Query the entries in the database, and render them.
@@ -159,7 +158,7 @@ class GetEntriesNode(BlogAssignmentOrInclusionNode):
         return qs
 
 
-@template_tag(register, 'get_tags')
+@register.tag('get_tags')
 class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
     """
     Find the popular tags associated with blog entries.
@@ -197,8 +196,7 @@ class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
 
 
 if False and __debug__:
-    # This only exists to make PyCharm happy:
-    # The real syntax should be passing the ``.parse`` method to the function.
+    # This only exists to make PyCharm happy.
     register.tag('get_entries', GetEntriesNode)
     register.tag('get_entry_url', GetEntryUrl)
     register.tag('get_tags', GetPopularTagsNode)
