@@ -3,23 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 16:48+0200\n"
-"PO-Revision-Date: 2012-08-28 23:47+0100\n"
-"Last-Translator: Diederik van der Boor <vdboor@edoburu.nl>\n"
+"POT-Creation-Date: 2016-08-20 16:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: admin/abstractbase.py:44
 msgid "Publication settings"
-msgstr "Publicatievoorkeuren"
+msgstr ""
 
 #: admin/abstractbase.py:95
 #, python-brace-format
@@ -27,377 +27,381 @@ msgid ""
 "The blog entry can't be previewed yet, a '{page_type_name}' page needs to be "
 "created first."
 msgstr ""
-"Het blogartikel kan nog niet bekeken worden, er moet eerst een "
-"'{page_type_name}' pagina aangemaakt worden."
 
 #: admin/abstractbase.py:143
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: admin/abstractbase.py:164
 #: templates/admin/fluent_blogs/entry/change_form.html:5
 msgid "View on site"
-msgstr "Bekijk op website"
+msgstr ""
 
 #: admin/abstractbase.py:177
 msgid "Actions"
-msgstr "Acties"
+msgstr ""
 
 #: admin/abstractbase.py:188
 msgid "Mark selected entries as published"
-msgstr "Publiceer geselecteerde blogartikelen"
+msgstr ""
 
 #: admin/abstractbase.py:233
 msgid "SEO settings"
-msgstr "Zoekmachine opties"
+msgstr ""
 
 #: admin/forms.py:55
 msgid "The slug is not unique"
-msgstr "De slug is niet uniek"
+msgstr ""
 
 #: admin/forms.py:61
 msgid "The slug is not unique within it's publication year."
-msgstr "De slug is niet uniek binnen het publicatiejaar."
+msgstr ""
 
 #: admin/forms.py:64
 msgid "The slug is not unique within it's publication month."
-msgstr "De slug is niet uniek binnen de publicatiemaand."
+msgstr ""
 
 #: admin/forms.py:67
 msgid "The slug is not unique within it's publication day."
-msgstr "De slug is niet uniek binnen de publicatiedag."
+msgstr ""
 
 #: base_models.py:58
 msgid "Title"
-msgstr "Titel"
+msgstr ""
 
 #: base_models.py:59
 msgid "Slug"
-msgstr "Slug"
+msgstr ""
 
 #: base_models.py:76
 msgid "Published"
-msgstr "Gepubliceerd"
+msgstr ""
 
 #: base_models.py:77
 msgid "Draft"
-msgstr "Concept"
+msgstr ""
 
 #: base_models.py:82
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:35
 msgid "status"
-msgstr "status"
+msgstr ""
 
 #: base_models.py:83
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:36
 msgid "publication date"
-msgstr "gepubliceerd op"
+msgstr ""
 
 #: base_models.py:83
 msgid "When the entry should go live, status must be \"Published\"."
-msgstr "Zet de status op 'gepubliceerd' zodra het blogartikel live moet staan."
+msgstr ""
 
 #: base_models.py:84
 msgid "publication end date"
-msgstr "gepubliceerd tot"
+msgstr ""
 
 #: base_models.py:87
 msgid "author"
-msgstr "auteur"
+msgstr ""
 
 #: base_models.py:88
 msgid "creation date"
-msgstr "aanmaak datum"
+msgstr ""
 
 #: base_models.py:89
 msgid "last modification"
-msgstr "laatste wijziging"
+msgstr ""
 
 #: base_models.py:94 models/db.py:24
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:34
 msgid "Blog entry"
-msgstr "Blogartikel"
+msgstr ""
 
 #: base_models.py:95 models/db.py:25
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:56
 msgid "Blog entries"
-msgstr "Blogartikelen"
+msgstr ""
 
 #: base_models.py:206
 msgid "Introtext"
-msgstr "Introductietekst"
+msgstr ""
 
 #: base_models.py:222
 msgid "Excerpt text"
-msgstr "Uittreksel"
+msgstr ""
 
 #: base_models.py:222
 msgid "This is the summary in the list of articles."
-msgstr "Dit is de samenvatting in de lijst van artikelen."
+msgstr ""
 
 #: base_models.py:232
 msgid "Intro image"
-msgstr "Introductieafbeelding"
+msgstr ""
 
 #: base_models.py:266
 msgid "Categories"
-msgstr "Categoriën"
+msgstr ""
 
 #: base_models.py:294
 msgid "keywords"
-msgstr "trefwoorden"
+msgstr ""
 
 #: base_models.py:294
 msgid "When this field is not filled in, the the tags will be used."
-msgstr "Als dit veld niet is ingevuld, zullen de 'tags' worden gebruikt."
+msgstr ""
 
 #: base_models.py:295
 msgid "description"
-msgstr "beschrijving"
+msgstr ""
 
 #: base_models.py:295
 msgid ""
 "When this field is not filled in, the contents or intro text will be used."
 msgstr ""
-"Als dit veld niet is ingevuld, zal de inhoud of intro tekst worden gebruikt."
 
 #: base_models.py:296
 msgid "page title"
-msgstr "paginatitel"
+msgstr ""
 
 #: base_models.py:296
 msgid "When this field is not filled in, the menu title text will be used."
-msgstr "Als dit veld niet wordt ingevuld, wordt de algemene titel worden gebruikt."
+msgstr ""
 
 #: base_models.py:341 models/db.py:37
 msgid "Blog entry translation"
-msgstr "Blogartikel vertaling"
+msgstr ""
 
 #: base_models.py:342 models/db.py:38
 msgid "Blog entry translations"
-msgstr "Blogartikel vertalingen"
+msgstr ""
 
 #: pagetypes/blogpage/models.py:12
 msgid "Blog module"
-msgstr "Blogmodule"
+msgstr ""
 
 #: pagetypes/blogpage/models.py:13
 msgid "Blog modules"
-msgstr "Blogmodules"
+msgstr ""
 
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:27
 msgid "Latest blog entries at this page"
-msgstr "Laatste blogartikelen op deze pagina"
+msgstr ""
 
 #: pagetypes/blogpage/templates/admin/blogpage/change_form.html:37
 msgid "actions"
-msgstr "acties"
+msgstr ""
 
 #: templates/admin/fluent_blogs/entry/change_form.html:4
 msgid "History"
-msgstr "Geschiedenis"
+msgstr ""
 
 #: templates/admin/fluent_blogs/entry/change_form_navigation.html:5
 msgid "previous entry"
-msgstr "vorig artikel"
+msgstr ""
 
 #: templates/admin/fluent_blogs/entry/change_form_navigation.html:6
 msgid "next entry"
-msgstr "volgend artikel"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:11
 #: templates/fluent_blogs/base_archive.html:21
 msgid "Latest entries"
-msgstr "Laatste blogartikelen"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:15
 #, python-format
 msgid "RSS Feed for %(category)s"
-msgstr "RSS-feed voor %(category)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:16
 #, python-format
 msgid "RSS Feed for %(tag)s"
-msgstr "RSS-feed voor %(tag)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:17
 #, python-format
 msgid "RSS Feed for %(author_name)s"
-msgstr "RSS-feed voor %(author_name)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:22
 #, python-format
 msgid "Category %(category)s"
-msgstr "Categorie %(category)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:23
 #: templates/fluent_blogs/base_archive.html:31
 #, python-format
 msgid "Tag %(tag)s"
-msgstr "Tag %(tag)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:24
 #, python-format
 msgid "Author %(author_name)s"
-msgstr "Auteur %(author_name)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:25
 #, python-format
 msgid "Page %(number)s"
-msgstr "Pagina %(number)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_archive.html:32
 #, python-format
 msgid "Entries by %(author_name)s"
-msgstr "Artikelen door %(author_name)s"
+msgstr ""
 
 #: templates/fluent_blogs/base_internal.html:8
 msgid "RSS Feed of latest entries"
-msgstr "RSS Feed met de laatste blogartikelen"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive/empty.html:1
 msgid "No entries yet."
-msgstr "Nog geen artikelen."
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive/item.html:32
 msgid "Read More"
-msgstr "Lees verder"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive/item.html:46
 #, python-format
 msgid "%(comment_count)s comment"
 msgid_plural "%(comment_count)s comments"
-msgstr[0] "%(comment_count)s reactie"
-msgstr[1] "%(comment_count)s reacties"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/fluent_blogs/entry_archive/item.html:49
 msgid "Post a comment"
-msgstr "Plaats een reactie"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive/item.html:53
 #, python-format
 msgid "%(pingback_count)s pingback"
 msgid_plural "%(pingback_count)s pingbacks"
-msgstr[0] "%(pingback_count)s pingback"
-msgstr[1] "%(pingback_count)s pingbacks"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/fluent_blogs/entry_archive/item.html:54
 #, python-format
 msgid "%(trackback_count)s trackback"
 msgid_plural "%(trackback_count)s trackbacks"
-msgstr[0] "%(trackback_count)s trackback"
-msgstr[1] "%(trackback_count)s trackbacks"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/fluent_blogs/entry_archive_day.html:4
 #: templates/fluent_blogs/entry_archive_day.html:6
 #: templates/fluent_blogs/entry_archive_day.html:8
 #, python-format
 msgid "Archives of %(day)s"
-msgstr "Archief van %(day)s"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_index.html:5
 msgid "Page"
-msgstr "Pagina"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_month.html:4
 #: templates/fluent_blogs/entry_archive_month.html:6
 #: templates/fluent_blogs/entry_archive_month.html:8
 #, python-format
 msgid "Archives of %(month)s"
-msgstr "Archief van %(month)s"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_month.html:13
 msgid "Daily archives"
-msgstr "Dagelijke archiefpagina's"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_tag.html:4
 #: templates/fluent_blogs/entry_archive_tag.html:6
 #, python-format
 msgid "Archives of tag %(tag)s"
-msgstr "Archief van de tag %(tag)s"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_year.html:4
 #: templates/fluent_blogs/entry_archive_year.html:6
 #: templates/fluent_blogs/entry_archive_year.html:8
 #, python-format
 msgid "Archives of %(year)s"
-msgstr "Archief van %(year)s"
+msgstr ""
 
 #: templates/fluent_blogs/entry_archive_year.html:13
 msgid "Monthly archives"
-msgstr "Maandelijke archiefpagina's"
+msgstr ""
+
+#: templates/fluent_blogs/entry_contents_base.html:27
+#, python-format
+msgid ""
+"By <a href=\"%(author_url)s\" class=\"author\">%(author)s</a> on <span class="
+"\"date\">%(date)s</span>"
+msgstr ""
 
 #: templates/fluent_blogs/entry_contents_base.html:33
 msgid "in"
-msgstr "in"
+msgstr ""
 
 #: templates/fluent_blogs/entry_contents_base.html:58
 msgid "Tags"
-msgstr "Tags"
+msgstr ""
 
 #: templates/fluent_blogs/entry_detail/comments.html:6
 #, python-format
 msgid "%(comment_count)s comment to %(entry_title)s"
 msgid_plural "%(comment_count)s comments to %(entry_title)s"
-msgstr[0] "%(comment_count)s reactie op %(entry_title)s"
-msgstr[1] "%(comment_count)s reacties op %(entry_title)s"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/fluent_blogs/entry_detail/comments.html:11
 msgid "Comments are closed."
-msgstr "Reacties zijn gesloten."
+msgstr ""
 
 #: templates/fluent_blogs/entry_detail/comments.html:16
 msgid "Leave a reply"
-msgstr "Laat een reactie achter"
+msgstr ""
 
 #: templates/fluent_blogs/entry_detail/navigation.html:7
 msgid "Previous"
-msgstr "Vorige"
+msgstr ""
 
 #: templates/fluent_blogs/entry_detail/navigation.html:8
 msgid "Next"
-msgstr "Volgende"
+msgstr ""
 
 #: templates/fluent_blogs/entry_detail/navigation.html:14
 msgid "Related entries"
-msgstr "Gerelateerde artikelen"
+msgstr ""
 
 #: views/feeds.py:133
 #, python-brace-format
 msgid "{site_name} - Latest entries"
-msgstr "{site_name} - Laatste berichten"
+msgstr ""
 
 #: views/feeds.py:139
 #, python-brace-format
 msgid "The latest entries for {site_name}"
-msgstr "Recente artikelen van {site_name}"
+msgstr ""
 
 #: views/feeds.py:159
 #, python-brace-format
 msgid "Entries in the category {category_name}"
-msgstr "Artikelen in de categorie {category_name}"
+msgstr ""
 
 #: views/feeds.py:166
 #, python-brace-format
 msgid "The latest entries in the category {category_name}"
-msgstr "Recente artikelen in de categorie {category_name}"
+msgstr ""
 
 #: views/feeds.py:185
 #, python-brace-format
 msgid "Entries by {author_name}"
-msgstr "Artikelen door {author_name}"
+msgstr ""
 
 #: views/feeds.py:191
 #, python-brace-format
 msgid "The latest entries written by {author_name}"
-msgstr "Recente artikelen geschreven door {author_name}"
+msgstr ""
 
 #: views/feeds.py:210
 #, python-brace-format
 msgid "Entries for the tag {tag_name}"
-msgstr "Artikelen met de tag {tag_name}"
+msgstr ""
 
 #: views/feeds.py:216
 #, python-brace-format
 msgid "The latest entries tagged with {tag_name}"
-msgstr "Recente artikelen die getagged zijn met {tag_name}"
+msgstr ""
