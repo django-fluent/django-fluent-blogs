@@ -1,9 +1,11 @@
-Changes in git
---------------
+Version 1.2.4 (2017-01-27)
+--------------------------
 
 * Added ``tags`` and ``categories`` blocks to the ``fluent_blogs/entry_contents_base.html`` template
 * Fixed duplicate query count for categories and tags.
-* Fix minor Python 3 issue with error handling of ``FeedView``
+* Fixed minor Python 3 issue with error handling of ``FeedView``
+* Fixed Python 3 ``__str__()`` for blog models
+* Using django-tag-parser_ 3.0
 
 
 Version 1.2.3 (2016-06-19)
@@ -214,11 +216,12 @@ Main features:
 * Abstract base model for custom blog models.
 
 .. _django-any-urlfield: https://github.com/edoburu/django-any-urlfield
-.. _django-fluent-comments: https://github.com/edoburu/django-fluent-comments
-.. _django-fluent-contents: https://github.com/edoburu/django-fluent-contents
+.. _django-fluent-comments: https://github.com/django-fluent/django-fluent-comments
+.. _django-fluent-contents: https://github.com/django-fluent/django-fluent-contents
 .. _django-fluent-pages: https://github.com/edoburu/django-fluent-pages
 .. _django-categories-i18n: https://github.com/edoburu/django-categories-i18n
-.. _django-parler: https://github.com/edoburu/django-parler
+.. _django-parler: https://github.com/django-parler/django-parler
 .. _django-slug-preview: https://github.com/edoburu/django-slug-preview
+.. _django-tag-parser: https://github.com/edoburu/django-tag-parser
 .. _django-taggit-autosuggest: https://bitbucket.org/fabian/django-taggit-autosuggest
 .. _django-threadedcomments: https://github.com/HonzaKral/django-threadedcomments.git
