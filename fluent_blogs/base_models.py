@@ -1,6 +1,7 @@
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import NoReverseMatch
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -62,6 +63,7 @@ class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
         abstract = True
 
 
+@python_2_unicode_compatible
 class AbstractSharedEntryBaseMixin(models.Model):
     """
     The basic interface for blog entries.
@@ -97,7 +99,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
         get_latest_by = "publication_date"  # Support Entry.objects.latest() call.
         abstract = True
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
