@@ -1,4 +1,4 @@
-Version 1.2.4 (2017-01-27)
+Version 1.2.4 (2017-02-03)
 --------------------------
 
 * Added ``tags`` and ``categories`` blocks to the ``fluent_blogs/entry_contents_base.html`` template
