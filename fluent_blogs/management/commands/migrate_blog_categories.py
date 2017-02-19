@@ -3,7 +3,7 @@ from optparse import make_option
 import django
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.management.base import NoArgsCommand, CommandError
+from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, models, transaction
 from django.utils.six import python_2_unicode_compatible
 from mptt.fields import TreeForeignKey
@@ -14,7 +14,7 @@ from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     """
     Migrate a the blog category model data and constraints.
 
@@ -30,12 +30,21 @@ class Command(NoArgsCommand):
         " - run: manage.py migrate_blog_categories --from=categories.Category --to=categories_i18n.Category\n"
         " - remove 'categories' from INSTALLED_APPS.\n"
     )
-    option_list = NoArgsCommand.option_list + (
-        make_option('-f', '--from', action='store', dest='from', help="The old model to read data from"),
-        make_option('-t', '--to', action='store', dest='to', help="The new model to migrate to"),
-    )
 
-    def handle_noargs(self, **options):
+    if django.VERSION >= (1, 8):
+        def add_arguments(self, parser):
+            super(Command, self).add_arguments(parser)
+            parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
+            parser.add_argument('-t', '--to', action='store', dest='to', help="The new model to migrate to")
+    else:
+        option_list = BaseCommand.option_list + (
+            make_option('-f', '--from', action='store', dest='from', help="The old model to read data from"),
+            make_option('-t', '--to', action='store', dest='to', help="The new model to migrate to"),
+        )
+
+    def handle(self, *args, **options):
+        if args:
+            raise CommandError("Command doesn't accept any arguments")
         try:
             from django.apps import apps
         except ImportError:
