@@ -26,7 +26,7 @@ before_install:
 - pip install codecov
 install:
 - pip install -U pip wheel setuptools
-- pip install $PACKAGES django-wysiwyg django-fluent-pages>=1.0.1 -e .
+- pip install $PACKAGES -e .[tests]
 script:
 - coverage run --source=fluent_blogs runtests.py
 after_success:

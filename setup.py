@@ -47,10 +47,14 @@ setup(
         'django-tag-parser>=3.0',          # Ensure Django 1.8 compatibility
     ],
     requires=[
-        'Django (>=1.5)',
+        'Django (>=1.6)',
     ],
     extras_require = {
-        'blogpage': ['django-fluent-pages>=0.9'],
+        'tests': [
+            'django-fluent-pages>=1.0.1',
+            'django-wysiwyg>=0.7.1',
+        ],
+        'blogpage': ['django-fluent-pages>=1.0.1'],
         'taggit': ['taggit', 'taggit-autosuggest'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',
@@ -75,7 +79,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
@@ -84,6 +87,8 @@ setup(
         'Framework :: Django :: 1.6',
         'Framework :: Django :: 1.7',
         'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.10',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
