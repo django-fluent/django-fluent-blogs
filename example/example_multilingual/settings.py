@@ -3,7 +3,7 @@ from example_standalone.settings import *
 
 PARLER_DEFAULT_LANGUAGE_CODE = 'en'  # defaults to LANGUAGE_CODE
 
-TEMPLATE_CONTEXT_PROCESSORS += (
+TEMPLATES[0]['OPTIONS']['context_processors'] += (
     'example_multilingual.context_processors.multilingual',
 )
 
@@ -31,6 +31,6 @@ MIDDLEWARE_CLASSES += (
 
 ROOT_URLCONF = 'example_multilingual.urls'
 
-TEMPLATE_DIRS = (
+TEMPLATES[0]['DIRS'] = (
     join(dirname(__file__), "templates"),
 )

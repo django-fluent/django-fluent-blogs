@@ -136,9 +136,6 @@ class EntryManager(models.Manager):
         """
         Filter to the given site.
         """
-        # NOTE: by using .all(), the correct get_queryset() or get_query_set() method is called.
-        # Just calling self.get_queryset() will break the RelatedManager.get_query_set() override in Django 1.5
-        # This avoids all issues with Django 1.5/1.6/1.7 compatibility.
         return self.all().parent_site(site)
 
     def published(self, for_user=None):

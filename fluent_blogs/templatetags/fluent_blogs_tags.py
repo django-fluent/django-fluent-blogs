@@ -1,6 +1,5 @@
 from datetime import date, datetime
 
-import django
 from django.conf import settings
 from django.template import Library
 from fluent_blogs.models import get_entry_model
@@ -31,11 +30,7 @@ def blogurl(parser, token):
         from fluent_pages.templatetags.appurl_tags import appurl
         return appurl(parser, token)
     else:
-        # Using url from future, so the syntax is the same modern style.
-        if django.VERSION < (1, 8):
-            from django.templatetags.future import url
-        else:
-            from django.template.defaulttags import url
+        from django.template.defaulttags import url
         return url(parser, token)
 
 
@@ -74,9 +69,11 @@ class GetEntryUrl(BaseAssignmentOrOutputNode):
 @register.filter
 def format_year(year):
     """
-    Compatibility tag for Django 1.4.
     Format the year value of the ``YearArchiveView``,
     which can be a integer or date object.
+
+    This tag is no longer needed, but exists for template compatibility.
+    It was a compatibility tag for Django 1.4.
     """
     if isinstance(year, (date, datetime)):
         # Django 1.5 and up, 'year' is a date object, consistent with month+day views.

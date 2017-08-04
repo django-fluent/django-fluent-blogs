@@ -1,4 +1,3 @@
-import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
@@ -58,10 +57,7 @@ def get_entry_model():
             _EntryModel = Entry
         else:
             app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
-            if django.VERSION < (1, 7):
-                _EntryModel = get_model(app_label, model_name, only_installed=False)
-            else:
-                _EntryModel = get_model(app_label, model_name)
+            _EntryModel = get_model(app_label, model_name)
 
             if _EntryModel is None:
                 raise ImportError("{app_label}.{model_name} could not be imported.".format(app_label=app_label, model_name=model_name))

@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import django
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.admin.templatetags.admin_urls import admin_urlname
@@ -26,8 +25,6 @@ class BlogPageTests(TestCase):
     """
     Testing integration between django-fluent-pages and django-fluent-blogs
     """
-    if django.VERSION < (1, 8):
-        urls = 'fluent_blogs.pagetypes.blogpage.tests.urls'  # Older Django
 
     @classmethod
     def setUpClass(cls):
@@ -39,15 +36,11 @@ class BlogPageTests(TestCase):
 
     def setUp(self):
         super(BlogPageTests, self).setUp()
-
-        if django.VERSION >= (1, 8):
-            self.overrider = override_settings(ROOT_URLCONF='fluent_blogs.pagetypes.blogpage.tests.urls')
-            self.overrider.enable()
+        self.overrider = override_settings(ROOT_URLCONF='fluent_blogs.pagetypes.blogpage.tests.urls')
+        self.overrider.enable()
 
     def tearDown(self):
-        if django.VERSION >= (1, 8):
-            self.overrider.disable()
-
+        self.overrider.disable()
         cache.clear()  # BlogPage URLs are stored in cache
         super(BlogPageTests, self).tearDown()
 

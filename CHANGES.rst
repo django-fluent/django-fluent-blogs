@@ -1,3 +1,12 @@
+Version 1.3 (2017-07-04)
+--------------------------
+
+* Dropped Django 1.6 and 1.7 support.
+* Fix migrations being regenerated on Python 3 due to str/bytes differences.
+* Fix Django 1.10 invocation of management commands
+* Fix ``FluentContentsPage`` import to use the proper new location.
+
+
 Version 1.2.4 (2017-02-03)
 --------------------------
 

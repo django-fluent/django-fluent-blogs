@@ -1,7 +1,7 @@
 {% load i18n parler_tags %}
 
 <p>Set visitor language:</p>
-<form method="post" action="{% url 'django.views.i18n.set_language' %}">
+<form method="post" action="{% url 'set_language' %}">
   {% csrf_token %}
 
   <select name="language" onchange="this.form.next.value = this.options[this.selectedIndex].getAttribute('data-next-url') || '';">

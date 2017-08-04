@@ -1,6 +1,4 @@
-from optparse import make_option
-
-import django
+from django import apps
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
@@ -18,7 +16,6 @@ class Command(BaseCommand):
     """
     Migrate a the blog category model data and constraints.
 
-    The django-categories 1.2.3 release still doesn't have Django 1.8 support.
     The ideal replacement is django-categories-i18n, which also allows the category names
     to be translated. This command migrates the data, and adjusts the foreign key in the M2M table.
     """
@@ -31,25 +28,14 @@ class Command(BaseCommand):
         " - remove 'categories' from INSTALLED_APPS.\n"
     )
 
-    if django.VERSION >= (1, 8):
-        def add_arguments(self, parser):
-            super(Command, self).add_arguments(parser)
-            parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
-            parser.add_argument('-t', '--to', action='store', dest='to', help="The new model to migrate to")
-    else:
-        option_list = BaseCommand.option_list + (
-            make_option('-f', '--from', action='store', dest='from', help="The old model to read data from"),
-            make_option('-t', '--to', action='store', dest='to', help="The new model to migrate to"),
-        )
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
+        parser.add_argument('-t', '--to', action='store', dest='to', help="The new model to migrate to")
 
     def handle(self, *args, **options):
         if args:
             raise CommandError("Command doesn't accept any arguments")
-        try:
-            from django.apps import apps
-        except ImportError:
-            # Don't bother migrating old south tables, first migrate to Django 1.7 please.
-            raise CommandError("This is a Django 1.7+ command only")
 
         Entry = get_entry_model()
         CategoryM2M = Entry.categories.through
@@ -215,10 +201,7 @@ class DummyCategoryBase(MPTTModel):
 
 
 def _detect_title_field(Model):
-    if django.VERSION <(1, 8):
-        field_names = Model._meta.get_all_field_names()
-    else:
-        field_names = [f.name for f in Model._meta.get_fields()]
+    field_names = [f.name for f in Model._meta.get_fields()]
 
     if 'name' in field_names:
         return 'name'

@@ -40,7 +40,7 @@ setup(
 
     install_requires=[
         'django-fluent-contents>=1.0',
-        'django-fluent-utils>=1.2.3',      # DRY utility code
+        'django-fluent-utils>=1.3.3',      # DRY utility code
         'django-categories-i18n>=1.0',
         'django-parler>=1.6',              # Ensure Django 1.9 compatibility
         'django-slug-preview>=1.0.1',

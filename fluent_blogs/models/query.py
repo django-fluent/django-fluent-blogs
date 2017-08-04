@@ -146,9 +146,6 @@ def query_tags(order=None, orderby=None, limit=None):
     EntryModel = get_entry_model()
     ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
 
-    # In Django 1.5, it was possible to call TaggedItem.objects.filter(entry__status=..)
-    # this rel-name depended on the model name. In Django 1.6, this is no longer possible,
-    # so have to run a subquery for the object id instead.
     entry_filter = {
         'status': EntryModel.PUBLISHED
     }

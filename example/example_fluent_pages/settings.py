@@ -18,6 +18,6 @@ INSTALLED_APPS += (
 
 ROOT_URLCONF = 'example_fluent_pages.urls'
 
-TEMPLATE_DIRS = (
+TEMPLATES[0]['DIRS'] = (
     join(dirname(__file__), "templates"),
 )

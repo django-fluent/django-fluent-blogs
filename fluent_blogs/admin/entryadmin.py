@@ -1,4 +1,3 @@
-import django
 from django.conf import settings
 from django.contrib.admin import widgets
 
@@ -7,15 +6,8 @@ from fluent_blogs.admin.abstractbase import AbstractEntryBaseAdmin, AbstractTran
 from fluent_blogs.models import get_entry_model
 from parler.models import TranslatableModel
 
-
 EntryModel = get_entry_model()
-
-if django.VERSION >= (1, 8):
-    # get_all_field_names() was deprecated
-    _model_fields = [f.name for f in EntryModel._meta.get_fields()]
-else:
-    # This also returns any _id fields, but that's not an issue for us here.
-    _model_fields = EntryModel._meta.get_all_field_names()
+_model_fields = [f.name for f in EntryModel._meta.get_fields()]
 
 if issubclass(EntryModel, TranslatableModel):
     _entry_admin_base = AbstractTranslatableEntryBaseAdmin
@@ -46,14 +38,6 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     ]
     if 'meta_keywords' in _model_fields:
         fieldsets.append(SeoEntryAdminMixin.FIELDSET_SEO)
-
-    if django.VERSION < (1, 5):
-        # For Django 1.4, the fieldsets shouldn't be declared with 'fieldsets ='
-        # as the admin validation won't recognize the translated fields.
-        # The 1.4 validation didn't check the form at all, but only checks the model fields.
-        # As of Django 1.5, using 'fieldsets = ..' with translated fields just works.
-        declared_fieldsets = fieldsets
-        fieldsets = None
 
     list_filter = ['status']  # reset, is rebuilt below.
     html_fields = []  # auto filled with excerpt_text

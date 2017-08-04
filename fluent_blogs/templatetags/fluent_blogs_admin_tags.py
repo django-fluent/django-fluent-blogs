@@ -1,4 +1,3 @@
-import django
 from django.core.urlresolvers import reverse
 from django.template import Library
 from django.utils.safestring import mark_safe
@@ -22,14 +21,4 @@ def actions_column(entry):
 @register.simple_tag()
 def blog_entry_admin_change_url(entry):
     model = get_entry_model()
-    return reverse('admin:{0}_{1}_change'.format(model._meta.app_label, _get_meta_model_name(model._meta)), args=(entry.pk,))
-
-
-# Despite using django-fluent-utils,
-# this is only used here and fine as inline.
-if django.VERSION >= (1, 6):
-    def _get_meta_model_name(opts):
-        return opts.model_name
-else:
-    def _get_meta_model_name(opts):
-        return opts.module_name
+    return reverse('admin:{0}_{1}_change'.format(model._meta.app_label, model._meta.model_name), args=(entry.pk,))
