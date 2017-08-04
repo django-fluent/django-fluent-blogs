@@ -53,7 +53,7 @@ def _get_order_by(order, orderby, order_by_fields):
 
     # Default to descending for some fields, otherwise be ascending
     is_desc = (not order and orderby in ORDER_BY_DESC) \
-           or (order or 'asc').lower() in ('desc', 'descending')
+        or (order or 'asc').lower() in ('desc', 'descending')
 
     if is_desc:
         return map(lambda name: '-' + name, db_fieldnames)
@@ -61,16 +61,17 @@ def _get_order_by(order, orderby, order_by_fields):
         return db_fieldnames
 
 
-def query_entries(queryset=None,
-        year=None, month=None, day=None,
-        category=None, category_slug=None,
-        tag=None, tag_slug=None,
-        author=None, author_slug=None,
-        future=False,
-        order=None,
-        orderby=None,
-        limit=None,
-    ):
+def query_entries(
+    queryset=None,
+    year=None, month=None, day=None,
+    category=None, category_slug=None,
+    tag=None, tag_slug=None,
+    author=None, author_slug=None,
+    future=False,
+    order=None,
+    orderby=None,
+    limit=None,
+):
     """
     Query the entries using a set of predefined filters.
     This interface is mainly used by the ``get_entries`` template tag.

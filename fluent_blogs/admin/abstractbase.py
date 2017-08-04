@@ -131,7 +131,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         # Create a status column, is also reused by templatetags/fluent_blogs_admin_tags.py
         status = entry.status
         title = next(rec[1] for rec in AbstractEntryBase.STATUSES if rec[0] == status)
-        icon  = next(rec[1] for rec in cls.STATUS_ICONS if rec[0] == status)
+        icon = next(rec[1] for rec in cls.STATUS_ICONS if rec[0] == status)
         return u'<img src="{static_url}{icon}" alt="{title}" title="{title}" />'.format(
             static_url=settings.STATIC_URL, icon=icon, title=title)
 

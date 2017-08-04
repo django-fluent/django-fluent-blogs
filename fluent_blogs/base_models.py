@@ -117,11 +117,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
         publication_date = self.publication_date or now()
         relative_url = appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
-            year = publication_date.strftime('%Y'),
-            month = publication_date.strftime('%m'),
-            day = publication_date.strftime('%d'),
-            slug = '{slug}',
-            pk = '{pk}',
+            year=publication_date.strftime('%Y'),
+            month=publication_date.strftime('%m'),
+            day=publication_date.strftime('%d'),
+            slug='{slug}',
+            pk='{pk}',
         )
         return root + relative_url
 
@@ -145,11 +145,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
         """
         # Return the link style, using the permalink style setting.
         return appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE.lstrip('/').format(
-            year = self.publication_date.strftime('%Y'),
-            month = self.publication_date.strftime('%m'),
-            day = self.publication_date.strftime('%d'),
-            slug = self.slug,
-            pk = self.pk,
+            year=self.publication_date.strftime('%Y'),
+            month=self.publication_date.strftime('%m'),
+            day=self.publication_date.strftime('%d'),
+            slug=self.slug,
+            pk=self.pk,
         )
 
     def get_current_language(self):
@@ -211,6 +211,7 @@ class IntroEntryMixin(models.Model):
 
     class Meta:
         abstract = True
+
 
 # Support old names.
 ExcerptEntryMixin = IntroEntryMixin
@@ -284,7 +285,7 @@ class TagsEntryMixin(TagsMixin):
         """
         Find similar objects using related tags.
         """
-        #TODO: filter appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
+        # TODO: filter appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
         #    filters.setdefault('parent_site', self.parent_site_id)
 
         # FIXME: Using super() doesn't work, calling directly.
@@ -304,8 +305,8 @@ class SeoEntryMixin(models.Model):
 
 
 class AbstractTranslatableEntryBase(
-    TranslatableModel,
-    AbstractSharedEntryBaseMixin):
+        TranslatableModel,
+        AbstractSharedEntryBaseMixin):
     """
     The translatable abstract entry base model.
     """
@@ -333,8 +334,8 @@ class AbstractTranslatableEntryBase(
 
 
 class AbstractTranslatedFieldsEntryBase(
-    TranslatedFieldsModel,
-    AbstractTranslatedFieldsEntryBaseMixin):
+        TranslatedFieldsModel,
+        AbstractTranslatedFieldsEntryBaseMixin):
     """
     The translatable fields for the base entry model.
     """

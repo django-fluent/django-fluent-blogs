@@ -65,7 +65,8 @@ def get_entry_model():
         # Auto-register with django-fluent-comments moderation
         if 'fluent_comments' in settings.INSTALLED_APPS and issubclass(_EntryModel, CommentsEntryMixin):
             from fluent_comments.moderation import moderate_model
-            moderate_model(_EntryModel,
+            moderate_model(
+                _EntryModel,
                 publication_date_field='publication_date',
                 enable_comments_field='enable_comments',
             )

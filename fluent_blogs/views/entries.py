@@ -70,7 +70,6 @@ class BaseArchiveMixin(BaseBlogMixin):
             queryset = queryset.order_by(*ordering)
         return queryset
 
-
     def get_template_names(self):
         names = super(BaseArchiveMixin, self).get_template_names()
 
