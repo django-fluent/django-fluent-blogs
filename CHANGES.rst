@@ -1,5 +1,5 @@
-Version 1.3 (2017-07-04)
---------------------------
+Version 1.3 (2017-08-04)
+------------------------
 
 * Dropped Django 1.6 and 1.7 support.
 * Fix migrations being regenerated on Python 3 due to str/bytes differences.
