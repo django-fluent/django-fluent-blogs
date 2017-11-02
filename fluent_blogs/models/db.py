@@ -1,8 +1,8 @@
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from fluent_utils.django_compat import get_model
 from fluent_blogs.base_models import CommentsEntryMixin, AbstractTranslatableEntry, AbstractTranslatedFieldsEntry
 from fluent_blogs import appsettings
 
@@ -57,7 +57,7 @@ def get_entry_model():
             _EntryModel = Entry
         else:
             app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
-            _EntryModel = get_model(app_label, model_name)
+            _EntryModel = apps.get_model(app_label, model_name)
 
             if _EntryModel is None:
                 raise ImportError("{app_label}.{model_name} could not be imported.".format(app_label=app_label, model_name=model_name))
@@ -88,7 +88,7 @@ def get_category_model():
     """
     app_label, model_name = appsettings.FLUENT_BLOGS_CATEGORY_MODEL.rsplit('.', 1)
     try:
-        return get_model(app_label, model_name)
+        return apps.get_model(app_label, model_name)
     except Exception as e:  # ImportError/LookupError
         raise ImproperlyConfigured("Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{0}': {1}".format(
             appsettings.FLUENT_BLOGS_CATEGORY_MODEL, str(e)

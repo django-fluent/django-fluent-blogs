@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import NoReverseMatch
 from django.db import models
@@ -16,7 +17,6 @@ from fluent_blogs.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
 from fluent_contents.extensions import PluginHtmlField, PluginImageField
 from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
-from fluent_utils.django_compat import AUTH_USER_MODEL
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
 
@@ -88,7 +88,7 @@ class AbstractSharedEntryBaseMixin(models.Model):
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
-    author = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_('author'))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('author'))
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 
