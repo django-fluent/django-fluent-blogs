@@ -188,7 +188,7 @@ class DummyCategoryBase(MPTTModel):
     This base model includes the absolute bare bones fields and methods. One
     could simply subclass this model and do nothing else and it should work.
     """
-    parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     slug = models.SlugField()
 
