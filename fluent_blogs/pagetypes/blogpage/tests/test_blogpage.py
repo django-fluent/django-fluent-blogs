@@ -6,7 +6,6 @@ from django.contrib.admin.templatetags.admin_urls import admin_urlname
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 from django.test.utils import override_settings
 from django.utils import translation
@@ -14,6 +13,7 @@ from django.utils import translation
 from fluent_blogs.admin import EntryAdmin
 from fluent_blogs.models import Entry
 from fluent_blogs.pagetypes.blogpage.models import BlogPage
+from fluent_utils.django_compat import reverse
 from fluent_pages.urlresolvers import PageTypeNotMounted
 
 
