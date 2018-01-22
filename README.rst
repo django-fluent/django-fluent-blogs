@@ -21,7 +21,7 @@ This is a basic blogging engine, with the following features:
 Used applications:
 
 * Categories based on django-categories-i18n_ (or django-categories_).
-* *Optional* comments based on django.contrib.comments_
+* *Optional* comments based on django-contrib-comments_
 * *Optional* multilingual support based on django-parler_.
 * *Optional* integration with django-taggit_ and django-taggit-autocomplete-modified_ for tag support
 * *Optional* integration with django-fluent-comments_ for Ajax-based comments
@@ -70,7 +70,7 @@ Add the applications to ``settings.py``:
         'slug_preview',
 
         # Optional commenting support
-        'django.contrib.comments',
+        'django_comments',
 
         # Optional tagging
         'taggit',
@@ -88,7 +88,7 @@ Include the apps in ``urls.py``:
 
     urlpatterns += patterns('',
         url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
-        url(r'^blog/comments/', include('django.contrib.comments.urls')),
+        url(r'^blog/comments/', include('django_comments.urls')),
         url(r'^blog/', include('fluent_blogs.urls')),
     )
 
@@ -146,8 +146,8 @@ The filename of the base template can also be changed by defining the  ``FLUENT_
 Comments
 ~~~~~~~~
 
-The commenting support can be based on django.contrib.comments_, or any other system of your choice.
-To integrate django.contrib.comments_ with your site theme, also create a ``comments/base.html`` template that maps the blocks:
+The commenting support can be based on django-contrib-comments_, or any other system of your choice.
+To integrate django-contrib-comments_ with your site theme, also create a ``comments/base.html`` template that maps the blocks:
 
 * ``title``
 * ``content``
@@ -185,7 +185,7 @@ To integrate with the page types of django-fluent-pages_, don't include ``fluent
 
     urlpatterns += patterns('',
         url(r'^admin/util/taggit_autocomplete_modified/', include('taggit_autocomplete_modified.urls')),
-        url(r'^blog/comments/', include('django.contrib.comments.urls')),   # or fluent_comments.urls
+        url(r'^blog/comments/', include('django_comments.urls')),   # or fluent_comments.urls
     )
 
 Instead, add a page type instead:
@@ -210,8 +210,8 @@ To use Ajax-based commenting features of django-fluent-comments_, include it in 
 
     INSTALLED_APPS += (
         'fluent_blogs',
-        'fluent_comments',      # Before django.contrib.comments
-        'django.contrib.comments',
+        'fluent_comments',      # Before django_comments
+        'django_comments',
 
         ...
     )
@@ -233,7 +233,7 @@ the required CSS and JavaScript files to have a Ajax-based commenting system.
 Integration with other commenting systems
 -----------------------------------------
 
-To use a different commenting system instead of django.contrib.comments_ (e.g. DISQUS_ or Facebook-comments_), override the following templates:
+To use a different commenting system instead of django-contrib-comments_ (e.g. DISQUS_ or Facebook-comments_), override the following templates:
 
 * ``fluent_blogs/entry_detail/comments.html``
 
@@ -332,7 +332,7 @@ Pull requests are welcome too. :-)
 .. _DISQUS: http://disqus.com/
 .. _django-blog-zinnia: http://django-blog-zinnia.com/documentation/
 .. _django.contrib.syndication: https://docs.djangoproject.com/en/dev/ref/contrib/syndication/
-.. _django.contrib.comments: https://docs.djangoproject.com/en/dev/ref/contrib/comments/
+.. _django-contrib-comments: https://django-contrib-comments.readthedocs.io/
 .. _django.contrib.sitemaps: https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/
 .. _django-categories: https://github.com/callowayproject/django-categories
 .. _django-categories-i18n: https://github.com/django-parler/django-categories-i18n

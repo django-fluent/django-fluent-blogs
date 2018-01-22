@@ -8,22 +8,22 @@ Pillow >= 4.2.1
 pytz >= 2017.2
 
 # Requirements for fluent-blogs
-django-fluent-contents[text,code,markup,oembeditem] >= 1.2.1
-django-fluent-utils >= 1.3.2
-django-parler >= 1.8
+django-fluent-contents[text,code,markup,oembeditem] >= 2.0
+django-fluent-utils >= 2.0
+django-parler >= 1.9.1
 django-slug-preview >= 1.0.2
 django-tag-parser >= 3.1
 
 # Optional requirements
-django-categories-i18n >= 1.0
+django-categories-i18n >= 1.1
 django-taggit >= 0.22.1
 django-taggit-autosuggest >= 0.3.1
 django-tinymce >= 2.6.0
 
 # For other examples:
-django-mptt >= 0.8.7
-django-fluent-comments >= 1.4.2
-django-fluent-pages >= 1.1.2
+django-mptt >= 0.9.0
+django-fluent-comments >= 2.0
+django-fluent-pages >= 2.0
 
 # These dependencies are all implied by the [text,code,markup,oembeditem,formdesignerlink] construct:
 ## For code plugin

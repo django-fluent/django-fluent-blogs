@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/apps/tinymce/', include('tinymce.urls')),
     url(r'^admin/apps/tags/', include('taggit_autosuggest.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     url(r'^comments/', include('django_comments.urls')),
     #url(r'^forms/', include('form_designer.urls')),

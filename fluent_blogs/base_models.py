@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
+from django.urls import NoReverseMatch
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -16,7 +17,6 @@ from fluent_blogs.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
 from fluent_contents.extensions import PluginHtmlField, PluginImageField
 from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
-from fluent_utils.django_compat import NoReverseMatch  # Django 1.9-
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
 

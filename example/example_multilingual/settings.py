@@ -25,7 +25,7 @@ PARLER_LANGUAGES = {
 }
 
 # NOTE: this middleware is not required, you can also use our own variation to set the frontend language.
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'django.middleware.locale.LocaleMiddleware',
 )
 

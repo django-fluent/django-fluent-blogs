@@ -1,9 +1,9 @@
 from django.template import Library
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from fluent_blogs.admin import EntryAdmin
 from fluent_blogs.models import get_entry_model
-from fluent_utils.django_compat import reverse  # Django 1.9-
 
 register = Library()
 

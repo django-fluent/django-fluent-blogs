@@ -1,4 +1,4 @@
-{% load i18n fluent_blogs_comments_tags %}{# fluent_blogs_comments_tags == django.contrib.comments library, but makes it optional #}
+{% load i18n fluent_blogs_comments_tags %}{# fluent_blogs_comments_tags == django_comments library, but makes it optional #}
 {% with comment_count=object.comments.count %}
 
   <div id="comments-wrapper">

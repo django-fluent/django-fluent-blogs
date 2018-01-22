@@ -39,7 +39,7 @@ setup(
     license='Apache 2.0',
 
     install_requires=[
-        'django-fluent-contents>=1.0',
+        'django-fluent-contents>=2.0',
         'django-fluent-utils>=2.0',
         'django-categories-i18n>=1.1',
         'django-parler>=1.9.1',
@@ -47,14 +47,14 @@ setup(
         'django-tag-parser>=3.1',
     ],
     requires=[
-        'Django (>=1.8)',
+        'Django (>=1.10)',
     ],
     extras_require = {
         'tests': [
-            'django-fluent-pages>=1.0.1',
+            'django-fluent-pages>=2.0.1',
             'django-wysiwyg>=0.7.1',
         ],
-        'blogpage': ['django-fluent-pages>=1.0.1'],
+        'blogpage': ['django-fluent-pages>=2.0.1'],
         'taggit': ['taggit', 'taggit-autosuggest'],
     },
     description='A blog engine with flexible block contents (based on django-fluent-contents).',
@@ -85,8 +85,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Framework :: Django',
-        'Framework :: Django :: 1.8',
-        'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',

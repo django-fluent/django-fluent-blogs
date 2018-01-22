@@ -347,6 +347,12 @@ form label {
 }
 
 
+/* bootstrap 3 comments */
+
+.control-group {
+  clear: left;
+}
+
 /* ---- standard resets and utils ---- */
 
 :focus       { outline: 0; }
