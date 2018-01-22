@@ -1,3 +1,12 @@
+Version 2.0 (2018-01-22)
+------------------------
+
+* Added Django 2.0 support.
+* Fixed support for django-polymorphic_ 2.0.
+* Fixed ``og:type`` for blog articles, to return ``article``.
+* Dropped Django 1.8 and 1.9 support.
+
+
 Version 1.3 (2017-08-04)
 ------------------------
 
