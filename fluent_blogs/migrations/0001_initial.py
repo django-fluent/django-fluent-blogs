@@ -42,9 +42,9 @@ class Migration(migrations.Migration):
                 ('publication_end_date', models.DateTimeField(db_index=True, null=True, verbose_name='publication end date', blank=True)),
                 ('creation_date', models.DateTimeField(auto_now_add=True, verbose_name='creation date')),
                 ('modification_date', models.DateTimeField(auto_now=True, verbose_name='last modification')),
-                ('author', models.ForeignKey(verbose_name='author', to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(verbose_name='author', on_delete=models.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('categories', models.ManyToManyField(to=fluent_blogs.appsettings.FLUENT_BLOGS_CATEGORY_MODEL, verbose_name='Categories', blank=True)),
-                ('parent_site', models.ForeignKey(default=fluent_blogs.base_models._get_current_site, editable=False, to='sites.Site')),
+                ('parent_site', models.ForeignKey(default=fluent_blogs.base_models._get_current_site, on_delete=models.CASCADE, editable=False, to='sites.Site')),
             ],
             options={
                 'ordering': ('-publication_date',),
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 ('meta_keywords', models.CharField(default='', help_text='When this field is not filled in, the the tags will be used.', max_length=255, verbose_name='keywords', blank=True)),
                 ('meta_description', models.CharField(default='', help_text='When this field is not filled in, the contents or intro text will be used.', max_length=255, verbose_name='description', blank=True)),
                 ('meta_title', models.CharField(help_text='When this field is not filled in, the menu title text will be used.', max_length=255, null=True, verbose_name='page title', blank=True)),
-                ('master', models.ForeignKey(related_name='translations', editable=False, to='fluent_blogs.Entry', null=True)),
+                ('master', models.ForeignKey(related_name='translations', on_delete=models.CASCADE, editable=False, to='fluent_blogs.Entry', null=True)),
             ],
             options={
                 'verbose_name': 'Blog entry translation',

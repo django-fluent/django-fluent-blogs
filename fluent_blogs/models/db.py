@@ -29,7 +29,7 @@ class Entry_Translation(AbstractTranslatedFieldsEntry):
     The translated fields for the blog entry.
     This model is constructed manually because the base table can be constructed from various mixins.
     """
-    master = models.ForeignKey(Entry, related_name='translations', editable=False, null=True)
+    master = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='translations', editable=False, null=True)
 
     class Meta:
         app_label = 'fluent_blogs'

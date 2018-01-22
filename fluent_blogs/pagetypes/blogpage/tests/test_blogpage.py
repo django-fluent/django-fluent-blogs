@@ -8,17 +8,13 @@ from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
+from django.test.utils import override_settings
 from django.utils import translation
 
 from fluent_blogs.admin import EntryAdmin
 from fluent_blogs.models import Entry
 from fluent_blogs.pagetypes.blogpage.models import BlogPage
 from fluent_pages.urlresolvers import PageTypeNotMounted
-
-try:
-    from django.test.utils import override_settings
-except ImportError:
-    override_settings = None
 
 
 class BlogPageTests(TestCase):

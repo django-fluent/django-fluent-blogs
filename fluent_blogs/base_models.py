@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import NoReverseMatch
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
@@ -17,8 +16,10 @@ from fluent_blogs.managers import EntryManager, TranslatableEntryManager
 from fluent_blogs import appsettings
 from fluent_contents.extensions import PluginHtmlField, PluginImageField
 from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
+from fluent_utils.django_compat import NoReverseMatch  # Django 1.9-
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
+
 
 # Rename to old class names
 CommentsEntryMixin = CommentsMixin
@@ -81,14 +82,14 @@ class AbstractSharedEntryBaseMixin(models.Model):
         (DRAFT, _('Draft')),
     )
 
-    parent_site = models.ForeignKey(Site, editable=False, default=_get_current_site)
+    parent_site = models.ForeignKey(Site, on_delete=models.CASCADE, editable=False, default=_get_current_site)
 
     status = models.CharField(_('status'), max_length=1, choices=STATUSES, default=DRAFT, db_index=True)
     publication_date = models.DateTimeField(_('publication date'), null=True, db_index=True, help_text=_('''When the entry should go live, status must be "Published".'''))
     publication_end_date = models.DateTimeField(_('publication end date'), null=True, blank=True, db_index=True)
 
     # Metadata
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('author'))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name=_('author'))
     creation_date = models.DateTimeField(_('creation date'), editable=False, auto_now_add=True)
     modification_date = models.DateTimeField(_('last modification'), editable=False, auto_now=True)
 

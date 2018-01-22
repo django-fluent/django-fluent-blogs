@@ -40,14 +40,14 @@ setup(
 
     install_requires=[
         'django-fluent-contents>=1.0',
-        'django-fluent-utils>=1.3.3',      # DRY utility code
-        'django-categories-i18n>=1.0',
-        'django-parler>=1.6',              # Ensure Django 1.9 compatibility
+        'django-fluent-utils>=2.0',
+        'django-categories-i18n>=1.1',
+        'django-parler>=1.9.1',
         'django-slug-preview>=1.0.1',
-        'django-tag-parser>=3.0',          # Ensure Django 1.8 compatibility
+        'django-tag-parser>=3.1',
     ],
     requires=[
-        'Django (>=1.6)',
+        'Django (>=1.8)',
     ],
     extras_require = {
         'tests': [
@@ -72,7 +72,7 @@ setup(
     test_suite = 'runtests',
     zip_safe=False,
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
@@ -81,14 +81,15 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Django',
-        'Framework :: Django :: 1.6',
-        'Framework :: Django :: 1.7',
         'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
