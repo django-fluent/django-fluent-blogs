@@ -1,3 +1,9 @@
+Version 2.0.1 (2018-02-05)
+--------------------------
+
+* Added missing migration for the new ``on_delete=SET_NULL`` behavior for the author field.
+
+
 Version 2.0 (2018-01-22)
 ------------------------
 
