@@ -215,7 +215,7 @@ class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
 
     def get_user(self, slug):
         User = get_user_model()
-        return get_object_or_404(User, username=slug)
+        return get_object_or_404(User, **{User.USERNAME_FIELD: slug})
 
 
 class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):

@@ -35,10 +35,10 @@ urlpatterns = [
     url(r'^categories/(?P<slug>[-\w]+)/feed.atom$', LatestCategoryEntriesFeed.as_view(format='atom1'), name='entry_archive_category_atom'),
 
     # Authors
-    url(r'^authors/(?P<slug>[-\w]+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author'),
-    url(r'^authors/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author_paginated'),
-    url(r'^authors/(?P<slug>[-\w]+)/feed.rss2$', LatestAuthorEntriesFeed.as_view(format='rss2.0'), name='entry_archive_author_rss'),
-    url(r'^authors/(?P<slug>[-\w]+)/feed.atom$', LatestAuthorEntriesFeed.as_view(format='atom1'), name='entry_archive_author_atom'),
+    url(r'^authors/(?P<slug>[-_@.\w]+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author'),
+    url(r'^authors/(?P<slug>[-_@.\w]+)/page/(?P<page>\d+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author_paginated'),
+    url(r'^authors/(?P<slug>[-_@.\w]+)/feed.rss2$', LatestAuthorEntriesFeed.as_view(format='rss2.0'), name='entry_archive_author_rss'),
+    url(r'^authors/(?P<slug>[-_@.\w]+)/feed.atom$', LatestAuthorEntriesFeed.as_view(format='atom1'), name='entry_archive_author_atom'),
 
     # Short link
     url(r'^(?P<pk>\d+)/$', EntryShortLink.as_view(), name='entry_shortlink'),   # Short link can also be used as GUID.

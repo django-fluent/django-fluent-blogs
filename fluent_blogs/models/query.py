@@ -4,12 +4,15 @@ A query interface to retrieve blog models and tags.
 from calendar import monthrange
 from datetime import datetime, timedelta
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
 from django.utils.timezone import utc
 from fluent_blogs import appsettings
 from fluent_blogs.models.db import get_entry_model, get_category_model
 from parler.models import TranslatableModel
+
+User = get_user_model()
 
 __all__ = (
     'query_entries',
@@ -20,7 +23,7 @@ ENTRY_ORDER_BY_FIELDS = {
     'slug': 'slug',
     'title': 'title',
     'author': ('author__first_name', 'author__last_name'),
-    'author_slug': ('author__username',),
+    'author_slug': ('author__{}'.format(User.USERNAME_FIELD),),
     'category': ('categories__name',),
     'category_slug': ('categories__slug',),
     'tag': ('tags__name',),

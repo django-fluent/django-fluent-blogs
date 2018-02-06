@@ -51,9 +51,9 @@ class EntryQuerySet(QuerySet):
         When multiple tags are provided, they operate as "OR" query.
         """
         if len(usernames) == 1:
-            return self.filter(author__username=usernames[0])
+            return self.filter(**{"author__{}".format(User.USERNAME_FIELD): usernames[0]})
         else:
-            return self.filter(author__username__in=usernames)
+            return self.filter(**{"author__{}__in".format(User.USERNAME_FIELD): usernames})
 
     def categories(self, *category_slugs):
         """

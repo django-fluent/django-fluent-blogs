@@ -14,14 +14,14 @@
     {{ block.super }}
     {% if category %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with category=category %}RSS Feed for {{ category }}{% endblocktrans %}" href="{% blogurl 'entry_archive_category_rss' category.slug %}" />{% endif %}
     {% if tag %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with tag=tag %}RSS Feed for {{ tag }}{% endblocktrans %}" href="{% blogurl 'entry_archive_tag_rss' tag.slug %}" />{% endif %}
-    {% if author %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with author_name=author.get_full_name|default:author.username %}RSS Feed for {{ author_name }}{% endblocktrans %}" href="{% blogurl 'entry_archive_author_rss' author.username %}" />{% endif %}
+    {% if author %}<link rel="alternate" type="application/rss+xml" title="{% blocktrans with author_name=author.get_full_name|default:author.get_username %}RSS Feed for {{ author_name }}{% endblocktrans %}" href="{% blogurl 'entry_archive_author_rss' author.get_username %}" />{% endif %}
 {% endblock %}
 
 {% block title %}
   {% trans "Latest entries" %}
   {% if category %}| {% blocktrans with category=category %}Category {{ category }}{% endblocktrans %}{% endif %}
   {% if tag %}| {% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}{% endif %}
-  {% if author %}| {% blocktrans with author_name=author.get_full_name|default:author.username %}Author {{ author_name }}{% endblocktrans %}{% endif %}
+  {% if author %}| {% blocktrans with author_name=author.get_full_name|default:author.get_username %}Author {{ author_name }}{% endblocktrans %}{% endif %}
   {% if page_obj and page_obj.number != 1 %} | {% blocktrans with number=page_obj.number %}Page {{ number }}{% endblocktrans %}{% endif %}
 {% endblock %}
 
@@ -29,7 +29,7 @@
   {% block content_title %}
     {% if category %}<h1>{{ category }}</h1>{% endif %}
     {% if tag %}<h1>{% blocktrans with tag=tag %}Tag {{ tag }}{% endblocktrans %}</h1>{% endif %}
-    {% if author %}<h1>{% blocktrans with author.get_full_name|default:author.username as author_name %}Entries by {{ author_name }}{% endblocktrans %}</h1>{% endif %}
+    {% if author %}<h1>{% blocktrans with author.get_full_name|default:author.get_username as author_name %}Entries by {{ author_name }}{% endblocktrans %}</h1>{% endif %}
 
     {% if category and category.description %}
       <p>{{ category.description|striptags|safe }}</p>

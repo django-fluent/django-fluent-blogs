@@ -55,7 +55,7 @@ class AuthorArchiveSitemap(Sitemap):
 
     def items(self):
         only_ids = EntryModel.objects.published().values('author').order_by().distinct()
-        return User.objects.filter(id__in=only_ids)
+        return User.objects.filter(id__in=only_ids).order_by(User.USERNAME_FIELD)
 
     def lastmod(self, author):
         """Return the last modification of the entry."""
@@ -64,7 +64,7 @@ class AuthorArchiveSitemap(Sitemap):
 
     def location(self, author):
         """Return url of an entry."""
-        return blog_reverse('entry_archive_author', kwargs={'slug': author.username}, ignore_multiple=True)
+        return blog_reverse('entry_archive_author', kwargs={'slug': author.get_username()}, ignore_multiple=True)
 
 
 class TagArchiveSitemap(Sitemap):
