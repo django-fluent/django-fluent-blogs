@@ -77,12 +77,11 @@ class TagArchiveSitemap(Sitemap):
         from taggit.models import Tag
         only_instances = EntryModel.objects.published().only('pk')
 
-        # Until https://github.com/alex/django-taggit/pull/86 is merged,
-        # better use the field names directly instead of bulk_lookup_kwargs
+        # Use the same filters as TaggedItem.bulk_lookup_kwargs()
         return Tag.objects.filter(
             taggit_taggeditem_items__object_id__in=only_instances,
             taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(EntryModel)
-        )
+        ).order_by('slug').distinct()
 
     def lastmod(self, tag):
         """Return the last modification of the entry."""
