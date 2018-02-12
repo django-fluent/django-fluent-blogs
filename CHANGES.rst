@@ -1,3 +1,11 @@
+Version 2.0.2 (2018-02-12)
+--------------------------
+
+* Added support for custom user model / username fields on Django 1.11+
+* Fix duplicate tag pages in the sitemap
+* Fix HTML display in admin list columns for Django 2.0
+
+
 Version 2.0.1 (2018-02-05)
 --------------------------
 
