@@ -3,8 +3,10 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AdminTextInputWidget, AdminTextareaWidget
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import NoReverseMatch
+from django.utils.html import format_html
 from django.utils.timezone import now
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.safestring import mark_safe
 from fluent_blogs import appsettings
 from fluent_blogs.admin.forms import AbstractEntryBaseAdminForm, AbstractTranslatableEntryBaseAdminForm
 from fluent_blogs.base_models import AbstractEntryBase
@@ -124,7 +126,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         # Create a status column, is also reused by templatetags/fluent_blogs_admin_tags.py
         title = next(rec[1] for rec in AbstractEntryBase.STATUSES if rec[0] == entry.status)
         icon = cls.STATUS_ICONS[entry.status]
-        return u'<img src="{static_url}{icon}" alt="{title}" title="{title}" />'.format(
+        return format_html('<img src="{static_url}{icon}" alt="{title}" title="{title}" />',
             static_url=settings.STATIC_URL, icon=icon, title=title)
 
     def status_column(self, entry):
@@ -136,7 +138,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
 
     @classmethod
     def get_actions_column(cls, entry):
-        return u' '.join(cls._actions_column_icons(entry))
+        return mark_safe(' '.join(cls._actions_column_icons(entry)))
 
     @classmethod
     def _actions_column_icons(cls, entry):
@@ -152,7 +154,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
                 pass
             else:
                 actions.append(
-                    u'<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_blogs/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>'.format(
+                    format_html('<a href="{url}" title="{title}" target="_blank"><img src="{static}fluent_blogs/img/admin/world.gif" width="16" height="16" alt="{title}" /></a>',
                         url=url, title=_('View on site'), static=settings.STATIC_URL)
                 )
         return actions
