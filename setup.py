@@ -39,11 +39,11 @@ setup(
     license='Apache 2.0',
 
     install_requires=[
-        'django-fluent-contents>=2.0',
+        'django-fluent-contents>=2.0.2',
         'django-fluent-utils>=2.0',
         'django-categories-i18n>=1.1',
         'django-parler>=1.9.1',
-        'django-slug-preview>=1.0.1',
+        'django-slug-preview>=1.0.4',
         'django-tag-parser>=3.1',
     ],
     requires=[
