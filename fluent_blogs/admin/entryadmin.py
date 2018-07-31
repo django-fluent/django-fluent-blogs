@@ -32,12 +32,17 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         'fields': ('title', 'slug', 'status',),  # is filled with ('contents', 'categories', 'tags', 'enable_comments') below
     })
 
-    fieldsets = [
-        FIELDSET_GENERAL,
-        AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
-    ]
     if 'meta_keywords' in _model_fields:
-        fieldsets.append(SeoEntryAdminMixin.FIELDSET_SEO)
+        fieldsets = [
+            FIELDSET_GENERAL,
+            SeoEntryAdminMixin.FIELDSET_SEO,
+            AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
+        ]
+    else:
+        fieldsets = [
+            FIELDSET_GENERAL,
+            AbstractEntryBaseAdmin.FIELDSET_PUBLICATION,
+        ]
 
     list_filter = ['status']  # reset, is rebuilt below.
     html_fields = []  # auto filled with excerpt_text
@@ -58,7 +63,6 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
         extra_context = extra_context or {}
         extra_context['html_fields'] = self.html_fields
         return super(EntryAdmin, self).change_view(request, object_id, form_url=form_url, extra_context=extra_context)
-
 
 
 # Add all optional mixin fields

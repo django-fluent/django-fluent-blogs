@@ -225,7 +225,7 @@ class SeoEntryAdminMixin(object):
     Mixin for the SEO fields.
     """
     FIELDSET_SEO = (_('SEO settings'), {
-        'fields': ('meta_keywords', 'meta_description', 'meta_title',),
+        'fields': ('meta_title', 'meta_keywords', 'meta_description',),
         'classes': ('collapse',),
     })
 
