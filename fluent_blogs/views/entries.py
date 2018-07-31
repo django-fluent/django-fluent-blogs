@@ -55,7 +55,7 @@ class BaseArchiveMixin(BaseBlogMixin):
     date_field = 'publication_date'
     month_format = '%m'
     allow_future = False
-    paginate_by = 10
+    paginate_by = appsettings.FLUENT_BLOGS_PAGINATE_BY
 
     def get_queryset(self):
         queryset = super(BaseArchiveMixin, self).get_queryset()
