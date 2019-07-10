@@ -1,6 +1,7 @@
 """
 A query interface to retrieve blog models and tags.
 """
+import sys
 import django
 from calendar import monthrange
 from datetime import datetime, timedelta
@@ -12,6 +13,10 @@ from django.utils.timezone import utc
 from fluent_blogs import appsettings
 from fluent_blogs.models.db import get_entry_model, get_category_model
 from parler.models import TranslatableModel
+
+
+if sys.version_info[0] >= 3:
+    basestring = str
 
 
 __all__ = (
