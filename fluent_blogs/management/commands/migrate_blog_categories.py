@@ -1,4 +1,5 @@
-from django import apps
+from argparse import RawTextHelpFormatter
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
@@ -28,6 +29,11 @@ class Command(BaseCommand):
         " - remove 'categories' from INSTALLED_APPS.\n"
     )
 
+    def create_parser(self, *args, **kwargs):
+        parser = super(Command, self).create_parser(*args, **kwargs)
+        parser.formatter_class = RawTextHelpFormatter
+        return parser
+
     def add_arguments(self, parser):
         super(Command, self).add_arguments(parser)
         parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
@@ -40,7 +46,7 @@ class Command(BaseCommand):
         Entry = get_entry_model()
         CategoryM2M = Entry.categories.through
         old_fk = CategoryM2M._meta.get_field('category')
-        CurrentModel = old_fk.rel.to
+        CurrentModel = old_fk.remote_field.model
         self.stdout.write("Current Entry.categories model: <{0}.{1}>".format(
             CurrentModel._meta.app_label, CurrentModel._meta.object_name
         ))
