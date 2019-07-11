@@ -34,6 +34,7 @@ if not settings.configured:
             'django.contrib.sites',
             'django.contrib.admin',
             'django.contrib.sessions',
+            'django.contrib.messages',
             'fluent_pages',
             'fluent_blogs',
             'fluent_blogs.pagetypes.blogpage',
@@ -45,11 +46,12 @@ if not settings.configured:
             'polymorphic',
             'polymorphic_tree',
         ),
-        MIDDLEWARE_CLASSES = (
+        MIDDLEWARE = (
             'django.middleware.common.CommonMiddleware',
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.middleware.csrf.CsrfViewMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
         ),
         TEMPLATES=[
             {
@@ -66,6 +68,7 @@ if not settings.configured:
                         'django.template.context_processors.media',
                         'django.template.context_processors.request',
                         'django.template.context_processors.static',
+                        'django.contrib.messages.context_processors.messages',
                         'django.contrib.auth.context_processors.auth',
                     ),
                 },
