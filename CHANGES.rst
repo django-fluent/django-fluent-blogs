@@ -1,8 +1,18 @@
+Version 2.0.4 (tbd)
+-------------------
+
+* Fixed ``manage.py migrate_blog_categories`` command for modern Django.
+* Fix Python 3 issue with ``query_entries()`` / ``{% get_entries category='..' %}``.
+* Reorder admin fieldsets to match django-fluent-pages_.
+* Reformatted all files with isort and black.
+
+
 Version 2.0.3 (2018-07-31)
 --------------------------
 
 * Added ``FLUENT_BLOGS_PAGINATE_BY`` setting.
 * Enforce newer django-slug-preview_ and django-fluent-contents_ for proper Django 2.0 support
+
 
 Version 2.0.2 (2018-02-12)
 --------------------------
