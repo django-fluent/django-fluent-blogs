@@ -3,8 +3,11 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from fluent_blogs.base_models import CommentsEntryMixin, AbstractTranslatableEntry, AbstractTranslatedFieldsEntry
+
 from fluent_blogs import appsettings
+from fluent_blogs.base_models import (AbstractTranslatableEntry,
+                                      AbstractTranslatedFieldsEntry,
+                                      CommentsEntryMixin)
 
 
 class Entry(AbstractTranslatableEntry):

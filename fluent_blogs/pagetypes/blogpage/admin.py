@@ -1,5 +1,7 @@
 from django.contrib import admin
-from fluent_pages.integration.fluent_contents.admin import FluentContentsPageAdmin
+from fluent_pages.integration.fluent_contents.admin import \
+    FluentContentsPageAdmin
+
 from .models import BlogPage
 
 

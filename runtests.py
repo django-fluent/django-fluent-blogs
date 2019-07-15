@@ -1,11 +1,12 @@
 #!/usr/bin/env python -Wd
 import sys
 import warnings
-import django
-from django.conf import settings, global_settings as default_settings
-from django.core.management import execute_from_command_line
 from os import path
 
+import django
+from django.conf import global_settings as default_settings
+from django.conf import settings
+from django.core.management import execute_from_command_line
 
 # python -Wd, or run via coverage:
 warnings.simplefilter('always', DeprecationWarning)

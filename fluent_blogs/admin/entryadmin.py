@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.contrib.admin import widgets
+from parler.models import TranslatableModel
 
 from fluent_blogs import appsettings
-from fluent_blogs.admin.abstractbase import AbstractEntryBaseAdmin, AbstractTranslatableEntryBaseAdmin, SeoEntryAdminMixin
+from fluent_blogs.admin.abstractbase import (
+    AbstractEntryBaseAdmin, AbstractTranslatableEntryBaseAdmin,
+    SeoEntryAdminMixin)
 from fluent_blogs.models import get_entry_model
-from parler.models import TranslatableModel
 
 EntryModel = get_entry_model()
 _model_fields = [f.name for f in EntryModel._meta.get_fields()]

@@ -1,8 +1,15 @@
 from django.conf import settings
 from django.conf.urls import url
-from fluent_blogs.views.entries import EntryArchiveIndex, EntryYearArchive, EntryMonthArchive, EntryDayArchive, EntryDetail, EntryShortLink, EntryCategoryArchive, EntryAuthorArchive, EntryTagArchive
-from fluent_blogs.views.feeds import LatestEntriesFeed, LatestCategoryEntriesFeed, LatestAuthorEntriesFeed, LatestTagEntriesFeed
+
 from fluent_blogs import appsettings
+from fluent_blogs.views.entries import (EntryArchiveIndex, EntryAuthorArchive,
+                                        EntryCategoryArchive, EntryDayArchive,
+                                        EntryDetail, EntryMonthArchive,
+                                        EntryShortLink, EntryTagArchive,
+                                        EntryYearArchive)
+from fluent_blogs.views.feeds import (LatestAuthorEntriesFeed,
+                                      LatestCategoryEntriesFeed,
+                                      LatestEntriesFeed, LatestTagEntriesFeed)
 
 
 def _get_entry_regex():

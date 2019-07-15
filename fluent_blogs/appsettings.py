@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from parler import appsettings as parler_appsettings
-from parler.utils import normalize_language_code, is_supported_django_language
+from parler.utils import is_supported_django_language, normalize_language_code
 
 if 'categories' in settings.INSTALLED_APPS:
     # old django-categories style. Keep first for backwards compatibility

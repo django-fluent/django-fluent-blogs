@@ -8,6 +8,7 @@ from django.utils import feedgenerator
 from django.utils.encoding import force_text
 from django.utils.translation import gettext
 from django.views.generic import View
+
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_category_for_slug

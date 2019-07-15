@@ -2,13 +2,12 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from parler.forms import TranslatableModelForm
+from slug_preview.forms import SlugPreviewFormMixin
 
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_date_range
-from parler.forms import TranslatableModelForm
-from slug_preview.forms import SlugPreviewFormMixin
-
 
 EntryModel = get_entry_model()
 

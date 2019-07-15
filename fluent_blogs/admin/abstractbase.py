@@ -1,21 +1,24 @@
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.admin.widgets import AdminTextInputWidget, AdminTextareaWidget
+from django.contrib.admin.widgets import (AdminTextareaWidget,
+                                          AdminTextInputWidget)
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import NoReverseMatch
 from django.utils.html import format_html
-from django.utils.timezone import now
-from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.safestring import mark_safe
-from fluent_blogs import appsettings
-from fluent_blogs.admin.forms import AbstractEntryBaseAdminForm, AbstractTranslatableEntryBaseAdminForm
-from fluent_blogs.base_models import AbstractEntryBase
-from fluent_blogs.models import get_entry_model
+from django.utils.timezone import now
+from django.utils.translation import ugettext
+from django.utils.translation import ugettext_lazy as _
 from fluent_utils.dry.admin import MultiSiteAdminMixin
-from fluent_contents.admin import PlaceholderFieldAdmin
 from parler.admin import TranslatableAdmin
 from parler.models import TranslationDoesNotExist
 
+from fluent_blogs import appsettings
+from fluent_blogs.admin.forms import (AbstractEntryBaseAdminForm,
+                                      AbstractTranslatableEntryBaseAdminForm)
+from fluent_blogs.base_models import AbstractEntryBase
+from fluent_blogs.models import get_entry_model
+from fluent_contents.admin import PlaceholderFieldAdmin
 
 EntryModel = get_entry_model()
 

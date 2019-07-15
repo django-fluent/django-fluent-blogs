@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+
 from example_standalone.urls import urlpatterns
 
 # Nothing needs to be changed for multilingual support really.

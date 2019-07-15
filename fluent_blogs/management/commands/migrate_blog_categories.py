@@ -1,4 +1,5 @@
 from argparse import RawTextHelpFormatter
+
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist

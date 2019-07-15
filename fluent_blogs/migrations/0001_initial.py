@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+import slug_preview.models
 from django.conf import settings
+from django.db import migrations, models
+
 import fluent_blogs.appsettings
 import fluent_blogs.base_models
-import slug_preview.models
 
 
 def make_site(apps, schema_editor):

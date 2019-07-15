@@ -7,19 +7,19 @@ from django.urls import NoReverseMatch
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-
+from fluent_utils.softdeps.comments import CommentsMixin
+from fluent_utils.softdeps.taggit import TagsMixin
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 from parler.utils.context import switch_language
 from slug_preview.models import SlugPreviewField
-from fluent_blogs.urlresolvers import blog_reverse
-from fluent_blogs.managers import EntryManager, TranslatableEntryManager
-from fluent_blogs import appsettings
-from fluent_contents.extensions import PluginHtmlField, PluginImageField
-from fluent_contents.models import PlaceholderField, ContentItemRelation, Placeholder
-from fluent_utils.softdeps.comments import CommentsMixin
-from fluent_utils.softdeps.taggit import TagsMixin
 
+from fluent_blogs import appsettings
+from fluent_blogs.managers import EntryManager, TranslatableEntryManager
+from fluent_blogs.urlresolvers import blog_reverse
+from fluent_contents.extensions import PluginHtmlField, PluginImageField
+from fluent_contents.models import (ContentItemRelation, Placeholder,
+                                    PlaceholderField)
 
 # Rename to old class names
 CommentsEntryMixin = CommentsMixin

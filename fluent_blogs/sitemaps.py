@@ -2,9 +2,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sitemaps import Sitemap
-from fluent_blogs.models import get_entry_model, get_category_model
-from fluent_blogs.urlresolvers import blog_reverse
 from parler.models import TranslatableModel
+
+from fluent_blogs.models import get_category_model, get_entry_model
+from fluent_blogs.urlresolvers import blog_reverse
 
 User = get_user_model()
 EntryModel = get_entry_model()

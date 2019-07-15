@@ -2,9 +2,11 @@ from datetime import date, datetime
 
 from django.conf import settings
 from django.template import Library
+from tag_parser.basetags import (BaseAssignmentOrInclusionNode,
+                                 BaseAssignmentOrOutputNode)
+
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import query_entries, query_tags
-from tag_parser.basetags import BaseAssignmentOrInclusionNode, BaseAssignmentOrOutputNode
 
 BlogPage = None
 

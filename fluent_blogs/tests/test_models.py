@@ -1,7 +1,6 @@
 from django.test import TestCase
 
-from fluent_blogs.models import Entry
-from fluent_blogs.models import get_entry_model
+from fluent_blogs.models import Entry, get_entry_model
 
 
 class ModelTests(TestCase):

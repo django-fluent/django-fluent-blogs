@@ -6,10 +6,10 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from django.utils.timezone import now
-
-from fluent_blogs import appsettings
 from parler.managers import TranslatableManager, TranslatableQuerySet
 from parler.models import TranslatableModel
+
+from fluent_blogs import appsettings
 
 
 class EntryQuerySet(QuerySet):

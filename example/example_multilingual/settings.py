@@ -1,4 +1,5 @@
-from os.path import join, dirname
+from os.path import dirname, join
+
 from example_standalone.settings import *
 
 PARLER_DEFAULT_LANGUAGE_CODE = 'en'  # defaults to LANGUAGE_CODE

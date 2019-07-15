@@ -1,9 +1,9 @@
 from django.utils.translation import ugettext_lazy as _
+from fluent_pages.integration.fluent_contents.models import FluentContentsPage
+from parler.models import TranslatableModel
 from parler.utils.context import switch_language
 
-from fluent_pages.integration.fluent_contents.models import FluentContentsPage
 from fluent_blogs.models import get_entry_model
-from parler.models import TranslatableModel
 
 
 class BlogPage(FluentContentsPage):

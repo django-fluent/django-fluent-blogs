@@ -1,5 +1,7 @@
+from fluent_pages.extensions import PageTypePlugin, page_type_pool
+
 from fluent_blogs.pagetypes.blogpage.models import BlogPage
-from fluent_pages.extensions import page_type_pool, PageTypePlugin
+
 from .admin import BlogPageAdmin
 
 
