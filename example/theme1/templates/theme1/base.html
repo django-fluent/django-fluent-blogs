@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">{% load static %}
 <html xml:lang="{{ LANGUAGE_CODE|default:"nl" }}" lang="{{ LANGUAGE_CODE|default:"nl" }}">
   <head>
     <meta charset="utf-8" />
     <title>{% block meta-title %}{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}theme1/site.css" type="text/css" />
+    <link rel="stylesheet" href="{% static 'theme1/site.css' %}" type="text/css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
     {# for fluent-blogs: #}
