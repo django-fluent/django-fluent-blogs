@@ -5,13 +5,13 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, models, transaction
-from django.utils.six import python_2_unicode_compatible
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from parler.models import TranslatableModel
 
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
+from fluent_blogs.six import python_2_unicode_compatible
 
 
 class Command(BaseCommand):

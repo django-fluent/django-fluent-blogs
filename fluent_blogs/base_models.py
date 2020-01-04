@@ -4,9 +4,9 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.urls import NoReverseMatch
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from fluent_blogs.six import python_2_unicode_compatible
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
 from parler.fields import TranslatedField

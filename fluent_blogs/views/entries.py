@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils import six, translation
+from django.utils import translation
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import (ArchiveIndexView, DayArchiveView,
                                         MonthArchiveView, YearArchiveView)
@@ -12,7 +12,7 @@ from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
 from parler.views import TranslatableSlugMixin
 
-from fluent_blogs import appsettings
+from fluent_blogs import appsettings, six
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_category_for_slug, get_date_range
 
