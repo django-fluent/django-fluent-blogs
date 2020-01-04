@@ -1,5 +1,13 @@
-Version 2.0.4 (tbd)
--------------------
+Version 2.0.5 (2020-01-04)
+--------------------------
+
+* Fixed Django 3.0 compatibility by removing ``django.utils.six`` dependency.
+* Fixed ``{% static .. %}`` usage in templates.
+* Bumped dependencies to Django 3.0 compatible versions.
+
+
+Version 2.0.4 (2019-07-15)
+--------------------------
 
 * Fixed ``manage.py migrate_blog_categories`` command for modern Django.
 * Fix Python 3 issue with ``query_entries()`` / ``{% get_entries category='..' %}``.
