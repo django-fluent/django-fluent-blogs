@@ -22,9 +22,23 @@ class BaseBlogMixin(CurrentPageMixin):
     prefetch_translations = False
     view_url_name_paginated = None
 
+    def get_base_queryset(self, for_user=None):
+        """The base queryset that all views derive from"""
+        try:
+            page = self.get_current_page()
+        except AttributeError:
+            # URL mounted view
+            return get_entry_model().objects.published(for_user=for_user)
+        else:
+            # BlogPage mounted views
+            return page.get_entry_queryset(
+                view_url_name=self.view_url_name,
+                for_user=for_user
+            )
+
     def get_queryset(self):
         # NOTE: This is also workaround, defining the queryset static somehow caused results to remain cached.
-        qs = get_entry_model().objects.published()
+        qs = self.get_base_queryset()
         if self.prefetch_translations:
             qs = qs.prefetch_related('translations')
         return qs
@@ -89,7 +103,7 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
     def get_queryset(self):
         # The DetailView redefines get_queryset() to show detail pages for staff members.
         # All other overviews won't show the draft pages yet.
-        qs = get_entry_model().objects.published(for_user=self.request.user)
+        qs = self.get_base_queryset(for_user=self.request.user)
         if self.prefetch_translations:
             qs = qs.prefetch_related('translations')
 
