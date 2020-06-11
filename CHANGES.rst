@@ -1,3 +1,11 @@
+Version 2.0.6 (2020-06-11)
+--------------------------
+
+* Added a "hidden" status to hide blog entries in the archive listings.
+  This makes the entries only accessible through a direct link.
+* Added ``BlogPage.get_entry_queryset()``, which allows limiting the entries shown at a particular ``BlogPage``.
+
+
 Version 2.0.5 (2020-01-04)
 --------------------------
 
