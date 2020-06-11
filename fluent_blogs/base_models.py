@@ -76,9 +76,11 @@ class AbstractSharedEntryBaseMixin(models.Model):
 
     # Some publication states
     DRAFT = 'd'
+    HIDDEN = 'h'
     PUBLISHED = 'p'
     STATUSES = (
         (PUBLISHED, _('Published')),
+        (HIDDEN, _('Hidden')),
         (DRAFT, _('Draft')),
     )
 

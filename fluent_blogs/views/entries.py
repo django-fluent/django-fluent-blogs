@@ -21,6 +21,7 @@ class BaseBlogMixin(CurrentPageMixin):
     context_object_name = None
     prefetch_translations = False
     view_url_name_paginated = None
+    include_hidden = False
 
     def get_base_queryset(self, for_user=None):
         """The base queryset that all views derive from"""
@@ -28,12 +29,13 @@ class BaseBlogMixin(CurrentPageMixin):
             page = self.get_current_page()
         except AttributeError:
             # URL mounted view
-            return get_entry_model().objects.published(for_user=for_user)
+            return get_entry_model().objects.published(for_user=for_user, include_hidden=self.include_hidden)
         else:
             # BlogPage mounted views
             return page.get_entry_queryset(
                 view_url_name=self.view_url_name,
-                for_user=for_user
+                for_user=for_user,
+                include_hidden=self.include_hidden
             )
 
     def get_queryset(self):
@@ -99,6 +101,7 @@ class BaseArchiveMixin(BaseBlogMixin):
 class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
     # Only relevant at the detail page, e.g. for a language switch menu.
     prefetch_translations = appsettings.FLUENT_BLOGS_PREFETCH_TRANSLATIONS
+    include_hidden = True  # only visible with direct link
 
     def get_queryset(self):
         # The DetailView redefines get_queryset() to show detail pages for staff members.

@@ -28,13 +28,13 @@ class BlogPage(FluentContentsPage):
 
         return qs
 
-    def get_entry_queryset(self, view_url_name, for_user=None):
+    def get_entry_queryset(self, view_url_name, for_user=None, include_hidden=False):
         """
         Return the base queryset that will be shown at this blog page.
         This allows subclasses of the `BlogPage` to limit which pages
         are shown at a particular mount point.
         """
-        return get_entry_model().objects.published(for_user=for_user)
+        return get_entry_model().objects.published(for_user=for_user, include_hidden=include_hidden)
 
     def get_entry_url(self, entry):
         """

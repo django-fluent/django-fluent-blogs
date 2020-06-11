@@ -121,14 +121,18 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
 
     STATUS_ICONS = {
        AbstractEntryBase.PUBLISHED: 'admin/img/icon-yes.svg',
+       AbstractEntryBase.HIDDEN: 'admin/img/icon-alert.svg',
        AbstractEntryBase.DRAFT: 'admin/img/icon-unknown.svg',
     }
 
     @classmethod
     def get_status_column(cls, entry):
         # Create a status column, is also reused by templatetags/fluent_blogs_admin_tags.py
+        try:
+            icon = cls.STATUS_ICONS[entry.status]
+        except KeyError:
+            return ''
         title = next(rec[1] for rec in AbstractEntryBase.STATUSES if rec[0] == entry.status)
-        icon = cls.STATUS_ICONS[entry.status]
         return format_html('<img src="{static_url}{icon}" alt="{title}" title="{title}" />',
             static_url=settings.STATIC_URL, icon=icon, title=title)
 

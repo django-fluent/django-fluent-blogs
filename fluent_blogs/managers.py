@@ -23,7 +23,7 @@ class EntryQuerySet(QuerySet):
         """
         return self.filter(parent_site=site)
 
-    def published(self, for_user=None):
+    def published(self, for_user=None, include_hidden=False):
         """
         Return only published entries for the current site.
         """
@@ -35,15 +35,20 @@ class EntryQuerySet(QuerySet):
         if for_user is not None and for_user.is_staff:
             return qs
 
-        return qs \
-            .filter(status=self.model.PUBLISHED) \
-            .filter(
-                Q(publication_date__isnull=True) |
-                Q(publication_date__lte=now())
-            ).filter(
-                Q(publication_end_date__isnull=True) |
-                Q(publication_end_date__gte=now())
-            )
+        if include_hidden:
+            filters = Q(status__in=(self.model.PUBLISHED, self.model.HIDDEN))
+        else:
+            filters = Q(status=self.model.PUBLISHED)
+
+        filters &= (
+            Q(publication_date__isnull=True) |
+            Q(publication_date__lte=now())
+        ) & (
+            Q(publication_date__isnull=True) |
+            Q(publication_date__lte=now())
+        )
+
+        return qs.filter(filters)
 
     def authors(self, *usernames):
         """
@@ -138,11 +143,11 @@ class EntryManager(models.Manager):
         """
         return self.all().parent_site(site)
 
-    def published(self, for_user=None):
+    def published(self, for_user=None, include_hidden=False):
         """
         Return only published entries for the current site.
         """
-        return self.all().published(for_user=for_user)
+        return self.all().published(for_user=for_user, include_hidden=include_hidden)
 
     def authors(self, *usernames):
         """
