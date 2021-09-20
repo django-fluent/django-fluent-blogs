@@ -1,0 +1,420 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-20 16:47+0200\n"
+"PO-Revision-Date: 2021-09-21 01:00+0200\n"
+"Last-Translator: Kevin Olbrich <hotline@dolphin-it.de>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: \n"
+"X-Generator: Poedit 3.0\n"
+
+#: admin/abstractbase.py:44
+msgid "Publication settings"
+msgstr "Einstellungen zur Veröffentlichung"
+
+#: admin/abstractbase.py:95
+#, python-brace-format
+msgid ""
+"The blog entry can't be previewed yet, a '{page_type_name}' page needs to be "
+"created first."
+msgstr ""
+"Der Blogeintrag kann noch nicht in der Vorschau angezeigt werden, es muss "
+"erst eine '{page_type_name}'-Seite erstellt werden."
+
+#: admin/abstractbase.py:143
+msgid "Status"
+msgstr "Status"
+
+#: admin/abstractbase.py:164
+#: templates/admin/fluent_blogs/entry/change_form.html:5
+msgid "View on site"
+msgstr "Auf der Webseite anzeigen"
+
+#: admin/abstractbase.py:177
+msgid "Actions"
+msgstr "Aktionen"
+
+#: admin/abstractbase.py:188
+msgid "Mark selected entries as published"
+msgstr "Ausgewählte Einträge als veröffentlicht markieren"
+
+#: admin/abstractbase.py:233
+msgid "SEO settings"
+msgstr "SEO-Einstellungen"
+
+#: admin/forms.py:55
+msgid "The slug is not unique"
+msgstr "Das Schlüsselwort ist nicht einzigartig"
+
+#: admin/forms.py:61
+msgid "The slug is not unique within it's publication year."
+msgstr ""
+"Das Schlüsselwort ist innerhalb ihres Erscheinungsjahres nicht einzigartig."
+
+#: admin/forms.py:64
+msgid "The slug is not unique within it's publication month."
+msgstr ""
+"Das Schlüsselwort ist innerhalb seines Veröffentlichungsmonats nicht "
+"eindeutig."
+
+#: admin/forms.py:67
+msgid "The slug is not unique within it's publication day."
+msgstr "Das Schlüsselwort ist an ihrem Erscheinungstag nicht einzigartig."
+
+#: base_models.py:58
+msgid "Title"
+msgstr "Titel"
+
+#: base_models.py:59
+msgid "Slug"
+msgstr "Slug"
+
+#: base_models.py:76
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: base_models.py:77
+msgid "Draft"
+msgstr "Entwurf"
+
+#: base_models.py:82
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:35
+msgid "status"
+msgstr "Status"
+
+#: base_models.py:83
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:36
+msgid "publication date"
+msgstr "Publikationsdatum"
+
+#: base_models.py:83
+msgid "When the entry should go live, status must be \"Published\"."
+msgstr ""
+"Wenn der Eintrag online gehen soll, muss der Status \"Veröffentlicht\" sein."
+
+#: base_models.py:84
+msgid "publication end date"
+msgstr "Enddatum der Veröffentlichung"
+
+#: base_models.py:87
+msgid "author"
+msgstr "Autor"
+
+#: base_models.py:88
+msgid "creation date"
+msgstr "Erstellungsdatum"
+
+#: base_models.py:89
+msgid "last modification"
+msgstr "Letzte Änderung"
+
+#: base_models.py:94 models/db.py:24
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:34
+msgid "Blog entry"
+msgstr "Blog-Eintrag"
+
+#: base_models.py:95 models/db.py:25
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:56
+msgid "Blog entries"
+msgstr "Blog-Einträge"
+
+#: base_models.py:206
+msgid "Introtext"
+msgstr "Introtext"
+
+#: base_models.py:222
+msgid "Excerpt text"
+msgstr "Auszug Text"
+
+#: base_models.py:222
+msgid "This is the summary in the list of articles."
+msgstr "Dies ist die Zusammenfassung in der Liste der Artikel."
+
+#: base_models.py:232
+msgid "Intro image"
+msgstr "Intro-Bild"
+
+#: base_models.py:266
+msgid "Categories"
+msgstr "Kategorien"
+
+#: base_models.py:294
+msgid "keywords"
+msgstr "Schlüsselwörter"
+
+#: base_models.py:294
+msgid "When this field is not filled in, the the tags will be used."
+msgstr "Wenn dieses Feld nicht ausgefüllt ist, werden die Tags verwendet."
+
+#: base_models.py:295
+msgid "description"
+msgstr "Beschreibung"
+
+#: base_models.py:295
+msgid ""
+"When this field is not filled in, the contents or intro text will be used."
+msgstr ""
+"Wenn dieses Feld nicht ausgefüllt ist, wird der Inhalt oder der "
+"Einleitungstext verwendet."
+
+#: base_models.py:296
+msgid "page title"
+msgstr "Seitentitel"
+
+#: base_models.py:296
+msgid "When this field is not filled in, the menu title text will be used."
+msgstr ""
+"Wenn dieses Feld nicht ausgefüllt ist, wird der Text des Menütitels "
+"verwendet."
+
+#: base_models.py:341 models/db.py:37
+msgid "Blog entry translation"
+msgstr "Blog-Eintrag Übersetzung"
+
+#: base_models.py:342 models/db.py:38
+msgid "Blog entry translations"
+msgstr "Blog-Eintrag Übersetzungen"
+
+#: pagetypes/blogpage/models.py:12
+msgid "Blog module"
+msgstr "Blog-Modul"
+
+#: pagetypes/blogpage/models.py:13
+msgid "Blog modules"
+msgstr "Blog-Module"
+
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:27
+msgid "Latest blog entries at this page"
+msgstr "Letzte Blogeinträge auf dieser Seite"
+
+#: pagetypes/blogpage/templates/admin/blogpage/change_form.html:37
+msgid "actions"
+msgstr "Aktionen"
+
+#: templates/admin/fluent_blogs/entry/change_form.html:4
+msgid "History"
+msgstr "Geschichte"
+
+#: templates/admin/fluent_blogs/entry/change_form_navigation.html:5
+msgid "previous entry"
+msgstr "Vorherige Eintrag"
+
+#: templates/admin/fluent_blogs/entry/change_form_navigation.html:6
+msgid "next entry"
+msgstr "Nächster Eintrag"
+
+#: templates/fluent_blogs/base_archive.html:11
+#: templates/fluent_blogs/base_archive.html:21
+msgid "Latest entries"
+msgstr "Letzte Einträge"
+
+#: templates/fluent_blogs/base_archive.html:15
+#, python-format
+msgid "RSS Feed for %(category)s"
+msgstr "RSS-Feed für %(category)s"
+
+#: templates/fluent_blogs/base_archive.html:16
+#, python-format
+msgid "RSS Feed for %(tag)s"
+msgstr "RSS-Feed für %(tag)s"
+
+#: templates/fluent_blogs/base_archive.html:17
+#, python-format
+msgid "RSS Feed for %(author_name)s"
+msgstr "RSS-Feed für %(author_name)s"
+
+#: templates/fluent_blogs/base_archive.html:22
+#, python-format
+msgid "Category %(category)s"
+msgstr "Kategorie %(category)s"
+
+#: templates/fluent_blogs/base_archive.html:23
+#: templates/fluent_blogs/base_archive.html:31
+#, python-format
+msgid "Tag %(tag)s"
+msgstr "Tag %(tag)s"
+
+#: templates/fluent_blogs/base_archive.html:24
+#, python-format
+msgid "Author %(author_name)s"
+msgstr "Autor %(author_name)s"
+
+#: templates/fluent_blogs/base_archive.html:25
+#, python-format
+msgid "Page %(number)s"
+msgstr "Seite %(number)s"
+
+#: templates/fluent_blogs/base_archive.html:32
+#, python-format
+msgid "Entries by %(author_name)s"
+msgstr "Einträge von %(author_name)s"
+
+#: templates/fluent_blogs/base_internal.html:8
+msgid "RSS Feed of latest entries"
+msgstr "RSS-Feed der letzten Einträge"
+
+#: templates/fluent_blogs/entry_archive/empty.html:1
+msgid "No entries yet."
+msgstr "Keine Einträge."
+
+#: templates/fluent_blogs/entry_archive/item.html:32
+msgid "Read More"
+msgstr "Weiterlesen"
+
+#: templates/fluent_blogs/entry_archive/item.html:46
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] "%(comment_count)s Kommentar"
+msgstr[1] "%(comment_count)s Kommentare"
+
+#: templates/fluent_blogs/entry_archive/item.html:49
+msgid "Post a comment"
+msgstr "Kommentar hinzufügen"
+
+#: templates/fluent_blogs/entry_archive/item.html:53
+#, python-format
+msgid "%(pingback_count)s pingback"
+msgid_plural "%(pingback_count)s pingbacks"
+msgstr[0] "%(pingback_count)s Pingback"
+msgstr[1] "%(pingback_count)s Pingbacks"
+
+#: templates/fluent_blogs/entry_archive/item.html:54
+#, python-format
+msgid "%(trackback_count)s trackback"
+msgid_plural "%(trackback_count)s trackbacks"
+msgstr[0] "%(trackback_count)s trackback"
+msgstr[1] "%(trackback_count)s trackbacks"
+
+#: templates/fluent_blogs/entry_archive_day.html:4
+#: templates/fluent_blogs/entry_archive_day.html:6
+#: templates/fluent_blogs/entry_archive_day.html:8
+#, python-format
+msgid "Archives of %(day)s"
+msgstr "Archiv von %(day)s"
+
+#: templates/fluent_blogs/entry_archive_index.html:5
+msgid "Page"
+msgstr "Seite"
+
+#: templates/fluent_blogs/entry_archive_month.html:4
+#: templates/fluent_blogs/entry_archive_month.html:6
+#: templates/fluent_blogs/entry_archive_month.html:8
+#, python-format
+msgid "Archives of %(month)s"
+msgstr "Archiv von %(month)s"
+
+#: templates/fluent_blogs/entry_archive_month.html:13
+msgid "Daily archives"
+msgstr "Tägliche Archive"
+
+#: templates/fluent_blogs/entry_archive_tag.html:4
+#: templates/fluent_blogs/entry_archive_tag.html:6
+#, python-format
+msgid "Archives of tag %(tag)s"
+msgstr "Archiv des Tags %(tag)s"
+
+#: templates/fluent_blogs/entry_archive_year.html:4
+#: templates/fluent_blogs/entry_archive_year.html:6
+#: templates/fluent_blogs/entry_archive_year.html:8
+#, python-format
+msgid "Archives of %(year)s"
+msgstr "Archiv von %(year)s"
+
+#: templates/fluent_blogs/entry_archive_year.html:13
+msgid "Monthly archives"
+msgstr "Monatliche Archive"
+
+#: templates/fluent_blogs/entry_contents_base.html:27
+#, python-format
+msgid ""
+"By <a href=\"%(author_url)s\" class=\"author\">%(author)s</a> on <span class="
+"\"date\">%(date)s</span>"
+msgstr ""
+"Von <a href=\"%(author_url)s\" class=\"author\">%(author)s</a> am <span "
+"class=\"date\">%(date)s</span>"
+
+#: templates/fluent_blogs/entry_contents_base.html:33
+msgid "in"
+msgstr "in"
+
+#: templates/fluent_blogs/entry_contents_base.html:58
+msgid "Tags"
+msgstr "Schlagwörter"
+
+#: templates/fluent_blogs/entry_detail/comments.html:6
+#, python-format
+msgid "%(comment_count)s comment to %(entry_title)s"
+msgid_plural "%(comment_count)s comments to %(entry_title)s"
+msgstr[0] "%(comment_count)s Kommentar zu %(entry_title)s"
+msgstr[1] "%(comment_count)s Kommentare zu %(entry_title)s"
+
+#: templates/fluent_blogs/entry_detail/comments.html:11
+msgid "Comments are closed."
+msgstr "Kommentare sind geschlossen."
+
+#: templates/fluent_blogs/entry_detail/comments.html:16
+msgid "Leave a reply"
+msgstr "Einen Kommentar verfassen"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:7
+msgid "Previous"
+msgstr "Zurück"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:8
+msgid "Next"
+msgstr "Weiter"
+
+#: templates/fluent_blogs/entry_detail/navigation.html:14
+msgid "Related entries"
+msgstr "Verwandte Einträge"
+
+#: views/feeds.py:133
+#, python-brace-format
+msgid "{site_name} - Latest entries"
+msgstr "{site_name} - Letzte Einträge"
+
+#: views/feeds.py:139
+#, python-brace-format
+msgid "The latest entries for {site_name}"
+msgstr "Die letzten Einträge für {site_name}"
+
+#: views/feeds.py:159
+#, python-brace-format
+msgid "Entries in the category {category_name}"
+msgstr "Einträge in der Kategorie {category_name}"
+
+#: views/feeds.py:166
+#, python-brace-format
+msgid "The latest entries in the category {category_name}"
+msgstr "Die neuesten Einträge in der Kategorie {category_name}"
+
+#: views/feeds.py:185
+#, python-brace-format
+msgid "Entries by {author_name}"
+msgstr "Einträge von {author_name}"
+
+#: views/feeds.py:191
+#, python-brace-format
+msgid "The latest entries written by {author_name}"
+msgstr "Die letzten von {author_name} geschriebenen Einträge"
+
+#: views/feeds.py:210
+#, python-brace-format
+msgid "Entries for the tag {tag_name}"
+msgstr "Einträge für den Tag {tag_name}"
+
+#: views/feeds.py:216
+#, python-brace-format
+msgid "The latest entries tagged with {tag_name}"
+msgstr "Die neuesten Einträge, die mit {tag_name} getaggt sind"
