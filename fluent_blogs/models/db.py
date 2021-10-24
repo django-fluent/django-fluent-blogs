@@ -5,9 +5,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from fluent_blogs import appsettings
-from fluent_blogs.base_models import (AbstractTranslatableEntry,
-                                      AbstractTranslatedFieldsEntry,
-                                      CommentsEntryMixin)
+from fluent_blogs.base_models import (
+    AbstractTranslatableEntry,
+    AbstractTranslatedFieldsEntry,
+    CommentsEntryMixin,
+)
 
 
 class Entry(AbstractTranslatableEntry):
@@ -20,9 +22,10 @@ class Entry(AbstractTranslatableEntry):
 
     Throughout the code the model is fetched using :func:`get_entry_model`.
     """
+
     class Meta:
-        app_label = 'fluent_blogs'  # required for models subfolder
-        ordering = ('-publication_date',)  # This is not inherited
+        app_label = "fluent_blogs"  # required for models subfolder
+        ordering = ("-publication_date",)  # This is not inherited
         verbose_name = _("Blog entry")
         verbose_name_plural = _("Blog entries")
 
@@ -32,10 +35,13 @@ class Entry_Translation(AbstractTranslatedFieldsEntry):
     The translated fields for the blog entry.
     This model is constructed manually because the base table can be constructed from various mixins.
     """
-    master = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='translations', editable=False, null=True)
+
+    master = models.ForeignKey(
+        Entry, on_delete=models.CASCADE, related_name="translations", editable=False, null=True
+    )
 
     class Meta:
-        app_label = 'fluent_blogs'
+        app_label = "fluent_blogs"
         verbose_name = _("Blog entry translation")
         verbose_name_plural = _("Blog entry translations")
 
@@ -59,25 +65,29 @@ def get_entry_model():
         if not appsettings.FLUENT_BLOGS_ENTRY_MODEL:
             _EntryModel = Entry
         else:
-            app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit('.', 1)
+            app_label, model_name = appsettings.FLUENT_BLOGS_ENTRY_MODEL.rsplit(".", 1)
             _EntryModel = apps.get_model(app_label, model_name)
 
             if _EntryModel is None:
                 raise ImportError(f"{app_label}.{model_name} could not be imported.")
 
         # Auto-register with django-fluent-comments moderation
-        if 'fluent_comments' in settings.INSTALLED_APPS and issubclass(_EntryModel, CommentsEntryMixin):
+        if "fluent_comments" in settings.INSTALLED_APPS and issubclass(
+            _EntryModel, CommentsEntryMixin
+        ):
             from fluent_comments.moderation import moderate_model
+
             moderate_model(
                 _EntryModel,
-                publication_date_field='publication_date',
-                enable_comments_field='enable_comments',
+                publication_date_field="publication_date",
+                enable_comments_field="enable_comments",
             )
 
         # Auto-register with django-any-urlfield
-        if 'any_urlfield' in settings.INSTALLED_APPS:
-            from any_urlfield.models import AnyUrlField
+        if "any_urlfield" in settings.INSTALLED_APPS:
             from any_urlfield.forms.widgets import SimpleRawIdWidget
+            from any_urlfield.models import AnyUrlField
+
             AnyUrlField.register_model(_EntryModel, widget=SimpleRawIdWidget(_EntryModel))
 
     return _EntryModel
@@ -89,10 +99,12 @@ def get_category_model():
 
     This function reads the :ref:`FLUENT_BLOGS_CATEGORY_MODEL` setting to find the model.
     """
-    app_label, model_name = appsettings.FLUENT_BLOGS_CATEGORY_MODEL.rsplit('.', 1)
+    app_label, model_name = appsettings.FLUENT_BLOGS_CATEGORY_MODEL.rsplit(".", 1)
     try:
         return apps.get_model(app_label, model_name)
     except Exception as e:  # ImportError/LookupError
-        raise ImproperlyConfigured("Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{}': {}".format(
-            appsettings.FLUENT_BLOGS_CATEGORY_MODEL, str(e)
-        ))
+        raise ImproperlyConfigured(
+            "Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{}': {}".format(
+                appsettings.FLUENT_BLOGS_CATEGORY_MODEL, str(e)
+            )
+        )

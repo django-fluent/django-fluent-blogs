@@ -21,4 +21,6 @@ def actions_column(entry):
 @register.simple_tag()
 def blog_entry_admin_change_url(entry):
     model = get_entry_model()
-    return reverse(f'admin:{model._meta.app_label}_{model._meta.model_name}_change', args=(entry.pk,))
+    return reverse(
+        f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=(entry.pk,)
+    )

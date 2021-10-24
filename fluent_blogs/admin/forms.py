@@ -21,30 +21,30 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
         super().__init__(*args, **kwargs)
 
         # The admin's .save() method fills in a default:
-        self.fields['publication_date'].required = False
+        self.fields["publication_date"].required = False
         try:
-            author_field = self.fields['author']
+            author_field = self.fields["author"]
         except KeyError:
             pass
         else:
             author_field.required = False
-            self.initial.setdefault('author', author_field.user)
+            self.initial.setdefault("author", author_field.user)
 
     def clean(self):
         cleaned_data = super().clean()
-        if 'slug' not in cleaned_data or 'publication_date' not in cleaned_data:
+        if "slug" not in cleaned_data or "publication_date" not in cleaned_data:
             return cleaned_data
 
         try:
             self.validate_unique_slug(cleaned_data)
         except ValidationError as e:
-            self._errors['slug'] = self.error_class(e.messages)
+            self._errors["slug"] = self.error_class(e.messages)
 
         return cleaned_data
 
     def clean_author(self):
         # Make sure the form never assigns None to the author value.
-        return self.cleaned_data['author'] or self.fields['author'].user
+        return self.cleaned_data["author"] or self.fields["author"].user
 
     def validate_unique_slug(self, cleaned_data):
         """
@@ -54,15 +54,15 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
         error_msg = _("The slug is not unique")
 
         # The /year/month/slug/ URL determines when a slug can be unique.
-        pubdate = cleaned_data['publication_date'] or now()
-        if '{year}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            date_kwargs['year'] = pubdate.year
+        pubdate = cleaned_data["publication_date"] or now()
+        if "{year}" in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            date_kwargs["year"] = pubdate.year
             error_msg = _("The slug is not unique within it's publication year.")
-        if '{month}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            date_kwargs['month'] = pubdate.month
+        if "{month}" in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            date_kwargs["month"] = pubdate.month
             error_msg = _("The slug is not unique within it's publication month.")
-        if '{day}' in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
-            date_kwargs['day'] = pubdate.day
+        if "{day}" in appsettings.FLUENT_BLOGS_ENTRY_LINK_STYLE:
+            date_kwargs["day"] = pubdate.day
             error_msg = _("The slug is not unique within it's publication day.")
 
         date_range = get_date_range(**date_kwargs)
@@ -70,7 +70,7 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
         # Base filters are configurable for translation support.
         dup_filters = self.get_unique_slug_filters(cleaned_data)
         if date_range:
-            dup_filters['publication_date__range'] = date_range
+            dup_filters["publication_date__range"] = date_range
 
         dup_qs = EntryModel.objects.filter(**dup_filters)
 
@@ -85,7 +85,7 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
     def get_unique_slug_filters(self, cleaned_data):
         # Allow to override this for translations
         return {
-            'slug': cleaned_data['slug'],
+            "slug": cleaned_data["slug"],
         }
 
 
@@ -96,6 +96,6 @@ class AbstractTranslatableEntryBaseAdminForm(TranslatableModelForm, AbstractEntr
 
     def get_unique_slug_filters(self, cleaned_data):
         return {
-            'translations__slug': cleaned_data['slug'],
-            'translations__language_code': self.language_code
+            "translations__slug": cleaned_data["slug"],
+            "translations__language_code": self.language_code,
         }

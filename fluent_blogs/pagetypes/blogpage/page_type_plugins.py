@@ -9,4 +9,4 @@ from .admin import BlogPageAdmin
 class BlogPagePlugin(PageTypePlugin):
     model = BlogPage
     model_admin = BlogPageAdmin
-    urls = 'fluent_blogs.urls'
+    urls = "fluent_blogs.urls"

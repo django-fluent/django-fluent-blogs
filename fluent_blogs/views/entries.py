@@ -5,8 +5,12 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import translation
 from django.views.generic.base import RedirectView
-from django.views.generic.dates import (ArchiveIndexView, DayArchiveView,
-                                        MonthArchiveView, YearArchiveView)
+from django.views.generic.dates import (
+    ArchiveIndexView,
+    DayArchiveView,
+    MonthArchiveView,
+    YearArchiveView,
+)
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
@@ -29,20 +33,22 @@ class BaseBlogMixin(CurrentPageMixin):
             page = self.get_current_page()
         except AttributeError:
             # URL mounted view
-            return get_entry_model().objects.published(for_user=for_user, include_hidden=self.include_hidden)
+            return get_entry_model().objects.published(
+                for_user=for_user, include_hidden=self.include_hidden
+            )
         else:
             # BlogPage mounted views
             return page.get_entry_queryset(
                 view_url_name=self.view_url_name,
                 for_user=for_user,
-                include_hidden=self.include_hidden
+                include_hidden=self.include_hidden,
             )
 
     def get_queryset(self):
         # NOTE: This is also workaround, defining the queryset static somehow caused results to remain cached.
         qs = self.get_base_queryset()
         if self.prefetch_translations:
-            qs = qs.prefetch_related('translations')
+            qs = qs.prefetch_related("translations")
         return qs
 
     def get_language(self):
@@ -53,31 +59,39 @@ class BaseBlogMixin(CurrentPageMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['FLUENT_BLOGS_BASE_TEMPLATE'] = appsettings.FLUENT_BLOGS_BASE_TEMPLATE
-        context['HAS_DJANGO_FLUENT_COMMENTS'] = 'fluent_comments' in settings.INSTALLED_APPS
-        context['FLUENT_BLOGS_INCLUDE_STATIC_FILES'] = appsettings.FLUENT_BLOGS_INCLUDE_STATIC_FILES
+        context["FLUENT_BLOGS_BASE_TEMPLATE"] = appsettings.FLUENT_BLOGS_BASE_TEMPLATE
+        context["HAS_DJANGO_FLUENT_COMMENTS"] = "fluent_comments" in settings.INSTALLED_APPS
+        context[
+            "FLUENT_BLOGS_INCLUDE_STATIC_FILES"
+        ] = appsettings.FLUENT_BLOGS_INCLUDE_STATIC_FILES
         if self.context_object_name:
-            context[self.context_object_name] = getattr(self, self.context_object_name)  # e.g. author, category, tag
+            context[self.context_object_name] = getattr(
+                self, self.context_object_name
+            )  # e.g. author, category, tag
         return context
 
     def get_view_url(self):
         # Support both use cases of the same view:
-        if 'page' in self.kwargs:
+        if "page" in self.kwargs:
             view_url_name = self.view_url_name_paginated
         else:
             view_url_name = self.view_url_name
-        return mixed_reverse(view_url_name, args=self.args, kwargs=self.kwargs, current_page=self.get_current_page())
+        return mixed_reverse(
+            view_url_name, args=self.args, kwargs=self.kwargs, current_page=self.get_current_page()
+        )
 
 
 class BaseArchiveMixin(BaseBlogMixin):
-    date_field = 'publication_date'
-    month_format = '%m'
+    date_field = "publication_date"
+    month_format = "%m"
     allow_future = False
     paginate_by = appsettings.FLUENT_BLOGS_PAGINATE_BY
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
+        queryset = queryset.active_translations(
+            self.get_language()
+        )  # NOTE: can't combine with other filters on translations__ relation.
 
         # Reapply ordering of MultipleObjectMixin that was skipped;
         # The BaseDateListView.get_ordering() turns this into a default DESC on the date field.
@@ -92,7 +106,7 @@ class BaseArchiveMixin(BaseBlogMixin):
         names = super().get_template_names()
 
         # Include the appname/model_suffix.html version for any customized model too.
-        if not names[-1].startswith('fluent_blogs/entry'):
+        if not names[-1].startswith("fluent_blogs/entry"):
             names.append(f"fluent_blogs/entry{self.template_name_suffix}.html")
 
         return names
@@ -108,13 +122,13 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
         # All other overviews won't show the draft pages yet.
         qs = self.get_base_queryset(for_user=self.request.user)
         if self.prefetch_translations:
-            qs = qs.prefetch_related('translations')
+            qs = qs.prefetch_related("translations")
 
         # Allow same slug in different dates
         # The available arguments depend on the FLUENT_BLOGS_ENTRY_LINK_STYLE setting.
-        year = int(self.kwargs['year']) if 'year' in self.kwargs else None
-        month = int(self.kwargs['month']) if 'month' in self.kwargs else None
-        day = int(self.kwargs['day']) if 'day' in self.kwargs else None
+        year = int(self.kwargs["year"]) if "year" in self.kwargs else None
+        month = int(self.kwargs["month"]) if "month" in self.kwargs else None
+        day = int(self.kwargs["day"]) if "day" in self.kwargs else None
 
         range = get_date_range(year, month, day)
         if range:
@@ -138,7 +152,7 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
     def get_template_names(self):
         names = super().get_template_names()
 
-        if not names[-1].startswith('fluent_blogs/entry'):
+        if not names[-1].startswith("fluent_blogs/entry"):
             names.append(f"fluent_blogs/entry{self.template_name_suffix}.html")
 
         return names
@@ -148,34 +162,36 @@ class EntryArchiveIndex(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive index page.
     """
-    view_url_name = 'entry_archive_index'
-    view_url_name_paginated = 'entry_archive_index_paginated'
-    template_name_suffix = '_archive_index'
+
+    view_url_name = "entry_archive_index"
+    view_url_name_paginated = "entry_archive_index_paginated"
+    template_name_suffix = "_archive_index"
     allow_empty = True
 
 
 class EntryYearArchive(BaseArchiveMixin, YearArchiveView):
-    view_url_name = 'entry_archive_year'
+    view_url_name = "entry_archive_year"
     make_object_list = True
 
 
 class EntryMonthArchive(BaseArchiveMixin, MonthArchiveView):
-    view_url_name = 'entry_archive_month'
+    view_url_name = "entry_archive_month"
 
 
 class EntryDayArchive(BaseArchiveMixin, DayArchiveView):
-    view_url_name = 'entry_archive_day'
+    view_url_name = "entry_archive_day"
 
 
 class EntryDetail(BaseDetailMixin, DetailView):
     """
     Blog detail page.
     """
-    view_url_name = 'entry_detail'
+
+    view_url_name = "entry_detail"
 
 
 class EntryShortLink(SingleObjectMixin, RedirectView):
-    permanent = False   # Allow changing the URL format
+    permanent = False  # Allow changing the URL format
 
     def get_queryset(self):
         # NOTE: This is a workaround, defining the queryset static somehow caused results to remain cached.
@@ -194,13 +210,14 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
-    view_url_name = 'entry_archive_category'
-    view_url_name_paginated = 'entry_archive_category_paginated'
-    template_name_suffix = '_archive_category'
-    context_object_name = 'category'
+
+    view_url_name = "entry_archive_category"
+    view_url_name_paginated = "entry_archive_category_paginated"
+    template_name_suffix = "_archive_category"
+    context_object_name = "category"
 
     def dispatch(self, request, *args, **kwargs):
-        self.category = self.get_category(slug=self.kwargs['slug'])
+        self.category = self.get_category(slug=self.kwargs["slug"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -220,13 +237,14 @@ class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
-    view_url_name = 'entry_archive_author'
-    view_url_name_paginated = 'entry_archive_author_paginated'
-    template_name_suffix = '_archive_author'
-    context_object_name = 'author'
+
+    view_url_name = "entry_archive_author"
+    view_url_name_paginated = "entry_archive_author_paginated"
+    template_name_suffix = "_archive_author"
+    context_object_name = "author"
 
     def dispatch(self, request, *args, **kwargs):
-        self.author = self.get_user(slug=self.kwargs['slug'])
+        self.author = self.get_user(slug=self.kwargs["slug"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -241,13 +259,14 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
     """
     Archive based on tag.
     """
-    view_url_name = 'entry_archive_tag'
-    view_url_name_paginated = 'entry_archive_tag_paginated'
-    template_name_suffix = '_archive_tag'
-    context_object_name = 'tag'
+
+    view_url_name = "entry_archive_tag"
+    view_url_name_paginated = "entry_archive_tag_paginated"
+    template_name_suffix = "_archive_tag"
+    context_object_name = "tag"
 
     def dispatch(self, request, *args, **kwargs):
-        self.tag = self.get_tag(slug=self.kwargs['slug'])
+        self.tag = self.get_tag(slug=self.kwargs["slug"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -255,4 +274,5 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
 
     def get_tag(self, slug):
         from taggit.models import Tag  # django-taggit is optional, hence imported here.
+
         return get_object_or_404(Tag, slug=slug)

@@ -4,4 +4,7 @@ import warnings
 
 from fluent_blogs.managers import *  # noqa
 
-warnings.warn("Importing managers from fluent_blogs.models is deprecated; use fluent_blogs.managers instead.", DeprecationWarning)
+warnings.warn(
+    "Importing managers from fluent_blogs.models is deprecated; use fluent_blogs.managers instead.",
+    DeprecationWarning,
+)

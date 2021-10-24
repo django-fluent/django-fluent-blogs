@@ -7,7 +7,6 @@ from fluent_blogs.models import get_entry_model
 
 
 class BlogPage(FluentContentsPage):
-
     class Meta:
         verbose_name = _("Blog module")
         verbose_name_plural = _("Blog modules")
@@ -19,11 +18,13 @@ class BlogPage(FluentContentsPage):
         """
         # Since there is currently no filtering in place, return all entries.
         EntryModel = get_entry_model()
-        qs = get_entry_model().objects.order_by('-publication_date')
+        qs = get_entry_model().objects.order_by("-publication_date")
 
         # Only limit to current language when this makes sense.
         if issubclass(EntryModel, TranslatableModel):
-            admin_form_language = self.get_current_language()  # page object is in current language tab.
+            admin_form_language = (
+                self.get_current_language()
+            )  # page object is in current language tab.
             qs = qs.active_translations(admin_form_language).language(admin_form_language)
 
         return qs
@@ -34,7 +35,9 @@ class BlogPage(FluentContentsPage):
         This allows subclasses of the `BlogPage` to limit which pages
         are shown at a particular mount point.
         """
-        return get_entry_model().objects.published(for_user=for_user, include_hidden=include_hidden)
+        return get_entry_model().objects.published(
+            for_user=for_user, include_hidden=include_hidden
+        )
 
     def get_entry_url(self, entry):
         """

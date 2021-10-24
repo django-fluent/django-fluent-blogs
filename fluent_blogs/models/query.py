@@ -21,36 +21,40 @@ if sys.version_info[0] >= 3:
 
 
 __all__ = (
-    'query_entries',
-    'query_tags',
+    "query_entries",
+    "query_tags",
 )
 
 ENTRY_ORDER_BY_FIELDS = {
-    'slug': 'slug',
-    'title': 'title',
-    'author': ('author__first_name', 'author__last_name'),
-    'author_slug': ('author__username',),
-    'category': ('categories__name',),
-    'category_slug': ('categories__slug',),
-    'tag': ('tags__name',),
-    'tag_slug': ('tags__slug',),
-    'date': ('publication_date',),
-    'year': ('publication_date',),
+    "slug": "slug",
+    "title": "title",
+    "author": ("author__first_name", "author__last_name"),
+    "author_slug": ("author__username",),
+    "category": ("categories__name",),
+    "category_slug": ("categories__slug",),
+    "tag": ("tags__name",),
+    "tag_slug": ("tags__slug",),
+    "date": ("publication_date",),
+    "year": ("publication_date",),
 }
 
 if django.VERSION >= (1, 11):
     # Django 1.10 doesn't support early importing.
     User = get_user_model()
-    ENTRY_ORDER_BY_FIELDS['author_slug'] = f'author__{User.USERNAME_FIELD}'
+    ENTRY_ORDER_BY_FIELDS["author_slug"] = f"author__{User.USERNAME_FIELD}"
 
 TAG_ORDER_BY_FIELDS = {
-    'slug': ('slug',),
-    'name': ('name',),
-    'count': ('count',),
+    "slug": ("slug",),
+    "name": ("name",),
+    "count": ("count",),
 }
 
 ORDER_BY_DESC = (
-    'date', 'year', 'month', 'day', 'count',
+    "date",
+    "year",
+    "month",
+    "day",
+    "count",
 )
 
 
@@ -63,24 +67,35 @@ def _get_order_by(order, orderby, order_by_fields):
         # Find the actual database fieldnames for the keyword.
         db_fieldnames = order_by_fields[orderby]
     except KeyError:
-        raise ValueError("Invalid value for 'orderby': '{}', supported values are: {}".format(orderby, ', '.join(sorted(order_by_fields.keys()))))
+        raise ValueError(
+            "Invalid value for 'orderby': '{}', supported values are: {}".format(
+                orderby, ", ".join(sorted(order_by_fields.keys()))
+            )
+        )
 
     # Default to descending for some fields, otherwise be ascending
-    is_desc = (not order and orderby in ORDER_BY_DESC) \
-        or (order or 'asc').lower() in ('desc', 'descending')
+    is_desc = (not order and orderby in ORDER_BY_DESC) or (order or "asc").lower() in (
+        "desc",
+        "descending",
+    )
 
     if is_desc:
-        return map(lambda name: '-' + name, db_fieldnames)
+        return map(lambda name: "-" + name, db_fieldnames)
     else:
         return db_fieldnames
 
 
 def query_entries(
     queryset=None,
-    year=None, month=None, day=None,
-    category=None, category_slug=None,
-    tag=None, tag_slug=None,
-    author=None, author_slug=None,
+    year=None,
+    month=None,
+    day=None,
+    category=None,
+    category_slug=None,
+    tag=None,
+    tag_slug=None,
+    author=None,
+    author_slug=None,
     future=False,
     order=None,
     orderby=None,
@@ -141,7 +156,7 @@ def query_entries(
     if orderby:
         queryset = queryset.order_by(*_get_order_by(order, orderby, ENTRY_ORDER_BY_FIELDS))
     else:
-        queryset = queryset.order_by('-publication_date')
+        queryset = queryset.order_by("-publication_date")
 
     # Limit
     if limit:
@@ -155,33 +170,28 @@ def query_tags(order=None, orderby=None, limit=None):
     Query the tags, with usage count included.
     This interface is mainly used by the ``get_tags`` template tag.
     """
-    from taggit.models import Tag, TaggedItem    # feature is still optional
+    from taggit.models import Tag, TaggedItem  # feature is still optional
 
     # Get queryset filters for published entries
     EntryModel = get_entry_model()
     ct = ContentType.objects.get_for_model(EntryModel)  # take advantage of local caching.
 
-    entry_filter = {
-        'status': EntryModel.PUBLISHED
-    }
+    entry_filter = {"status": EntryModel.PUBLISHED}
     if appsettings.FLUENT_BLOGS_FILTER_SITE_ID:
-        entry_filter['parent_site'] = settings.SITE_ID
+        entry_filter["parent_site"] = settings.SITE_ID
 
-    entry_qs = EntryModel.objects.filter(**entry_filter).values_list('pk')
+    entry_qs = EntryModel.objects.filter(**entry_filter).values_list("pk")
 
     # get tags
     queryset = Tag.objects.filter(
-        taggit_taggeditem_items__content_type=ct,
-        taggit_taggeditem_items__object_id__in=entry_qs
-    ).annotate(
-        count=Count('taggit_taggeditem_items')
-    )
+        taggit_taggeditem_items__content_type=ct, taggit_taggeditem_items__object_id__in=entry_qs
+    ).annotate(count=Count("taggit_taggeditem_items"))
 
     # Ordering
     if orderby:
         queryset = queryset.order_by(*_get_order_by(order, orderby, TAG_ORDER_BY_FIELDS))
     else:
-        queryset = queryset.order_by('-count')
+        queryset = queryset.order_by("-count")
 
     # Limit
     if limit:

@@ -8,13 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fluent_blogs', '0002_intro_allow_null'),
+        ("fluent_blogs", "0002_intro_allow_null"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='entry',
-            name='author',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='author'),
+            model_name="entry",
+            name="author",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="author",
+            ),
         ),
     ]

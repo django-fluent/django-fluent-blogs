@@ -40,12 +40,8 @@ class EntryQuerySet(QuerySet):
         else:
             filters = Q(status=self.model.PUBLISHED)
 
-        filters &= (
-            Q(publication_date__isnull=True) |
-            Q(publication_date__lte=now())
-        ) & (
-            Q(publication_date__isnull=True) |
-            Q(publication_date__lte=now())
+        filters &= (Q(publication_date__isnull=True) | Q(publication_date__lte=now())) & (
+            Q(publication_date__isnull=True) | Q(publication_date__lte=now())
         )
 
         return qs.filter(filters)
@@ -65,23 +61,25 @@ class EntryQuerySet(QuerySet):
         Return the entries with the given category slugs.
         When multiple tags are provided, they operate as "OR" query.
         """
-        categories_field = getattr(self.model, 'categories', None)
+        categories_field = getattr(self.model, "categories", None)
         if categories_field is None:
-            raise AttributeError(f"The {self.model.__name__} does not include CategoriesEntryMixin")
+            raise AttributeError(
+                f"The {self.model.__name__} does not include CategoriesEntryMixin"
+            )
 
         if issubclass(categories_field.rel.model, TranslatableModel):
             # Needs a different field, assume slug is translated (e.g django-categories-i18n)
             filters = {
-                'categories__translations__slug__in': category_slugs,
+                "categories__translations__slug__in": category_slugs,
             }
 
             # TODO: should the current language also be used as filter somehow?
             languages = self._get_active_rel_languages()
             if languages:
                 if len(languages) == 1:
-                    filters['categories__translations__language_code'] = languages[0]
+                    filters["categories__translations__language_code"] = languages[0]
                 else:
-                    filters['categories__translations__language_code__in'] = languages
+                    filters["categories__translations__language_code__in"] = languages
 
             return self.filter(**filters).distinct()
         else:
@@ -92,7 +90,7 @@ class EntryQuerySet(QuerySet):
         Return the items which are tagged with a specific tag.
         When multiple tags are provided, they operate as "OR" query.
         """
-        if getattr(self.model, 'tags', None) is None:
+        if getattr(self.model, "tags", None) is None:
             raise AttributeError(f"The {self.model.__name__} does not include TagsEntryMixin")
 
         if len(tag_slugs) == 1:
@@ -105,7 +103,6 @@ class EntryQuerySet(QuerySet):
 
 
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._rel_language_codes = None
@@ -132,6 +129,7 @@ class EntryManager(models.Manager):
     """
     Extra methods attached to ``Entry.objects`` .
     """
+
     queryset_class = EntryQuerySet
 
     def get_queryset(self):
@@ -175,4 +173,5 @@ class TranslatableEntryManager(EntryManager, TranslatableManager):
     """
     Extra methods attached to ``Entry.objects``.
     """
+
     queryset_class = TranslatableEntryQuerySet

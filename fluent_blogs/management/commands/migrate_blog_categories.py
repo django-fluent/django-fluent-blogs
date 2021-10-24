@@ -20,6 +20,7 @@ class Command(BaseCommand):
     The ideal replacement is django-categories-i18n, which also allows the category names
     to be translated. This command migrates the data, and adjusts the foreign key in the M2M table.
     """
+
     args = "--from=APP.MODEL --to=APP.MODEL"
     help = (
         "Migrate categories to a new model. This can be used when the old project used django-categories,\n"
@@ -36,8 +37,12 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         super().add_arguments(parser)
-        parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
-        parser.add_argument('-t', '--to', action='store', dest='to', help="The new model to migrate to")
+        parser.add_argument(
+            "-f", "--from", action="store", dest="from", help="The old model to read data from"
+        )
+        parser.add_argument(
+            "-t", "--to", action="store", dest="to", help="The new model to migrate to"
+        )
 
     def handle(self, *args, **options):
         if args:
@@ -45,18 +50,20 @@ class Command(BaseCommand):
 
         Entry = get_entry_model()
         CategoryM2M = Entry.categories.through
-        old_fk = CategoryM2M._meta.get_field('category')
+        old_fk = CategoryM2M._meta.get_field("category")
         CurrentModel = old_fk.remote_field.model
-        self.stdout.write("Current Entry.categories model: <{}.{}>".format(
-            CurrentModel._meta.app_label, CurrentModel._meta.object_name
-        ))
+        self.stdout.write(
+            "Current Entry.categories model: <{}.{}>".format(
+                CurrentModel._meta.app_label, CurrentModel._meta.object_name
+            )
+        )
 
-        old = options['from']
-        new = options['to']
+        old = options["from"]
+        new = options["to"]
         if not old or not new:
             raise CommandError("Expected --from and --to options")
 
-        if old.lower() == 'categories.category' and 'categories' not in settings.INSTALLED_APPS:
+        if old.lower() == "categories.category" and "categories" not in settings.INSTALLED_APPS:
             # Can't import it in a Django 1.8+ project.
             OldModel = DummyCategoryBase
         else:
@@ -91,36 +98,40 @@ class Command(BaseCommand):
                 self.stdout.write("* Copying category fields...")
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        'INSERT INTO {new_model}(id, slug, {new_title}, {mptt_fields}})'
-                        ' SELECT id, slug, {old_title}, {mptt_fields} FROM {old_model}'.format(
+                        "INSERT INTO {new_model}(id, slug, {new_title}, {mptt_fields}})"
+                        " SELECT id, slug, {old_title}, {mptt_fields} FROM {old_model}".format(
                             new_model=NewModel._meta.db_table,
                             new_title=new_title,
                             old_model=OldModel._meta.db_table,
                             old_title=old_title,
                             mptt_fields=mptt_fields,
-                        ))
+                        )
+                    )
             elif not old_i18n and new_i18n:
                 # Untranslated to translated
                 # - base table fields
                 with connection.cursor() as cursor:
                     self.stdout.write("* Copying category base fields...")
                     cursor.execute(
-                        'INSERT INTO {new_model}(id, {mptt_fields})'
-                        ' SELECT id, {mptt_fields} FROM {old_model}'.format(
+                        "INSERT INTO {new_model}(id, {mptt_fields})"
+                        " SELECT id, {mptt_fields} FROM {old_model}".format(
                             new_model=NewModel._meta.db_table,
                             old_model=OldModel._meta.db_table,
                             mptt_fields=mptt_fields,
-                        ))
+                        )
+                    )
                     # - create translations on fallback language
                     self.stdout.write("* Creating category translations...")
                     cursor.execute(
-                        'INSERT INTO {new_translations}(master_id, language_code, slug, {new_title})'
-                        ' SELECT id, %s, slug, {old_title} FROM {old_model}'.format(
+                        "INSERT INTO {new_translations}(master_id, language_code, slug, {new_title})"
+                        " SELECT id, %s, slug, {old_title} FROM {old_model}".format(
                             new_translations=NewModel._parler_meta.root_model._meta.db_table,
                             new_title=new_title,
                             old_model=OldModel._meta.db_table,
                             old_title=old_title,
-                        ), [appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE])
+                        ),
+                        [appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE],
+                    )
             elif old_i18n and not new_i18n:
                 # Reverse, translated to untranslated. Take fallback only
                 # Convert all fields back to the single-language table.
@@ -129,11 +140,13 @@ class Command(BaseCommand):
                     translations = old_category.translations.all()
                     try:
                         # Try default translation
-                        old_translation = translations.get(language_code=appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE)
+                        old_translation = translations.get(
+                            language_code=appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE
+                        )
                     except ObjectDoesNotExist:
                         try:
                             # Try internal fallback
-                            old_translation = translations.get(language_code__in=('en-us', 'en'))
+                            old_translation = translations.get(language_code__in=("en-us", "en"))
                         except ObjectDoesNotExist:
                             # Hope there is a single translation
                             old_translation = translations.get()
@@ -146,7 +159,7 @@ class Command(BaseCommand):
                         level=old_category.level,
                         # parler fields
                         _language_code=old_translation.language_code,
-                        slug=old_category.slug
+                        slug=old_category.slug,
                     )
                     fields[new_title] = getattr(old_translation, old_title)
                     NewModel.objects.create(**fields)
@@ -157,35 +170,40 @@ class Command(BaseCommand):
                 with connection.cursor() as cursor:
                     self.stdout.write("* Copying category base fields...")
                     cursor.execute(
-                        'INSERT INTO {new_model}(id, {mptt_fields})'
-                        ' SELECT id, {mptt_fields} FROM {old_model}'.format(
+                        "INSERT INTO {new_model}(id, {mptt_fields})"
+                        " SELECT id, {mptt_fields} FROM {old_model}".format(
                             new_model=NewModel._meta.db_table,
                             old_model=OldModel._meta.db_table,
                             mptt_fields=mptt_fields,
-                        ))
+                        )
+                    )
                     # - all translations
                     self.stdout.write("* Copying category translations...")
                     cursor.execute(
-                        'INSERT INTO {new_translations}(master_id, language_code, slug, {new_title})'
-                        ' SELECT id, languag_code, slug, {old_title} FROM {old_translations}'.format(
+                        "INSERT INTO {new_translations}(master_id, language_code, slug, {new_title})"
+                        " SELECT id, languag_code, slug, {old_title} FROM {old_translations}".format(
                             new_translations=NewModel._parler_meta.root_model._meta.db_table,
                             new_title=new_title,
                             old_translations=OldModel._parler_meta.root_model._meta.db_table,
                             old_title=old_title,
-                        ), [appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE])
+                        ),
+                        [appsettings.FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE],
+                    )
             else:
                 raise NotImplementedError()  # impossible combination
 
             self.stdout.write("* Switching M2M foreign key constraints...")
             __, __, __, kwargs = old_fk.deconstruct()
-            kwargs['to'] = NewModel
+            kwargs["to"] = NewModel
             new_fk = models.ForeignKey(on_delete=models.CASCADE, **kwargs)
             new_fk.set_attributes_from_name(old_fk.name)
             with connection.schema_editor() as schema_editor:
                 schema_editor.alter_field(CategoryM2M, old_fk, new_fk)
 
         self.stdout.write("Done.\n")
-        self.stdout.write("You may now remove the old category app from your project, INSTALLED_APPS and database.\n")
+        self.stdout.write(
+            "You may now remove the old category app from your project, INSTALLED_APPS and database.\n"
+        )
 
 
 class DummyCategoryBase(MPTTModel):
@@ -193,12 +211,15 @@ class DummyCategoryBase(MPTTModel):
     This base model includes the absolute bare bones fields and methods. One
     could simply subclass this model and do nothing else and it should work.
     """
-    parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
+
+    parent = TreeForeignKey(
+        "self", blank=True, null=True, related_name="children", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=100)
     slug = models.SlugField()
 
     class Meta:
-        db_table = 'categories_category'
+        db_table = "categories_category"
         managed = False
 
     def __str__(self):
@@ -208,18 +229,20 @@ class DummyCategoryBase(MPTTModel):
 def _detect_title_field(Model):
     field_names = [f.name for f in Model._meta.get_fields()]
 
-    if 'name' in field_names:
-        return 'name'
-    elif 'title' in field_names:
-        return 'title'
+    if "name" in field_names:
+        return "name"
+    elif "title" in field_names:
+        return "title"
 
     if issubclass(Model, TranslatableModel):
         field_names = Model._parler_meta.get_translated_fields()
-        if 'name' in field_names:
-            return 'name'
-        elif 'title' in field_names:
-            return 'title'
+        if "name" in field_names:
+            return "name"
+        elif "title" in field_names:
+            return "title"
 
-    raise CommandError("No 'name' or 'title' field found in model <{}.{}>".format(
-        Model.__module__, Model.__name__
-    ))
+    raise CommandError(
+        "No 'name' or 'title' field found in model <{}.{}>".format(
+            Model.__module__, Model.__name__
+        )
+    )

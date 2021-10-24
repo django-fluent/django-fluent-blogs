@@ -15,19 +15,24 @@ from fluent_blogs.models.query import get_category_for_slug
 from fluent_blogs.urlresolvers import blog_reverse
 
 _FEED_FORMATS = {
-    'atom1': feedgenerator.Atom1Feed,
-    'rss0.91': feedgenerator.RssUserland091Feed,
-    'rss2.0': feedgenerator.Rss201rev2Feed,
+    "atom1": feedgenerator.Atom1Feed,
+    "rss0.91": feedgenerator.RssUserland091Feed,
+    "rss2.0": feedgenerator.Rss201rev2Feed,
 }
 
 __all__ = (
-    'LatestEntriesFeed', 'LatestCategoryEntriesFeed', 'LatestAuthorEntriesFeed', 'LatestTagEntriesFeed'
+    "LatestEntriesFeed",
+    "LatestCategoryEntriesFeed",
+    "LatestAuthorEntriesFeed",
+    "LatestTagEntriesFeed",
 )
 
 
 def get_entry_queryset():
     # Avoid being cached at module level, always return a new queryset.
-    return get_entry_model().objects.published().active_translations().order_by('-publication_date')
+    return (
+        get_entry_model().objects.published().active_translations().order_by("-publication_date")
+    )
 
 
 _max_items = appsettings.FLUENT_BLOGS_MAX_FEED_ITEMS
@@ -38,19 +43,22 @@ class FeedView(View, Feed):
     Bridge to let Django syndication feeds operate like a normal class-based-view.
     This introduces the ``as_view()`` method, attributes like ``self.request`` and allows to assign attributes to 'self'.
     """
-    format = 'rss2.0'
+
+    format = "rss2.0"
 
     def __init__(self, **kwargs):
         View.__init__(self, **kwargs)
 
         # Allow this view to easily switch between feed formats.
-        format = kwargs.get('format', self.format)
+        format = kwargs.get("format", self.format)
         try:
             self.feed_type = _FEED_FORMATS[format]
         except KeyError:
-            raise ValueError("Unsupported feed format: {}. Supported are: {}".format(
-                self.format, ', '.join(sorted(_FEED_FORMATS.keys()))
-            ))
+            raise ValueError(
+                "Unsupported feed format: {}. Supported are: {}".format(
+                    self.format, ", ".join(sorted(_FEED_FORMATS.keys()))
+                )
+            )
 
     def get(self, request, *args, **kwargs):
         # Pass flow to the original Feed.__call__
@@ -71,7 +79,7 @@ class EntryFeedBase(FeedView):
         For example, the blog can be mounted using *django-fluent-pages* on multiple nodes.
         """
         # TODO: django-fluent-pages needs a public API to get the current page.
-        current_page = getattr(self.request, '_current_fluent_page', None)
+        current_page = getattr(self.request, "_current_fluent_page", None)
         return blog_reverse(viewname, args=args, kwargs=kwargs, current_page=current_page)
 
     # -- general
@@ -85,7 +93,7 @@ class EntryFeedBase(FeedView):
         templates = [
             f"{EntryModel._meta.app_label}/{EntryModel._meta.object_name.lower()}_feed_description.html",
             "fluent_blogs/entry_feed_description.html",  # New name
-            "fluent_blogs/feeds/entry/description.html"  # Old name
+            "fluent_blogs/feeds/entry/description.html",  # Old name
         ]
         # The value is passed to get_template by the Feed class, so reduce the list here manually.
         for name in templates:
@@ -94,7 +102,7 @@ class EntryFeedBase(FeedView):
             except TemplateDoesNotExist:
                 pass
             else:
-                setattr(self.__class__, 'description_template', name)
+                setattr(self.__class__, "description_template", name)
                 return templates
         return None
 
@@ -118,7 +126,11 @@ class EntryFeedBase(FeedView):
         return entry.author.email if entry.author else None
 
     def item_author_link(self, entry):
-        return self.reverse('entry_archive_author', kwargs={'slug': entry.author.get_username()}) if entry.author else None
+        return (
+            self.reverse("entry_archive_author", kwargs={"slug": entry.author.get_username()})
+            if entry.author
+            else None
+        )
 
     def item_categories(self, entry):
         return [force_str(category) for category in entry.categories.all()]
@@ -142,7 +154,7 @@ class LatestEntriesFeed(EntryFeedBase):
         return gettext("The latest entries for {site_name}").format(site_name=site.name)
 
     def link(self, site):
-        return self.reverse('entry_archive_index')
+        return self.reverse("entry_archive_index")
 
 
 class LatestCategoryEntriesFeed(EntryFeedBase):
@@ -159,17 +171,21 @@ class LatestCategoryEntriesFeed(EntryFeedBase):
     def title(self, category):
         # django-categories uses 'name', django-categories-i18n uses 'title'
         category_name = force_str(category)
-        return gettext("Entries in the category {category_name}").format(category_name=category_name)
+        return gettext("Entries in the category {category_name}").format(
+            category_name=category_name
+        )
 
     def subtitle(self, category):
         return self.description(category)  # For Atom1 feeds
 
     def description(self, category):
         category_name = force_str(category)
-        return gettext("The latest entries in the category {category_name}").format(category_name=category_name)
+        return gettext("The latest entries in the category {category_name}").format(
+            category_name=category_name
+        )
 
     def link(self, category):
-        return self.reverse('entry_archive_category', kwargs={'slug': category.slug})
+        return self.reverse("entry_archive_category", kwargs={"slug": category.slug})
 
 
 class LatestAuthorEntriesFeed(EntryFeedBase):
@@ -191,10 +207,12 @@ class LatestAuthorEntriesFeed(EntryFeedBase):
         return self.description(author)  # For Atom1 feeds
 
     def description(self, author):
-        return gettext("The latest entries written by {author_name}").format(author_name=author.get_full_name())
+        return gettext("The latest entries written by {author_name}").format(
+            author_name=author.get_full_name()
+        )
 
     def link(self, author):
-        return self.reverse('entry_archive_author', kwargs={'slug': author.get_username()})
+        return self.reverse("entry_archive_author", kwargs={"slug": author.get_username()})
 
 
 class LatestTagEntriesFeed(EntryFeedBase):
@@ -204,6 +222,7 @@ class LatestTagEntriesFeed(EntryFeedBase):
 
     def get_object(self, request, slug):
         from taggit.models import Tag  # Taggit is still an optional dependency
+
         return get_object_or_404(Tag, slug=slug)
 
     def items(self, tag):
@@ -219,4 +238,4 @@ class LatestTagEntriesFeed(EntryFeedBase):
         return gettext("The latest entries tagged with {tag_name}").format(tag_name=tag.name)
 
     def link(self, tag):
-        return self.reverse('entry_archive_tag', kwargs={'slug': tag.slug})
+        return self.reverse("entry_archive_tag", kwargs={"slug": tag.slug})

@@ -2,15 +2,14 @@ from datetime import date, datetime
 
 from django.conf import settings
 from django.template import Library
-from tag_parser.basetags import (BaseAssignmentOrInclusionNode,
-                                 BaseAssignmentOrOutputNode)
+from tag_parser.basetags import BaseAssignmentOrInclusionNode, BaseAssignmentOrOutputNode
 
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import query_entries, query_tags
 
 BlogPage = None
 
-HAS_APP_URLS = 'fluent_pages' in settings.INSTALLED_APPS
+HAS_APP_URLS = "fluent_pages" in settings.INSTALLED_APPS
 if HAS_APP_URLS:
     # HACK: accessing BlogPage directly. Apps are not completely separated this way.
     # Should have some kind of registry and filter system (like middleware) instead.
@@ -30,13 +29,15 @@ def blogurl(parser, token):
     """
     if HAS_APP_URLS:
         from fluent_pages.templatetags.appurl_tags import appurl
+
         return appurl(parser, token)
     else:
         from django.template.defaulttags import url
+
         return url(parser, token)
 
 
-@register.tag('get_entry_url')
+@register.tag("get_entry_url")
 class GetEntryUrl(BaseAssignmentOrOutputNode):
     """
     Get the URL of a blog entry.
@@ -46,6 +47,7 @@ class GetEntryUrl(BaseAssignmentOrOutputNode):
 
     When django-fluent-pages is not used, using this is identical to calling ``entry.get_absolute_url()``.
     """
+
     min_args = 1
     max_args = 1
     takes_context = True
@@ -56,11 +58,11 @@ class GetEntryUrl(BaseAssignmentOrOutputNode):
         if HAS_APP_URLS:
             # If the application supports mounting a BlogPage in the page tree,
             # that can be used as relative start point of the entry.
-            page = context.get('page')
-            request = context.get('request')
+            page = context.get("page")
+            request = context.get("request")
             if page is None and request is not None:
                 # HACK: access private django-fluent-pages var
-                page = getattr(request, '_current_fluent_page', None)
+                page = getattr(request, "_current_fluent_page", None)
 
             if page is not None and isinstance(page, BlogPage):
                 return page.get_entry_url(entry)
@@ -96,7 +98,7 @@ class BlogAssignmentOrInclusionNode(BaseAssignmentOrInclusionNode):
         # Also pass 'request' and 'page' if they are available.
         # This helps the 'blogurl' and 'appurl' tags to resolve the current blog pagetype,
         # if there are multiple pagetypes available.
-        for var in ('request', 'page'):
+        for var in ("request", "page"):
             value = parent_context.get(var)
             if value:
                 context[var] = value
@@ -104,7 +106,7 @@ class BlogAssignmentOrInclusionNode(BaseAssignmentOrInclusionNode):
         return context
 
 
-@register.tag('get_entries')
+@register.tag("get_entries")
 class GetEntriesNode(BlogAssignmentOrInclusionNode):
     """
     Query the entries in the database, and render them.
@@ -140,12 +142,19 @@ class GetEntriesNode(BlogAssignmentOrInclusionNode):
     * ``orderby``: can be ASC/ascending or DESC/descending. The default depends on the ``order`` field.
     * ``limit``: The maximum number of entries to return.
     """
+
     template_name = "fluent_blogs/templatetags/entries.html"
-    context_value_name = 'entries'
+    context_value_name = "entries"
     allowed_kwargs = (
-        'category', 'tag', 'author',
-        'year', 'month', 'day',
-        'orderby', 'order', 'limit',
+        "category",
+        "tag",
+        "author",
+        "year",
+        "month",
+        "day",
+        "orderby",
+        "order",
+        "limit",
     )
     model = get_entry_model()
 
@@ -157,7 +166,7 @@ class GetEntriesNode(BlogAssignmentOrInclusionNode):
         return qs
 
 
-@register.tag('get_tags')
+@register.tag("get_tags")
 class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
     """
     Find the popular tags associated with blog entries.
@@ -184,10 +193,13 @@ class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
     The returned :class:`~taggit.models.Tag` objects have a ``count`` attribute attached
     with the amount of times the tag is used.
     """
+
     template_name = "fluent_blogs/templatetags/popular_tags.html"
-    context_value_name = 'tags'
+    context_value_name = "tags"
     allowed_kwargs = (
-        'order', 'orderby', 'limit',
+        "order",
+        "orderby",
+        "limit",
     )
 
     def get_value(self, context, *tag_args, **tag_kwargs):
@@ -196,6 +208,6 @@ class GetPopularTagsNode(BlogAssignmentOrInclusionNode):
 
 if False and __debug__:
     # This only exists to make PyCharm happy.
-    register.tag('get_entries', GetEntriesNode)
-    register.tag('get_entry_url', GetEntryUrl)
-    register.tag('get_tags', GetPopularTagsNode)
+    register.tag("get_entries", GetEntriesNode)
+    register.tag("get_entry_url", GetEntryUrl)
+    register.tag("get_tags", GetPopularTagsNode)
