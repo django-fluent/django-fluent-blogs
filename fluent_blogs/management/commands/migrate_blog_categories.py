@@ -11,7 +11,6 @@ from parler.models import TranslatableModel
 
 from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
-from fluent_blogs.six import python_2_unicode_compatible
 
 
 class Command(BaseCommand):
@@ -31,12 +30,12 @@ class Command(BaseCommand):
     )
 
     def create_parser(self, *args, **kwargs):
-        parser = super(Command, self).create_parser(*args, **kwargs)
+        parser = super().create_parser(*args, **kwargs)
         parser.formatter_class = RawTextHelpFormatter
         return parser
 
     def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
+        super().add_arguments(parser)
         parser.add_argument('-f', '--from', action='store', dest='from', help="The old model to read data from")
         parser.add_argument('-t', '--to', action='store', dest='to', help="The new model to migrate to")
 
@@ -48,7 +47,7 @@ class Command(BaseCommand):
         CategoryM2M = Entry.categories.through
         old_fk = CategoryM2M._meta.get_field('category')
         CurrentModel = old_fk.remote_field.model
-        self.stdout.write("Current Entry.categories model: <{0}.{1}>".format(
+        self.stdout.write("Current Entry.categories model: <{}.{}>".format(
             CurrentModel._meta.app_label, CurrentModel._meta.object_name
         ))
 
@@ -64,7 +63,7 @@ class Command(BaseCommand):
             try:
                 OldModel = apps.get_model(old)
             except LookupError as e:
-                raise CommandError("Invalid --from value: {0}".format(e))
+                raise CommandError(f"Invalid --from value: {e}")
 
         if not issubclass(OldModel, MPTTModel):
             raise CommandError("Expected MPTT model for --from value")
@@ -72,7 +71,7 @@ class Command(BaseCommand):
         try:
             NewModel = apps.get_model(new)
         except LookupError as e:
-            raise CommandError("Invalid --to value: {0}".format(e))
+            raise CommandError(f"Invalid --to value: {e}")
 
         if not issubclass(NewModel, MPTTModel):
             raise CommandError("Expected MPTT model for --to value")
@@ -180,7 +179,7 @@ class Command(BaseCommand):
             self.stdout.write("* Switching M2M foreign key constraints...")
             __, __, __, kwargs = old_fk.deconstruct()
             kwargs['to'] = NewModel
-            new_fk = models.ForeignKey(**kwargs)
+            new_fk = models.ForeignKey(on_delete=models.CASCADE, **kwargs)
             new_fk.set_attributes_from_name(old_fk.name)
             with connection.schema_editor() as schema_editor:
                 schema_editor.alter_field(CategoryM2M, old_fk, new_fk)
@@ -189,7 +188,6 @@ class Command(BaseCommand):
         self.stdout.write("You may now remove the old category app from your project, INSTALLED_APPS and database.\n")
 
 
-@python_2_unicode_compatible
 class DummyCategoryBase(MPTTModel):
     """
     This base model includes the absolute bare bones fields and methods. One
@@ -222,6 +220,6 @@ def _detect_title_field(Model):
         elif 'title' in field_names:
             return 'title'
 
-    raise CommandError("No 'name' or 'title' field found in model <{0}.{1}>".format(
+    raise CommandError("No 'name' or 'title' field found in model <{}.{}>".format(
         Model.__module__, Model.__name__
     ))

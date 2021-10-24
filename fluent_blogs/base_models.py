@@ -1,12 +1,9 @@
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.urls import NoReverseMatch
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
-from fluent_blogs.six import python_2_unicode_compatible
+from django.utils.translation import gettext_lazy as _
 from fluent_utils.softdeps.comments import CommentsMixin
 from fluent_utils.softdeps.taggit import TagsMixin
 from parler.fields import TranslatedField
@@ -66,7 +63,6 @@ class AbstractTranslatedFieldsEntryBaseMixin(models.Model):
         abstract = True
 
 
-@python_2_unicode_compatible
 class AbstractSharedEntryBaseMixin(models.Model):
     """
     The basic interface for blog entries.
@@ -333,7 +329,7 @@ class AbstractTranslatableEntryBase(
         Make sure that the URL is translated in the current language.
         """
         with switch_language(self):
-            return super(AbstractTranslatableEntryBase, self).default_url
+            return super().default_url
 
 
 class AbstractTranslatedFieldsEntryBase(

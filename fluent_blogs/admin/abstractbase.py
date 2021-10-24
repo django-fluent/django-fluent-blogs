@@ -7,8 +7,7 @@ from django.urls import NoReverseMatch
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-from django.utils.translation import ugettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from fluent_utils.dry.admin import MultiSiteAdminMixin
 from parler.admin import TranslatableAdmin
 from parler.models import TranslationDoesNotExist
@@ -56,7 +55,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         }
 
     def get_readonly_fields(self, request, obj=None):
-        readonly_fields = list(super(AbstractEntryBaseAdmin, self).get_readonly_fields(request, obj))
+        readonly_fields = list(super().get_readonly_fields(request, obj))
         if not request.user.is_superuser:
             readonly_fields.append('author')
         return readonly_fields
@@ -80,7 +79,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         if overrides:
             kwargs.update(overrides)
 
-        field = super(AbstractEntryBaseAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        field = super().formfield_for_dbfield(db_field, **kwargs)
 
         # Pass user to the form.
         if db_field.name == 'author':
@@ -96,7 +95,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
                 self._reverse_blogpage_index(request, obj)
             except PageTypeNotMounted:
                 from fluent_blogs.pagetypes.blogpage.models import BlogPage
-                context['preview_error'] = ugettext("The blog entry can't be previewed yet, a '{page_type_name}' page needs to be created first.").format(page_type_name=BlogPage._meta.verbose_name)
+                context['preview_error'] = gettext("The blog entry can't be previewed yet, a '{page_type_name}' page needs to be created first.").format(page_type_name=BlogPage._meta.verbose_name)
             except MultipleReverseMatch:
                 # When 'entry_archive_index is ambiguous (because there are multiple blog nodes in the fluent-pages tree),
                 # the edit page will automatically pick an option.
@@ -109,7 +108,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
                     "or add the 'fluent_blogs.pagetypes.blogpage' app to the INSTALLED_APPS."
                 )
 
-        return super(AbstractEntryBaseAdmin, self).render_change_form(request, context, add, change, form_url, obj)
+        return super().render_change_form(request, context, add, change, form_url, obj)
 
     def _reverse_blogpage_index(self, request, obj=None):
         # Internal method with "protected access" to handle translation differences.
@@ -183,7 +182,7 @@ class AbstractEntryBaseAdmin(MultiSiteAdminMixin, PlaceholderFieldAdmin):
         if rows_updated == 1:
             message = "1 entry was marked as published."
         else:
-            message = "{0} entries were marked as published.".format(rows_updated)
+            message = f"{rows_updated} entries were marked as published."
         self.message_user(request, message)
 
     make_published.short_description = _("Mark selected entries as published")
@@ -224,10 +223,10 @@ class AbstractTranslatableEntryBaseAdmin(TranslatableAdmin, AbstractEntryBaseAdm
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context['FLUENT_BLOGS_IS_TRANSLATABLE'] = True
-        return super(AbstractTranslatableEntryBaseAdmin, self).changelist_view(request, extra_context)
+        return super().changelist_view(request, extra_context)
 
 
-class SeoEntryAdminMixin(object):
+class SeoEntryAdminMixin:
     """
     Mixin for the SEO fields.
     """

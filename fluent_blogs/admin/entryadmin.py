@@ -59,12 +59,12 @@ class EntryAdmin(SeoEntryAdminMixin, _entry_admin_base):
     def add_view(self, request, form_url='', extra_context=None):
         extra_context = extra_context or {}
         extra_context['html_fields'] = self.html_fields
-        return super(EntryAdmin, self).add_view(request, form_url=form_url, extra_context=extra_context)
+        return super().add_view(request, form_url=form_url, extra_context=extra_context)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra_context = extra_context or {}
         extra_context['html_fields'] = self.html_fields
-        return super(EntryAdmin, self).change_view(request, object_id, form_url=form_url, extra_context=extra_context)
+        return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
 
 
 # Add all optional mixin fields

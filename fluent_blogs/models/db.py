@@ -2,7 +2,7 @@ from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from fluent_blogs import appsettings
 from fluent_blogs.base_models import (AbstractTranslatableEntry,
@@ -63,7 +63,7 @@ def get_entry_model():
             _EntryModel = apps.get_model(app_label, model_name)
 
             if _EntryModel is None:
-                raise ImportError("{app_label}.{model_name} could not be imported.".format(app_label=app_label, model_name=model_name))
+                raise ImportError(f"{app_label}.{model_name} could not be imported.")
 
         # Auto-register with django-fluent-comments moderation
         if 'fluent_comments' in settings.INSTALLED_APPS and issubclass(_EntryModel, CommentsEntryMixin):
@@ -93,6 +93,6 @@ def get_category_model():
     try:
         return apps.get_model(app_label, model_name)
     except Exception as e:  # ImportError/LookupError
-        raise ImproperlyConfigured("Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{0}': {1}".format(
+        raise ImproperlyConfigured("Failed to import FLUENT_BLOGS_CATEGORY_MODEL '{}': {}".format(
             appsettings.FLUENT_BLOGS_CATEGORY_MODEL, str(e)
         ))

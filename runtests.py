@@ -12,8 +12,8 @@ from django.core.management import execute_from_command_line
 warnings.simplefilter('always', DeprecationWarning)
 
 # Give feedback on used versions
-sys.stderr.write('Using Python version {0} from {1}\n'.format(sys.version[:5], sys.executable))
-sys.stderr.write('Using Django version {0} from {1}\n'.format(
+sys.stderr.write(f'Using Python version {sys.version[:5]} from {sys.executable}\n')
+sys.stderr.write('Using Django version {} from {}\n'.format(
     django.get_version(),
     path.dirname(path.abspath(django.__file__)))
 )
@@ -77,6 +77,7 @@ if not settings.configured:
         ],
         ROOT_URLCONF = 'fluent_blogs.tests.testapp.urls',
         TEST_RUNNER = 'django.test.runner.DiscoverRunner',
+        SECRET_KEY="testtest",
         SITE_ID = 4,
         PARLER_LANGUAGES = {
             4: (

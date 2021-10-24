@@ -91,7 +91,7 @@ class BlogAssignmentOrInclusionNode(BaseAssignmentOrInclusionNode):
     """
 
     def get_context_data(self, parent_context, *tag_args, **tag_kwargs):
-        context = super(BlogAssignmentOrInclusionNode, self).get_context_data(parent_context, *tag_args, **tag_kwargs)
+        context = super().get_context_data(parent_context, *tag_args, **tag_kwargs)
 
         # Also pass 'request' and 'page' if they are available.
         # This helps the 'blogurl' and 'appurl' tags to resolve the current blog pagetype,

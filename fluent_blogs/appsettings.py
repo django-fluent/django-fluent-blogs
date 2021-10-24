@@ -49,7 +49,7 @@ FLUENT_BLOGS_LANGUAGES = getattr(settings, 'FLUENT_BLOGS_LANGUAGES', parler_apps
 FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE = normalize_language_code(FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE)
 
 if not is_supported_django_language(FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE):
-    raise ImproperlyConfigured("FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE '{0}' does not exist in LANGUAGES".format(FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE))
+    raise ImproperlyConfigured(f"FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE '{FLUENT_BLOGS_DEFAULT_LANGUAGE_CODE}' does not exist in LANGUAGES")
 
 FLUENT_BLOGS_LANGUAGES = parler_appsettings.add_default_language_settings(
     FLUENT_BLOGS_LANGUAGES, 'FLUENT_BLOGS_LANGUAGES',

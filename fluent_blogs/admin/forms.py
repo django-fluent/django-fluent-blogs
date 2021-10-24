@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from parler.forms import TranslatableModelForm
 from slug_preview.forms import SlugPreviewFormMixin
 
@@ -18,7 +18,7 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
     """
 
     def __init__(self, *args, **kwargs):
-        super(AbstractEntryBaseAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # The admin's .save() method fills in a default:
         self.fields['publication_date'].required = False
@@ -31,7 +31,7 @@ class AbstractEntryBaseAdminForm(SlugPreviewFormMixin, ModelForm):
             self.initial.setdefault('author', author_field.user)
 
     def clean(self):
-        cleaned_data = super(AbstractEntryBaseAdminForm, self).clean()
+        cleaned_data = super().clean()
         if 'slug' not in cleaned_data or 'publication_date' not in cleaned_data:
             return cleaned_data
 

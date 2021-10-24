@@ -56,9 +56,9 @@ class EntryQuerySet(QuerySet):
         When multiple tags are provided, they operate as "OR" query.
         """
         if len(usernames) == 1:
-            return self.filter(**{"author__{}".format(User.USERNAME_FIELD): usernames[0]})
+            return self.filter(**{f"author__{User.USERNAME_FIELD}": usernames[0]})
         else:
-            return self.filter(**{"author__{}__in".format(User.USERNAME_FIELD): usernames})
+            return self.filter(**{f"author__{User.USERNAME_FIELD}__in": usernames})
 
     def categories(self, *category_slugs):
         """
@@ -67,7 +67,7 @@ class EntryQuerySet(QuerySet):
         """
         categories_field = getattr(self.model, 'categories', None)
         if categories_field is None:
-            raise AttributeError("The {0} does not include CategoriesEntryMixin".format(self.model.__name__))
+            raise AttributeError(f"The {self.model.__name__} does not include CategoriesEntryMixin")
 
         if issubclass(categories_field.rel.model, TranslatableModel):
             # Needs a different field, assume slug is translated (e.g django-categories-i18n)
@@ -93,7 +93,7 @@ class EntryQuerySet(QuerySet):
         When multiple tags are provided, they operate as "OR" query.
         """
         if getattr(self.model, 'tags', None) is None:
-            raise AttributeError("The {0} does not include TagsEntryMixin".format(self.model.__name__))
+            raise AttributeError(f"The {self.model.__name__} does not include TagsEntryMixin")
 
         if len(tag_slugs) == 1:
             return self.filter(tags__slug=tag_slugs[0])
@@ -107,7 +107,7 @@ class EntryQuerySet(QuerySet):
 class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
 
     def __init__(self, *args, **kwargs):
-        super(TranslatableEntryQuerySet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._rel_language_codes = None
 
     def _clone(self, *args, **kw):
@@ -122,7 +122,7 @@ class TranslatableEntryQuerySet(TranslatableQuerySet, EntryQuerySet):
 
     def translated(self, *language_codes, **translated_fields):
         self._rel_language_codes = language_codes
-        return super(TranslatableEntryQuerySet, self).translated(*language_codes, **translated_fields)
+        return super().translated(*language_codes, **translated_fields)
 
     def _get_active_rel_languages(self):
         return self._rel_language_codes

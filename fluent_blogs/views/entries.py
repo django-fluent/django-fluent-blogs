@@ -12,7 +12,7 @@ from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
 from parler.views import TranslatableSlugMixin
 
-from fluent_blogs import appsettings, six
+from fluent_blogs import appsettings
 from fluent_blogs.models import get_entry_model
 from fluent_blogs.models.query import get_category_for_slug, get_date_range
 
@@ -52,7 +52,7 @@ class BaseBlogMixin(CurrentPageMixin):
         return translation.get_language()  # Assumes that middleware has set this properly.
 
     def get_context_data(self, **kwargs):
-        context = super(BaseBlogMixin, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['FLUENT_BLOGS_BASE_TEMPLATE'] = appsettings.FLUENT_BLOGS_BASE_TEMPLATE
         context['HAS_DJANGO_FLUENT_COMMENTS'] = 'fluent_comments' in settings.INSTALLED_APPS
         context['FLUENT_BLOGS_INCLUDE_STATIC_FILES'] = appsettings.FLUENT_BLOGS_INCLUDE_STATIC_FILES
@@ -76,24 +76,24 @@ class BaseArchiveMixin(BaseBlogMixin):
     paginate_by = appsettings.FLUENT_BLOGS_PAGINATE_BY
 
     def get_queryset(self):
-        queryset = super(BaseArchiveMixin, self).get_queryset()
+        queryset = super().get_queryset()
         queryset = queryset.active_translations(self.get_language())  # NOTE: can't combine with other filters on translations__ relation.
 
         # Reapply ordering of MultipleObjectMixin that was skipped;
         # The BaseDateListView.get_ordering() turns this into a default DESC on the date field.
         ordering = self.get_ordering()
         if ordering:
-            if isinstance(ordering, six.string_types):
+            if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
         return queryset
 
     def get_template_names(self):
-        names = super(BaseArchiveMixin, self).get_template_names()
+        names = super().get_template_names()
 
         # Include the appname/model_suffix.html version for any customized model too.
         if not names[-1].startswith('fluent_blogs/entry'):
-            names.append("fluent_blogs/entry{0}.html".format(self.template_name_suffix))
+            names.append(f"fluent_blogs/entry{self.template_name_suffix}.html")
 
         return names
 
@@ -136,10 +136,10 @@ class BaseDetailMixin(TranslatableSlugMixin, BaseBlogMixin):
         return appsettings.FLUENT_BLOGS_LANGUAGES.get_active_choices()
 
     def get_template_names(self):
-        names = super(BaseDetailMixin, self).get_template_names()
+        names = super().get_template_names()
 
         if not names[-1].startswith('fluent_blogs/entry'):
-            names.append("fluent_blogs/entry{0}.html".format(self.template_name_suffix))
+            names.append(f"fluent_blogs/entry{self.template_name_suffix}.html")
 
         return names
 
@@ -201,10 +201,10 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
 
     def dispatch(self, request, *args, **kwargs):
         self.category = self.get_category(slug=self.kwargs['slug'])
-        return super(EntryCategoryArchive, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return super(EntryCategoryArchive, self).get_queryset().filter(categories=self.category)
+        return super().get_queryset().filter(categories=self.category)
 
     def get_category(self, slug):
         """
@@ -227,10 +227,10 @@ class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
 
     def dispatch(self, request, *args, **kwargs):
         self.author = self.get_user(slug=self.kwargs['slug'])
-        return super(EntryAuthorArchive, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return super(EntryAuthorArchive, self).get_queryset().filter(author=self.author)
+        return super().get_queryset().filter(author=self.author)
 
     def get_user(self, slug):
         User = get_user_model()
@@ -248,10 +248,10 @@ class EntryTagArchive(BaseArchiveMixin, ArchiveIndexView):
 
     def dispatch(self, request, *args, **kwargs):
         self.tag = self.get_tag(slug=self.kwargs['slug'])
-        return super(EntryTagArchive, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return super(EntryTagArchive, self).get_queryset().filter(tags=self.tag)
+        return super().get_queryset().filter(tags=self.tag)
 
     def get_tag(self, slug):
         from taggit.models import Tag  # django-taggit is optional, hence imported here.

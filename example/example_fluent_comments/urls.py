@@ -1,15 +1,15 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib import admin
 
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/apps/tinymce/', include('tinymce.urls')),
-    url(r'^admin/apps/tags/', include('taggit_autosuggest.urls')),
-    url(r'^admin/', admin.site.urls),
+    path('admin/apps/tinymce/', include('tinymce.urls')),
+    path('admin/apps/tags/', include('taggit_autosuggest.urls')),
+    path('admin/', admin.site.urls),
 
-    url(r'^comments/', include('fluent_comments.urls')),
+    path('comments/', include('fluent_comments.urls')),
     #url(r'^forms/', include('form_designer.urls')),
 
-    url(r'', include('fluent_blogs.urls')),
+    path('', include('fluent_blogs.urls')),
 ]

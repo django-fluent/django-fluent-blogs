@@ -41,7 +41,7 @@ ENTRY_ORDER_BY_FIELDS = {
 if django.VERSION >= (1, 11):
     # Django 1.10 doesn't support early importing.
     User = get_user_model()
-    ENTRY_ORDER_BY_FIELDS['author_slug'] = 'author__{}'.format(User.USERNAME_FIELD)
+    ENTRY_ORDER_BY_FIELDS['author_slug'] = f'author__{User.USERNAME_FIELD}'
 
 TAG_ORDER_BY_FIELDS = {
     'slug': ('slug',),
@@ -63,7 +63,7 @@ def _get_order_by(order, orderby, order_by_fields):
         # Find the actual database fieldnames for the keyword.
         db_fieldnames = order_by_fields[orderby]
     except KeyError:
-        raise ValueError("Invalid value for 'orderby': '{0}', supported values are: {1}".format(orderby, ', '.join(sorted(order_by_fields.keys()))))
+        raise ValueError("Invalid value for 'orderby': '{}', supported values are: {}".format(orderby, ', '.join(sorted(order_by_fields.keys()))))
 
     # Default to descending for some fields, otherwise be ascending
     is_desc = (not order and orderby in ORDER_BY_DESC) \

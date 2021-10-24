@@ -24,21 +24,21 @@ class BlogPageTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(BlogPageTests, cls).setUpClass()
+        super().setUpClass()
         User = get_user_model()
 
         Site.objects.get_or_create(id=settings.SITE_ID, defaults=dict(domain='django.localhost', name='django at localhost'))
         cls.user = User.objects.create_superuser("fluent-blogs-admin", 'admin@example.org', 'admin')
 
     def setUp(self):
-        super(BlogPageTests, self).setUp()
+        super().setUp()
         self.overrider = override_settings(ROOT_URLCONF='fluent_blogs.pagetypes.blogpage.tests.urls')
         self.overrider.enable()
 
     def tearDown(self):
         self.overrider.disable()
         cache.clear()  # BlogPage URLs are stored in cache
-        super(BlogPageTests, self).tearDown()
+        super().tearDown()
 
     def test_no_blogpage(self):
         """

@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 
 from example_standalone.urls import urlpatterns
 
@@ -8,5 +8,5 @@ from example_standalone.urls import urlpatterns
 # or separate settings per domain name with a different LANGUAGE_CODE set.
 
 urlpatterns = [
-    url('^i18n/', include('django.conf.urls.i18n')),
+    path('i18n/', include('django.conf.urls.i18n')),
 ] + urlpatterns

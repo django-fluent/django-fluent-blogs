@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.utils import feedgenerator
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext
 from django.views.generic import View
 
@@ -48,7 +48,7 @@ class FeedView(View, Feed):
         try:
             self.feed_type = _FEED_FORMATS[format]
         except KeyError:
-            raise ValueError("Unsupported feed format: {0}. Supported are: {1}".format(
+            raise ValueError("Unsupported feed format: {}. Supported are: {}".format(
                 self.format, ', '.join(sorted(_FEED_FORMATS.keys()))
             ))
 
@@ -83,7 +83,7 @@ class EntryFeedBase(FeedView):
     def description_template(self):
         EntryModel = get_entry_model()
         templates = [
-            "{0}/{1}_feed_description.html".format(EntryModel._meta.app_label, EntryModel._meta.object_name.lower()),
+            f"{EntryModel._meta.app_label}/{EntryModel._meta.object_name.lower()}_feed_description.html",
             "fluent_blogs/entry_feed_description.html",  # New name
             "fluent_blogs/feeds/entry/description.html"  # Old name
         ]
@@ -121,7 +121,7 @@ class EntryFeedBase(FeedView):
         return self.reverse('entry_archive_author', kwargs={'slug': entry.author.get_username()}) if entry.author else None
 
     def item_categories(self, entry):
-        return [force_text(category) for category in entry.categories.all()]
+        return [force_str(category) for category in entry.categories.all()]
 
 
 class LatestEntriesFeed(EntryFeedBase):
@@ -133,13 +133,13 @@ class LatestEntriesFeed(EntryFeedBase):
         return get_current_site(request)
 
     def title(self, site):
-        return gettext(u"{site_name} - Latest entries").format(site_name=site.name)
+        return gettext("{site_name} - Latest entries").format(site_name=site.name)
 
     def subtitle(self, site):
         return self.description(site)  # For Atom1 feeds
 
     def description(self, site):
-        return gettext(u"The latest entries for {site_name}").format(site_name=site.name)
+        return gettext("The latest entries for {site_name}").format(site_name=site.name)
 
     def link(self, site):
         return self.reverse('entry_archive_index')
@@ -158,15 +158,15 @@ class LatestCategoryEntriesFeed(EntryFeedBase):
 
     def title(self, category):
         # django-categories uses 'name', django-categories-i18n uses 'title'
-        category_name = force_text(category)
-        return gettext(u"Entries in the category {category_name}").format(category_name=category_name)
+        category_name = force_str(category)
+        return gettext("Entries in the category {category_name}").format(category_name=category_name)
 
     def subtitle(self, category):
         return self.description(category)  # For Atom1 feeds
 
     def description(self, category):
-        category_name = force_text(category)
-        return gettext(u"The latest entries in the category {category_name}").format(category_name=category_name)
+        category_name = force_str(category)
+        return gettext("The latest entries in the category {category_name}").format(category_name=category_name)
 
     def link(self, category):
         return self.reverse('entry_archive_category', kwargs={'slug': category.slug})
@@ -185,13 +185,13 @@ class LatestAuthorEntriesFeed(EntryFeedBase):
         return get_entry_queryset().filter(author=author)[:_max_items]
 
     def title(self, author):
-        return gettext(u"Entries by {author_name}").format(author_name=author.get_full_name())
+        return gettext("Entries by {author_name}").format(author_name=author.get_full_name())
 
     def subtitle(self, author):
         return self.description(author)  # For Atom1 feeds
 
     def description(self, author):
-        return gettext(u"The latest entries written by {author_name}").format(author_name=author.get_full_name())
+        return gettext("The latest entries written by {author_name}").format(author_name=author.get_full_name())
 
     def link(self, author):
         return self.reverse('entry_archive_author', kwargs={'slug': author.get_username()})
@@ -210,13 +210,13 @@ class LatestTagEntriesFeed(EntryFeedBase):
         return get_entry_queryset().filter(tags=tag)[:_max_items]
 
     def title(self, tag):
-        return gettext(u"Entries for the tag {tag_name}").format(tag_name=tag.name)
+        return gettext("Entries for the tag {tag_name}").format(tag_name=tag.name)
 
     def subtitle(self, tag):
         return self.description(tag)  # For Atom1 feeds
 
     def description(self, tag):
-        return gettext(u"The latest entries tagged with {tag_name}").format(tag_name=tag.name)
+        return gettext("The latest entries tagged with {tag_name}").format(tag_name=tag.name)
 
     def link(self, tag):
         return self.reverse('entry_archive_tag', kwargs={'slug': tag.slug})

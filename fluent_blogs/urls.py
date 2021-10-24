@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import path, re_path
 
 from fluent_blogs import appsettings
 from fluent_blogs.views.entries import (EntryArchiveIndex, EntryAuthorArchive,
@@ -20,45 +20,45 @@ def _get_entry_regex():
         .replace('{day}', r'(?P<day>\d{2})') \
         .replace('{slug}', r'(?P<slug>[-\w]+)') \
         .replace('{pk}', r'(?P<pk>[-\w]+)')
-    return '^{0}$'.format(regex.lstrip('/'))
+    return '^{}$'.format(regex.lstrip('/'))
 
 
 urlpatterns = [
     # Index
-    url(r'^$', EntryArchiveIndex.as_view(), name='entry_archive_index'),
-    url(r'^page/(?P<page>\d+)/$', EntryArchiveIndex.as_view(), name='entry_archive_index_paginated'),
-    url(r'^feed.rss2$', LatestEntriesFeed.as_view(format='rss2.0'), name='entry_archive_index_rss'),
-    url(r'^feed.atom$', LatestEntriesFeed.as_view(format='atom1'), name='entry_archive_index_atom'),
+    path('', EntryArchiveIndex.as_view(), name='entry_archive_index'),
+    path('page/<int:page>/', EntryArchiveIndex.as_view(), name='entry_archive_index_paginated'),
+    re_path(r'^feed.rss2$', LatestEntriesFeed.as_view(format='rss2.0'), name='entry_archive_index_rss'),
+    re_path(r'^feed.atom$', LatestEntriesFeed.as_view(format='atom1'), name='entry_archive_index_atom'),
 
     # Archives
-    url(r'^(?P<year>\d{4})/$', EntryYearArchive.as_view(), name='entry_archive_year'),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', EntryMonthArchive.as_view(), name='entry_archive_month'),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', EntryDayArchive.as_view(), name='entry_archive_day'),
+    re_path(r'^(?P<year>\d{4})/$', EntryYearArchive.as_view(), name='entry_archive_year'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', EntryMonthArchive.as_view(), name='entry_archive_month'),
+    re_path(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', EntryDayArchive.as_view(), name='entry_archive_day'),
 
     # Categories
-    url(r'^categories/(?P<slug>[-\w]+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category'),
-    url(r'^categories/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category_paginated'),
-    url(r'^categories/(?P<slug>[-\w]+)/feed.rss2$', LatestCategoryEntriesFeed.as_view(format='rss2.0'), name='entry_archive_category_rss'),
-    url(r'^categories/(?P<slug>[-\w]+)/feed.atom$', LatestCategoryEntriesFeed.as_view(format='atom1'), name='entry_archive_category_atom'),
+    re_path(r'^categories/(?P<slug>[-\w]+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category'),
+    re_path(r'^categories/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryCategoryArchive.as_view(), name='entry_archive_category_paginated'),
+    re_path(r'^categories/(?P<slug>[-\w]+)/feed.rss2$', LatestCategoryEntriesFeed.as_view(format='rss2.0'), name='entry_archive_category_rss'),
+    re_path(r'^categories/(?P<slug>[-\w]+)/feed.atom$', LatestCategoryEntriesFeed.as_view(format='atom1'), name='entry_archive_category_atom'),
 
     # Authors
-    url(r'^authors/(?P<slug>[-_@.\w]+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author'),
-    url(r'^authors/(?P<slug>[-_@.\w]+)/page/(?P<page>\d+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author_paginated'),
-    url(r'^authors/(?P<slug>[-_@.\w]+)/feed.rss2$', LatestAuthorEntriesFeed.as_view(format='rss2.0'), name='entry_archive_author_rss'),
-    url(r'^authors/(?P<slug>[-_@.\w]+)/feed.atom$', LatestAuthorEntriesFeed.as_view(format='atom1'), name='entry_archive_author_atom'),
+    re_path(r'^authors/(?P<slug>[-_@.\w]+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author'),
+    re_path(r'^authors/(?P<slug>[-_@.\w]+)/page/(?P<page>\d+)/$', EntryAuthorArchive.as_view(), name='entry_archive_author_paginated'),
+    re_path(r'^authors/(?P<slug>[-_@.\w]+)/feed.rss2$', LatestAuthorEntriesFeed.as_view(format='rss2.0'), name='entry_archive_author_rss'),
+    re_path(r'^authors/(?P<slug>[-_@.\w]+)/feed.atom$', LatestAuthorEntriesFeed.as_view(format='atom1'), name='entry_archive_author_atom'),
 
     # Short link
-    url(r'^(?P<pk>\d+)/$', EntryShortLink.as_view(), name='entry_shortlink'),   # Short link can also be used as GUID.
+    path('<int:pk>/', EntryShortLink.as_view(), name='entry_shortlink'),   # Short link can also be used as GUID.
 
     # Entries
-    url(_get_entry_regex(), EntryDetail.as_view(), name='entry_detail'),
+    re_path(_get_entry_regex(), EntryDetail.as_view(), name='entry_detail'),
 ]
 
 
 if 'taggit' in settings.INSTALLED_APPS:
     urlpatterns += [
-        url(r'^tags/(?P<slug>[-\w]+)/$', EntryTagArchive.as_view(), name='entry_archive_tag'),
-        url(r'^tags/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryTagArchive.as_view(), name='entry_archive_tag_paginated'),
-        url(r'^tags/(?P<slug>[-\w]+)/feed.rss2$', LatestTagEntriesFeed.as_view(format='rss2.0'), name='entry_archive_tag_rss'),
-        url(r'^tags/(?P<slug>[-\w]+)/feed.atom$', LatestTagEntriesFeed.as_view(format='atom1'), name='entry_archive_tag_atom'),
+        re_path(r'^tags/(?P<slug>[-\w]+)/$', EntryTagArchive.as_view(), name='entry_archive_tag'),
+        re_path(r'^tags/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', EntryTagArchive.as_view(), name='entry_archive_tag_paginated'),
+        re_path(r'^tags/(?P<slug>[-\w]+)/feed.rss2$', LatestTagEntriesFeed.as_view(format='rss2.0'), name='entry_archive_tag_rss'),
+        re_path(r'^tags/(?P<slug>[-\w]+)/feed.atom$', LatestTagEntriesFeed.as_view(format='atom1'), name='entry_archive_tag_atom'),
     ]
