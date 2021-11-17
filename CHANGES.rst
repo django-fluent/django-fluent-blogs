@@ -1,3 +1,11 @@
+Version 3.0 (2021-11-17)
+------------------------
+
+* Added Django 4.0 compatibility
+* Dropped Django 1.x support.
+* Dropped Python 2.7 - 3.5 support.
+
+
 Version 2.0.6 (2020-06-11)
 --------------------------
 
