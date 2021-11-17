@@ -1,14 +1,14 @@
-.. image:: https://img.shields.io/travis/django-fluent/django-fluent-blogs/master.svg?branch=master
-    :target: http://travis-ci.org/django-fluent/django-fluent-blogs
+django-fluent-blogs
+===================
+
+.. image:: https://github.com/django-fluent/django-fluent-blogs/actions/workflows/tests.yaml/badge.svg?branch=master
+    :target: https://github.com/django-fluent/django-fluent-blogs/actions/workflows/tests.yaml
 .. image:: https://img.shields.io/pypi/v/django-fluent-blogs.svg
     :target: https://pypi.python.org/pypi/django-fluent-blogs/
 .. image:: https://img.shields.io/pypi/l/django-fluent-blogs.svg
     :target: https://pypi.python.org/pypi/django-fluent-blogs/
 .. image:: https://img.shields.io/codecov/c/github/django-fluent/django-fluent-blogs/master.svg
     :target: https://codecov.io/github/django-fluent/django-fluent-blogs?branch=master
-
-django-fluent-blogs
-===================
 
 This is a basic blogging engine, with the following features:
 
