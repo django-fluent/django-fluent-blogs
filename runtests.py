@@ -74,11 +74,11 @@ if not settings.configured:
                 },
             },
         ],
-        ROOT_URLCONF = 'fluent_blogs.tests.testapp.urls',
-        TEST_RUNNER = 'django.test.runner.DiscoverRunner',
+        ROOT_URLCONF="fluent_blogs.tests.testapp.urls",
+        TEST_RUNNER="django.test.runner.DiscoverRunner",
         SECRET_KEY="testtest",
-        SITE_ID = 4,
-        PARLER_LANGUAGES = {
+        SITE_ID=4,
+        PARLER_LANGUAGES={
             4: (
                 {"code": "nl", "fallback": "en"},
                 {"code": "en"},
