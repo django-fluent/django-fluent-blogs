@@ -1,3 +1,9 @@
+Version 3.0.2 (2022-01-09)
+--------------------------
+
+* Fixed listing for for ``{% get_translated_url %}`` usage.
+
+
 Version 3.0.1 (2022-01-09)
 --------------------------
 
