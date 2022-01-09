@@ -80,7 +80,11 @@ class BaseBlogMixin(CurrentPageMixin):
 
         # Make sure the slug is replaced with a translated version of the current language.
         kwargs = self.kwargs
-        if isinstance(self.object, TranslatableModel) and self.slug_url_kwarg in kwargs:
+        if (
+            hasattr(self, "object")
+            and isinstance(self.object, TranslatableModel)
+            and self.slug_url_kwarg in kwargs
+        ):
             kwargs = kwargs.copy()
             with switch_language(self.object, translation.get_language()):
                 kwargs[self.slug_url_kwarg] = getattr(self.object, self.slug_field)
