@@ -14,6 +14,7 @@ from django.views.generic.dates import (
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from fluent_utils.softdeps.fluent_pages import CurrentPageMixin, mixed_reverse
 from parler.models import TranslatableModel, TranslationDoesNotExist
+from parler.utils.context import switch_language
 from parler.views import TranslatableSlugMixin
 
 from fluent_blogs import appsettings
@@ -76,8 +77,16 @@ class BaseBlogMixin(CurrentPageMixin):
             view_url_name = self.view_url_name_paginated
         else:
             view_url_name = self.view_url_name
+
+        # Make sure the slug is replaced with a translated version of the current language.
+        kwargs = self.kwargs
+        if isinstance(self.object, TranslatableModel) and self.slug_url_kwarg in kwargs:
+            kwargs = kwargs.copy()
+            with switch_language(self.object, translation.get_language()):
+                kwargs[self.slug_url_kwarg] = getattr(self.object, self.slug_field)
+
         return mixed_reverse(
-            view_url_name, args=self.args, kwargs=self.kwargs, current_page=self.get_current_page()
+            view_url_name, args=self.args, kwargs=kwargs, current_page=self.get_current_page()
         )
 
 
