@@ -79,7 +79,12 @@ class BaseBlogMixin(CurrentPageMixin):
             view_url_name = self.view_url_name
 
         # Make sure the slug is replaced with a translated version of the current language.
-        kwargs = self.kwargs
+        kwargs = self._get_translated_kwargs(self.kwargs)
+        return mixed_reverse(
+            view_url_name, args=self.args, kwargs=kwargs, current_page=self.get_current_page()
+        )
+
+    def _get_translated_kwargs(self, kwargs):
         if (
             hasattr(self, "object")
             and isinstance(self.object, TranslatableModel)
@@ -88,10 +93,7 @@ class BaseBlogMixin(CurrentPageMixin):
             kwargs = kwargs.copy()
             with switch_language(self.object, translation.get_language()):
                 kwargs[self.slug_url_kwarg] = getattr(self.object, self.slug_field)
-
-        return mixed_reverse(
-            view_url_name, args=self.args, kwargs=kwargs, current_page=self.get_current_page()
-        )
+        return kwargs
 
 
 class BaseArchiveMixin(BaseBlogMixin):
@@ -244,6 +246,16 @@ class EntryCategoryArchive(BaseArchiveMixin, ArchiveIndexView):
             return get_category_for_slug(slug)
         except ObjectDoesNotExist as e:
             raise Http404(str(e))
+
+    def _get_translated_kwargs(self, kwargs):
+        # ListView does not combine with SingleObjectMixin logic.
+        # Hence, this variation needs custom handling for get_view_url()
+        if isinstance(self.category, TranslatableModel):
+            kwargs = kwargs.copy()
+            with switch_language(self.category, translation.get_language()):
+                kwargs['slug'] = self.category.slug
+
+        return kwargs
 
 
 class EntryAuthorArchive(BaseArchiveMixin, ArchiveIndexView):
