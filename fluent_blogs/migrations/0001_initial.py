@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                         max_length=1,
                         verbose_name="status",
                         db_index=True,
-                        choices=[("p", "Published"), ("d", "Draft")],
+                        choices=[("p", "Published"), ("h", "Hidden"), ("d", "Draft")],
                     ),
                 ),
                 (
