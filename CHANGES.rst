@@ -1,7 +1,15 @@
+Version 3.1 (2024-02-05)
+------------------------
+
+* Fixed Django 4 compatibility issues.
+* Fixed Python 3 compatibility issues in ``{% get_entries %}`` / ``query_entries()``.
+* Fixed translating category view for ``{% get_translated_url %}`` usage.
+
+
 Version 3.0.2 (2022-01-09)
 --------------------------
 
-* Fixed listing for for ``{% get_translated_url %}`` usage.
+* Fixed listing for ``{% get_translated_url %}`` usage.
 
 
 Version 3.0.1 (2022-01-09)
