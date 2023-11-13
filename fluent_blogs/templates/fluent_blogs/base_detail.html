@@ -20,21 +20,6 @@
     {% if object.short_url %}<link rel="shortlink" href="{{ object.short_url }}" />{% endif %}
     {% if previous %}<link rel="prev" title="{{ previous.title }}" href="{% get_entry_url previous %}" />{% endif %}
     {% if next %}<link rel="next" title="{{ next.title }}" href="{% get_entry_url next %}" />{% endif %}
-
-
-    {% comment %}
-    {% with object.publication_date|date:"Y" as year %}
-      {% with object.publication_date|date:"m" as month %}
-        {% with object.publication_date|date:"d" as day %}
-          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of discussions on" %} '{{ object.title }}'"
-                href="{% url zinnia_entry_discussion_feed year month day object.slug %}" />
-          <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of comments on" %} '{{ object.title }}'"
-                href="{% url zinnia_entry_comment_feed year month day object.slug %}" />
-        {% endwith %}
-      {% endwith %}
-    {% endwith %}
-    {% endcomment %}
-
     {% include "fluent_blogs/entry_detail/comments_css.html" %}
 {% endwith %}{% endblock %}
 
