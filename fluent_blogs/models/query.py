@@ -1,7 +1,6 @@
 """
 A query interface to retrieve blog models and tags.
 """
-import sys
 from calendar import monthrange
 from datetime import datetime, timedelta
 
@@ -10,14 +9,11 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.aggregates import Count
-from django.utils.timezone import utc
+from django.utils.timezone import get_current_timezone
 from parler.models import TranslatableModel
 
 from fluent_blogs import appsettings
 from fluent_blogs.models.db import get_category_model, get_entry_model
-
-if sys.version_info[0] >= 3:
-    basestring = str
 
 
 __all__ = (
@@ -25,11 +21,12 @@ __all__ = (
     "query_tags",
 )
 
+User = get_user_model()
 ENTRY_ORDER_BY_FIELDS = {
     "slug": "slug",
     "title": "title",
     "author": ("author__first_name", "author__last_name"),
-    "author_slug": ("author__username",),
+    "author_slug": (f"author__{User.USERNAME_FIELD}",),
     "category": ("categories__name",),
     "category_slug": ("categories__slug",),
     "tag": ("tags__name",),
@@ -38,10 +35,6 @@ ENTRY_ORDER_BY_FIELDS = {
     "year": ("publication_date",),
 }
 
-if django.VERSION >= (1, 11):
-    # Django 1.10 doesn't support early importing.
-    User = get_user_model()
-    ENTRY_ORDER_BY_FIELDS["author_slug"] = f"author__{User.USERNAME_FIELD}"
 
 TAG_ORDER_BY_FIELDS = {
     "slug": ("slug",),
@@ -123,9 +116,9 @@ def query_entries(
 
     # The main category/tag/author filters
     if category:
-        if isinstance(category, basestring):
+        if isinstance(category, str):
             queryset = queryset.categories(category)
-        elif isinstance(category, (int, long)):
+        elif isinstance(category, int):
             queryset = queryset.filter(categories=category)
         else:
             raise ValueError("Expected slug or ID for the 'category' parameter")
@@ -133,9 +126,9 @@ def query_entries(
         queryset = queryset.categories(category)
 
     if tag:
-        if isinstance(tag, basestring):
+        if isinstance(tag, str):
             queryset = queryset.tagged(tag)
-        elif isinstance(tag, (int, long)):
+        elif isinstance(tag, int):
             queryset = queryset.filter(tags=tag)
         else:
             raise ValueError("Expected slug or ID for 'tag' parameter.")
@@ -143,9 +136,9 @@ def query_entries(
         queryset = queryset.tagged(tag)
 
     if author:
-        if isinstance(author, basestring):
+        if isinstance(author, str):
             queryset = queryset.authors(author)
-        elif isinstance(author, (int, long)):
+        elif isinstance(author, int):
             queryset = queryset.filter(author=author)
         else:
             raise ValueError("Expected slug or ID for 'author' parameter.")
@@ -218,19 +211,21 @@ def get_date_range(year=None, month=None, day=None):
     if year is None:
         return None
 
+    timezone = get_current_timezone()
+
     if month is None:
         # year only
-        start = datetime(year, 1, 1, 0, 0, 0, tzinfo=utc)
-        end = datetime(year, 12, 31, 23, 59, 59, 999, tzinfo=utc)
+        start = datetime(year, 1, 1, 0, 0, 0, tzinfo=timezone)
+        end = datetime(year, 12, 31, 23, 59, 59, 999, tzinfo=timezone)
         return (start, end)
 
     if day is None:
         # year + month only
-        start = datetime(year, month, 1, 0, 0, 0, tzinfo=utc)
+        start = datetime(year, month, 1, 0, 0, 0, tzinfo=timezone)
         end = start + timedelta(days=monthrange(year, month)[1], microseconds=-1)
         return (start, end)
     else:
         # Exact day
-        start = datetime(year, month, day, 0, 0, 0, tzinfo=utc)
+        start = datetime(year, month, day, 0, 0, 0, tzinfo=timezone)
         end = start + timedelta(days=1, microseconds=-1)
         return (start, end)
